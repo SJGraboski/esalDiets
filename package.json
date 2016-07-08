@@ -27,6 +27,8 @@
     "mysql": "^2.11.1",
     "path": "^0.12.7",
     "react": "^15.2.0",
+    "react-bootstrap": "^0.29.5",
+    "react-datepicker": "^0.28.0",
     "react-dom": "^15.2.0",
     "react-router": "^2.5.2",
     "sequelize": "^3.23.4"
