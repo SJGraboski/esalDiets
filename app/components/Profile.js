@@ -34,6 +34,7 @@ var Profile = React.createClass({
 				reportId: data.reportId,
 				answered: data.answered,
 				startDate: data.startDate,
+				allAnswers: data.allAnswers,
 				reportUpdate: null
 			})
 		}.bind(this));

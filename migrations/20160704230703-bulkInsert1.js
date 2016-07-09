@@ -46,8 +46,8 @@ function addProgress(user, diet) {
         a2: null,
         q3: "What was your weight today?",
         a3: null,
-        reportDay: (Date.now() + (86400000 * i))
-        // ^^^ the current day, plus one day times the value of i
+        reportDay: (Date.now() - (86400000 * 4)  + (86400000 * i))
+        // ^^^ the current day, minus 5 days, plus one day times the value of i
       })
       // then, with the dietProg passed,
       .then(function(dietProg){
