@@ -2,6 +2,7 @@
 // require dependencies
 var path = require('path');
 var request = require('request');
+var moment = require('moment')
 
 // load our models
 var models = require('../models');
@@ -12,13 +13,15 @@ var models = require('../models');
 module.exports = function(app) {
 	app.get('/api/profile-data', function(req, res){
 		var answered;
+		var startDay;
+		var theAnswers = [[], [], []];
 		// in later versions, we'll actually grab the user's id and diet
 		// using req's cookies.
 		//
 		// for now, we'll use dummy data, except the next part.
 
 		// we first need to grab the earliest dietReport
-		models.DietProgress.findOne(
+		models.DietProgress.findAll(
 			{
 				where: {
 					UserId: 1,
@@ -27,8 +30,22 @@ module.exports = function(app) {
 				order: [['reportDay', 'ASC']]
 			}
 		)
-		.then(function(theFirst){
-			console.log(theFirst);
+		// now we need to parse every one for answers
+		.then(function(theReports){
+			console.log(theReports);
+			currentDay = theReports[0].reportDay;
+			for (var i = 1; i <= theReports.length; i++) {
+				if (theReports[i-1].a1){
+					theAnswers[0].push({x:i, y:theReports[i-1].a1})
+				}
+				if (theReports[i-1].a2){
+					theAnswers[1].push({x:i, y:theReports[i-1].a2})
+				}
+				if (theReports[i-1].a3){
+					theAnswers[2].push({x:i, y:theReports[i-1].a3})
+				}
+			}
+			console.log(theAnswers);
 			// We're going to check whether the user answered a question today.
 			return models.DietProgress.findOne(
 				{
@@ -57,7 +74,8 @@ module.exports = function(app) {
 					dietId: result.DietId,
 					reportId: result.id,
 					reportDay: result.reportDay,
-					startDate: theFirst.reportDay,
+					startDate: currentDay,
+					answers: theAnswers,
 					answered: answered
 				});
 			})
@@ -81,7 +99,7 @@ module.exports = function(app) {
 		)		
 		// with that instance selected, pass it into a .then, and update it
 		.then(function(report){
-			res.status(201).end
+			res.send({report});
 		})
 		// catch any errors
 		.catch(function(err) {
