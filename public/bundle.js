@@ -26545,9 +26545,12 @@
 	// dependencies
 	var React = __webpack_require__(1);
 
+<<<<<<< HEAD
+=======
 	// bring in our components
 	var components = __webpack_require__(233);
 
+>>>>>>> 310366942e8857bedf292a59e67cedfc4653daba
 	// We will then pull the router
 	var Router = __webpack_require__(170);
 	var Route = Router.Route;
@@ -26555,6 +26558,8 @@
 	//  This is the catchall route
 	var IndexRoute = Router.IndexRoute;
 
+<<<<<<< HEAD
+=======
 	module.exports = React.createElement(
 		Route,
 		{ path: '/', component: components.App },
@@ -62809,5 +62814,6 @@
 	}
 
 
+>>>>>>> 310366942e8857bedf292a59e67cedfc4653daba
 /***/ }
 /******/ ]);

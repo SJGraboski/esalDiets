@@ -52,7 +52,8 @@ require('./routes/api.js')(app);
 // ======
 
 // define our port (either our environment's preset, or 3000)
-var PORT = process.env.PORT || 3001;
+var PORT = process.env.PORT || 8080
+
 
 // listen on our port
 app.listen(PORT, function(){
