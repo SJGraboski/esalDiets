@@ -99,7 +99,7 @@ module.exports = function(app) {
 		)		
 		// with that instance selected, pass it into a .then, and update it
 		.then(function(report){
-			res.status(201).end
+			res.send({report});
 		})
 		// catch any errors
 		.catch(function(err) {
