@@ -7,6 +7,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
+var passport = require('passport');
 var logger = require('morgan');
 
 
@@ -28,6 +29,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 var staticContentFolder = './public';
 app.use(express.static(staticContentFolder));
 
+// get app to use passport
+app.use(passpot.initialize());
 
 
 // Sequelize
