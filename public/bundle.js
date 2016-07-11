@@ -26696,8 +26696,17 @@
 			return React.createElement(
 				'div',
 				null,
-				React.createElement(Calendar, { updateQuery: this.updateQuery, startDate: this.state.startDate, reportId: this.state.reportId, answered: this.state.answered }),
-				React.createElement(Graph, { mood: this.state.answers[0], energy: this.state.answers[1], weight: this.state.answers[2] })
+				React.createElement(Calendar, {
+					updateQuery: this.updateQuery,
+					startDate: this.state.startDate,
+					reportId: this.state.reportId,
+					answered: this.state.answered
+				}),
+				React.createElement(Graph, {
+					mood: this.state.answers[0],
+					energy: this.state.answers[1],
+					weight: this.state.answers[2]
+				})
 			);
 		}
 	});

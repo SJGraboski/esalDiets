@@ -78,8 +78,17 @@ var Profile = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
-				<Graph mood={this.state.answers[0]} energy={this.state.answers[1]} weight={this.state.answers[2]} />
+				<Calendar 
+					updateQuery={this.updateQuery} 
+					startDate={this.state.startDate} 
+					reportId={this.state.reportId} 
+					answered={this.state.answered} 
+				/>
+				<Graph 
+					mood={this.state.answers[0]} 
+					energy={this.state.answers[1]} 
+					weight={this.state.answers[2]} 
+				/>
 			</div>
 		)
 	}
