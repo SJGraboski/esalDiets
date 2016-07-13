@@ -60547,40 +60547,44 @@
 	        key: "render",
 	        value: function render() {
 	            return _React2.default.createElement(
-	                "svg",
-	                { width: "1300", height: "700" },
+	                "div",
+	                { "col-md-4": true },
 	                _React2.default.createElement(
-	                    _victory.VictoryChart,
-	                    null,
+	                    "svg",
+	                    { width: "1200", height: "300" },
 	                    _React2.default.createElement(
-	                        _victory.VictoryLabel,
-	                        {
-	                            x: 150,
-	                            y: 150 },
-	                        "Mood"
-	                    ),
-	                    _React2.default.createElement(_victory.VictoryAxis, {
+	                        _victory.VictoryChart,
+	                        null,
+	                        _React2.default.createElement(
+	                            _victory.VictoryLabel,
+	                            {
+	                                x: 150,
+	                                y: 150 },
+	                            "Mood"
+	                        ),
+	                        _React2.default.createElement(_victory.VictoryAxis, {
 
-	                        domain: [1, 28],
-	                        label: "Day",
-	                        style: {
-	                            axis: { stroke: "black" },
-	                            grid: { strokeWidth: 2 },
-	                            ticks: { stroke: "red" },
-	                            tickLabels: { fontSize: 12 },
-	                            axisLabel: { fontsize: 16 }
-	                        }
-	                    }),
-	                    _React2.default.createElement(_victory.VictoryAxis, {
-	                        dependentAxis: true,
-	                        domain: [1, 5],
-	                        label: "Rating"
-	                    }),
-	                    _React2.default.createElement(_victory.VictoryLine, {
-	                        style: { data: { stroke: "blue", strokeWidth: 6 }
-	                        },
-	                        data: this.state.mood
-	                    })
+	                            domain: [1, 28],
+	                            label: "Day",
+	                            style: {
+	                                axis: { stroke: "black" },
+	                                grid: { strokeWidth: 2 },
+	                                ticks: { stroke: "red" },
+	                                tickLabels: { fontSize: 12 },
+	                                axisLabel: { fontsize: 16 }
+	                            }
+	                        }),
+	                        _React2.default.createElement(_victory.VictoryAxis, {
+	                            dependentAxis: true,
+	                            domain: [1, 5],
+	                            label: "Rating"
+	                        }),
+	                        _React2.default.createElement(_victory.VictoryLine, {
+	                            style: { data: { stroke: "blue", strokeWidth: 2 }
+	                            },
+	                            data: this.state.mood
+	                        })
+	                    )
 	                )
 	            );
 	        }
@@ -99833,40 +99837,44 @@
 	        key: "render",
 	        value: function render() {
 	            return _React2.default.createElement(
-	                "svg",
-	                { width: "1300", height: "700" },
+	                "div",
+	                { "col-md-4": true },
 	                _React2.default.createElement(
-	                    _victory.VictoryChart,
-	                    null,
+	                    "svg",
+	                    { width: "1200", height: "300" },
 	                    _React2.default.createElement(
-	                        _victory.VictoryLabel,
-	                        {
-	                            x: 150,
-	                            y: 150 },
-	                        "Energy"
-	                    ),
-	                    _React2.default.createElement(_victory.VictoryAxis, {
+	                        _victory.VictoryChart,
+	                        null,
+	                        _React2.default.createElement(
+	                            _victory.VictoryLabel,
+	                            {
+	                                x: 150,
+	                                y: 150 },
+	                            "Energy"
+	                        ),
+	                        _React2.default.createElement(_victory.VictoryAxis, {
 
-	                        domain: [1, 28],
-	                        label: "Day",
-	                        style: {
-	                            axis: { stroke: "black" },
-	                            grid: { strokeWidth: 2 },
-	                            ticks: { stroke: "red" },
-	                            tickLabels: { fontSize: 12 },
-	                            axisLabel: { fontsize: 16 }
-	                        }
-	                    }),
-	                    _React2.default.createElement(_victory.VictoryAxis, {
-	                        dependentAxis: true,
-	                        domain: [1, 5],
-	                        label: "Rating"
-	                    }),
-	                    _React2.default.createElement(_victory.VictoryLine, {
-	                        style: { data: { stroke: "red", strokeWidth: 6 }
-	                        },
-	                        data: this.state.energy
-	                    })
+	                            domain: [1, 28],
+	                            label: "Day",
+	                            style: {
+	                                axis: { stroke: "black" },
+	                                grid: { strokeWidth: 2 },
+	                                ticks: { stroke: "red" },
+	                                tickLabels: { fontSize: 12 },
+	                                axisLabel: { fontsize: 16 }
+	                            }
+	                        }),
+	                        _React2.default.createElement(_victory.VictoryAxis, {
+	                            dependentAxis: true,
+	                            domain: [1, 5],
+	                            label: "Rating"
+	                        }),
+	                        _React2.default.createElement(_victory.VictoryLine, {
+	                            style: { data: { stroke: "red", strokeWidth: 6 }
+	                            },
+	                            data: this.state.energy
+	                        })
+	                    )
 	                )
 	            );
 	        }
@@ -99925,40 +99933,44 @@
 	        key: "render",
 	        value: function render() {
 	            return _React2.default.createElement(
-	                "svg",
-	                { width: "1300", height: "700" },
+	                "div",
+	                { "col-md-4": true },
 	                _React2.default.createElement(
-	                    _victory.VictoryChart,
-	                    null,
+	                    "svg",
+	                    { width: "1200", height: "300" },
 	                    _React2.default.createElement(
-	                        _victory.VictoryLabel,
-	                        {
-	                            x: 150,
-	                            y: 150 },
-	                        "Weight"
-	                    ),
-	                    _React2.default.createElement(_victory.VictoryAxis, {
+	                        _victory.VictoryChart,
+	                        null,
+	                        _React2.default.createElement(
+	                            _victory.VictoryLabel,
+	                            {
+	                                x: 150,
+	                                y: 150 },
+	                            "Weight"
+	                        ),
+	                        _React2.default.createElement(_victory.VictoryAxis, {
 
-	                        domain: [1, 28],
-	                        label: "Day",
-	                        style: {
-	                            axis: { stroke: "black" },
-	                            grid: { strokeWidth: 2 },
-	                            ticks: { stroke: "red" },
-	                            tickLabels: { fontSize: 12 },
-	                            axisLabel: { fontsize: 16 }
-	                        }
-	                    }),
-	                    _React2.default.createElement(_victory.VictoryAxis, {
-	                        dependentAxis: true,
-	                        domain: [1, 5],
-	                        label: "Weight (lbs)"
-	                    }),
-	                    _React2.default.createElement(_victory.VictoryLine, {
-	                        style: { data: { stroke: "orange", strokeWidth: 6 }
-	                        },
-	                        data: this.state.weight
-	                    })
+	                            domain: [1, 28],
+	                            label: "Day",
+	                            style: {
+	                                axis: { stroke: "black" },
+	                                grid: { strokeWidth: 2 },
+	                                ticks: { stroke: "red" },
+	                                tickLabels: { fontSize: 12 },
+	                                axisLabel: { fontsize: 16 }
+	                            }
+	                        }),
+	                        _React2.default.createElement(_victory.VictoryAxis, {
+	                            dependentAxis: true,
+	                            domain: [1, 5],
+	                            label: "Weight (lbs)"
+	                        }),
+	                        _React2.default.createElement(_victory.VictoryLine, {
+	                            style: { data: { stroke: "orange", strokeWidth: 2 }
+	                            },
+	                            data: this.state.weight
+	                        })
+	                    )
 	                )
 	            );
 	        }
