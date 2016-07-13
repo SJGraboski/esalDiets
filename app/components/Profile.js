@@ -7,7 +7,11 @@ var Router = require('react-router');
 
 // get components
 var Calendar = require('./Calendar/Calendar.js');
-var Graph = require('./Graph.js');
+var MoodGraph = require('./MoodGraph.js');
+var EnergyGraph = require('./EnergyGraph.js');
+var WeightGraph = require('./WeightGraph.js');
+
+
 
 // helpers functions
 var helpers = require('../utils/helpers.js');
@@ -78,8 +82,14 @@ var Profile = React.createClass({
 	render: function() {
 		return (
 			<div>
+				<MoodGraph mood={this.state.answers[0]} />
+				<EnergyGraph energy={this.state.answers[1]} />
+				<WeightGraph weight={this.state.answers[2]} />
+				
 				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
-				<Graph mood={this.state.answers[0]} energy={this.state.answers[1]} weight={this.state.answers[2]} />
+
+
+
 			</div>
 		)
 	}
