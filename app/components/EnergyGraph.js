@@ -18,7 +18,7 @@ class EnergyGraph extends React.Component {
 
     render () {
         return (
-            <div col-md-4>
+            <div className="col-md-4">
             <svg width="1200" height="300">
 
                 <VictoryChart>
@@ -36,7 +36,7 @@ class EnergyGraph extends React.Component {
                         style={{
               axis: {stroke: "black"},
               grid: {strokeWidth: 2},
-              ticks: {stroke: "red"},
+              ticks: {stroke: "#000000"},
               tickLabels: {fontSize: 12},
               axisLabel: {fontsize: 16}
             }}
@@ -51,7 +51,7 @@ class EnergyGraph extends React.Component {
 
                     <VictoryLine
                         style={{data:
-              {stroke: "red", strokeWidth: 2}
+              {stroke: "#2a6ec3", strokeWidth: 7}
             }}
                         data={this.state.energy}
                     />
