@@ -30,7 +30,7 @@ var staticContentFolder = './public';
 app.use(express.static(staticContentFolder));
 
 // get app to use passport
-app.use(passpot.initialize());
+app.use(passport.initialize());
 
 
 // Sequelize
