@@ -87,9 +87,6 @@ var Profile = React.createClass({
 				<WeightGraph weight={this.state.answers[2]} />
 				
 				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
-
-
-
 			</div>
 		)
 	}

@@ -39,3 +39,4 @@ jspm_packages
 # Get rid of .DS_Store 
 .DS_Store
 
+# remove config folder from github
