@@ -7,6 +7,11 @@ var Router = require('react-router');
 
 // get components
 var Calendar = require('./Calendar/Calendar.js');
+var MoodGraph = require('./MoodGraph.js');
+var EnergyGraph = require('./EnergyGraph.js');
+var WeightGraph = require('./WeightGraph.js');
+
+
 
 // helpers functions
 var helpers = require('../utils/helpers.js');
@@ -21,7 +26,8 @@ var Profile = React.createClass({
 			reportId: null,
 			answered: null,
 			startDay: null,
-			reportUpdate: null
+			reportUpdate: null,
+			answers: [[],[],[]]
 		}
 	},
 	componentWillMount: function(){
@@ -34,7 +40,7 @@ var Profile = React.createClass({
 				reportId: data.reportId,
 				answered: data.answered,
 				startDate: data.startDate,
-				allAnswers: data.allAnswers,
+				answers: data.answers,
 				reportUpdate: null
 			})
 		}.bind(this));
@@ -48,9 +54,19 @@ var Profile = React.createClass({
 			.then(function(data){
 				// check response
 				if (data != false) {
-					return this.setState({
-						answered: true
-					})
+					return helpers.getProfileData()
+					.then(function(result){
+						var data = result.data;
+						return this.setState({
+							userId: data.userId,
+							dietId: data.dietId,
+							reportId: data.reportId,
+							answered: data.answered,
+							startDate: data.startDate,
+							answers: data.answers,
+							reportUpdate: null
+						})
+					}.bind(this)); // make "this" function as expected)
 				}
 			}.bind(this)); // make "this" function as expected
 		}
@@ -66,7 +82,14 @@ var Profile = React.createClass({
 	render: function() {
 		return (
 			<div>
+				<MoodGraph mood={this.state.answers[0]} />
+				<EnergyGraph energy={this.state.answers[1]} />
+				<WeightGraph weight={this.state.answers[2]} />
+				
 				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
+
+
+
 			</div>
 		)
 	}
