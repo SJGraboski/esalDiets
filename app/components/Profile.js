@@ -113,7 +113,7 @@ var Profile = React.createClass({
 		return (
 			<div>
 				<SearchBar
-					placeholder="search 'mac'"
+					placeholder="search for diets"
 					onChange={this.onChange}
 					onSearch={this.onSearch} />
 				<MoodGraph mood={this.state.answers[0]} />

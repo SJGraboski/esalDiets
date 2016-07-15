@@ -26822,7 +26822,7 @@
 				'div',
 				null,
 				React.createElement(SearchBar, {
-					placeholder: 'search \'mac\'',
+					placeholder: 'search for diets',
 					onChange: this.onChange,
 					onSearch: this.onSearch }),
 				React.createElement(MoodGraph, { mood: this.state.answers[0] }),
