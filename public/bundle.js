@@ -99870,7 +99870,7 @@
 	                            label: "Rating"
 	                        }),
 	                        _React2.default.createElement(_victory.VictoryLine, {
-	                            style: { data: { stroke: "red", strokeWidth: 6 }
+	                            style: { data: { stroke: "red", strokeWidth: 2 }
 	                            },
 	                            data: this.state.energy
 	                        })
@@ -99962,7 +99962,6 @@
 	                        }),
 	                        _React2.default.createElement(_victory.VictoryAxis, {
 	                            dependentAxis: true,
-	                            domain: [1, 5],
 	                            label: "Weight (lbs)"
 	                        }),
 	                        _React2.default.createElement(_victory.VictoryLine, {

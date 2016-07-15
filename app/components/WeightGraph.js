@@ -44,7 +44,6 @@ class WeightGraph extends React.Component {
 
                     <VictoryAxis
                         dependentAxis
-                        domain={[1,5]}
                         label="Weight (lbs)"
                     />
 
