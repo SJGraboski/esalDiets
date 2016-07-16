@@ -16,9 +16,9 @@ import Diet from '../components/Diet';
 module.exports = (
   <Route path ="/" component={App}>
     <IndexRoute component={Profile} />
-    <Route component={Home} name="Home" path="/home" />
-    <Route component={Diet} name="Diet" path="/diet" />
-    <Route component={Profile} name="Profile" path="/profile" />
+    <Route component={Home} name="Home" path="home" />
+    <Route component={Diet} name="Diet" path="diet" />
+    <Route component={Profile} name="Profile" path="profile" />
 
   </Route>
 );
