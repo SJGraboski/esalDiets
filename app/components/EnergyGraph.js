@@ -18,46 +18,47 @@ class EnergyGraph extends React.Component {
 
     render () {
         return (
-            <div col-md-4>
-            <svg width="1200" height="300">
+            <div className="col-md-4">
+            <div className="panel panel-default energypanel">
+                <div className="panel-heading energyhead">Energy</div>
+                    <div className="panel-body energybody">
+                    <svg width="1200" height="300">
 
-                <VictoryChart>
+                        <VictoryChart>
 
-                    <VictoryLabel
-                        x={150}
-                        y={150}>
-                        Energy
-                    </VictoryLabel>
+                            
 
-                    <VictoryAxis
+                            <VictoryAxis
 
-                        domain={[1,28]}
-                        label="Day"
-                        style={{
-              axis: {stroke: "black"},
-              grid: {strokeWidth: 2},
-              ticks: {stroke: "red"},
-              tickLabels: {fontSize: 12},
-              axisLabel: {fontsize: 16}
-            }}
-                    />
+                                domain={[1,28]}
+                                label="Day"
+                                style={{
+                      axis: {stroke: "black"},
+                      grid: {strokeWidth: 2},
+                      ticks: {stroke: "#000000"},
+                      tickLabels: {fontSize: 12},
+                      axisLabel: {fontsize: 16}
+                    }}
+                            />
 
-                    <VictoryAxis
-                        dependentAxis
-                        domain={[1,5]}
-                        label="Rating"
-                    />
+                            <VictoryAxis
+                                dependentAxis
+                                domain={[1,5]}
+                                label="Rating"
+                            />
 
 
-                    <VictoryLine
-                        style={{data:
-              {stroke: "red", strokeWidth: 2}
-            }}
-                        data={this.state.energy}
-                    />
+                            <VictoryLine
+                                style={{data:
+                      {stroke: "#f69c16", strokeWidth: 7}
+                    }}
+                                data={this.state.energy}
+                            />
 
-                </VictoryChart>
-            </svg>
+                        </VictoryChart>
+                    </svg>
+                </div>
+            </div>
             </div>
 
         );

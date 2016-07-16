@@ -18,16 +18,15 @@ class WeightGraph extends React.Component {
 
     render () {
         return (
-            <div col-md-4>
+            <div className="col-md-4">
+            <div className="panel panel-default weightpanel">
+                <div className="panel-heading weighthead">Weight</div>
+                    <div className="panel-body weightbody">
             <svg width="1200" height="300">
 
                 <VictoryChart>
 
-                    <VictoryLabel
-                        x={150}
-                        y={150}>
-                        Weight
-                    </VictoryLabel>
+                    
 
                     <VictoryAxis
 
@@ -36,7 +35,7 @@ class WeightGraph extends React.Component {
                         style={{
               axis: {stroke: "black"},
               grid: {strokeWidth: 2},
-              ticks: {stroke: "red"},
+              ticks: {stroke: "#000000"},
               tickLabels: {fontSize: 12},
               axisLabel: {fontsize: 16}
             }}
@@ -51,13 +50,15 @@ class WeightGraph extends React.Component {
 
                     <VictoryLine
                         style={{data:
-              {stroke: "orange", strokeWidth: 2}
+              {stroke: "#f54f5b", strokeWidth: 7}
             }}
                         data={this.state.weight}
                     />
 
                 </VictoryChart>
             </svg>
+            </div>
+            </div>
             </div>
 
         );
