@@ -26770,7 +26770,7 @@
 												null,
 												React.createElement(
 													"a",
-													{ href: "#analytics" },
+													{ href: "#placeholderspace" },
 													React.createElement("i", { className: "fa fa-line-chart", "aria-hidden": "true" }),
 													" Analytics"
 												)
@@ -26911,6 +26911,7 @@
 			return React.createElement(
 				'div',
 				{ className: 'row graphContainer' },
+				React.createElement('div', { className: 'placeholderspace', id: 'placeholderspace' }),
 				React.createElement(
 					'div',
 					{ className: 'col-md-12', id: 'analytics' },
