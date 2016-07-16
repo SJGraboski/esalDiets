@@ -82,6 +82,7 @@ var Profile = React.createClass({
 	render: function() {
 		return (
 			<div className="row graphContainer">
+			<div className="placeholderspace" id="placeholderspace"></div>
 			<div className="col-md-12" id="analytics">
 				<MoodGraph mood={this.state.answers[0]} />
 				<EnergyGraph energy={this.state.answers[1]} />

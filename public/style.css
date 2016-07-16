@@ -76,7 +76,9 @@ header {
 	font-size: 1.2em;
 }
 
-
+#placeholderspace{
+	height: 0px;
+}
 
 .dietSearch {
 	border-radius: 20px;
