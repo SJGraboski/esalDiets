@@ -27,13 +27,6 @@ var models = require('../models');
 
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    // add images column to diets
-    return queryInterface.addColumn(
-      'Diets',
-      'image',
-      Sequelize.STRING
-    )
-    .then(function(){
       // bulkCreate diets
       return models.Diet.bulkCreate([
         { 
@@ -85,7 +78,6 @@ module.exports = {
           image: "assets/images/placeholder.jpg"
         }
       ])
-    })
   },
 
   down: function (queryInterface, Sequelize) {
@@ -108,8 +100,5 @@ module.exports = {
           return item.destroy();
         })
       })
-    .then(function(){
-      return queryInterface.removeColumn('Diets','image')
-    })
   } 
 }

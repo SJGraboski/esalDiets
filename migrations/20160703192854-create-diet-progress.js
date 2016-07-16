@@ -26,6 +26,10 @@ module.exports = {
       a3: {
         type: Sequelize.INTEGER
       },
+      reportNum:{
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       reportDay: {
         type: Sequelize.DATE,
         allowNull: false
