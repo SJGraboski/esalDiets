@@ -29,6 +29,21 @@ var models = require('../models');
 // GLOBALS
 // =========
 
+var insertCheck = 0;
+// this function will return a number between 1 and 5.
+// works great for answers 1 and 2, which are on a 1-5 spectrum.
+function getRandomAnswer() {
+  // random number * 5, plus 1, rounded down. This gives us a random num between 1 and 5
+  return Math.floor(Math.random() * (5)) + 1;
+}
+
+// this function gets a random weight between 180 and 183.
+function getRandomWeight() {
+  //  We add the number 180 to a random number between 0 and 3.
+  // In other words, we get a randNum between 180 and 183.
+  return Math.floor(Math.random() * (4)) + 180;
+}
+
 // function to add 28 diet progress reports to db
 function addProgress(user, diet) {
 
@@ -41,13 +56,14 @@ function addProgress(user, diet) {
       // create one of the 28 progress reports, saving it as a promise
       var newPromise = models.DietProgress.create({
         q1: "How's your mood?",
-        a1: null,
+        a1: getRandomAnswer(),
         q2: "How's your energy?",
-        a2: null,
+        a2: getRandomAnswer(),
         q3: "What was your weight today?",
-        a3: null,
-        reportDay: (Date.now() - (86400000 * 4)  + (86400000 * i))
-        // ^^^ the current day, minus 5 days, plus one day times the value of i
+        a3: getRandomWeight(),
+        reportDay: (Date.now() - (86400000 * 10)  + (86400000 * i)),
+        reportNum: (i+1)
+        // ^^^ the current day, minus 10 days, plus one day times the value of i
       })
       // then, with the dietProg passed,
       .then(function(dietProg){
