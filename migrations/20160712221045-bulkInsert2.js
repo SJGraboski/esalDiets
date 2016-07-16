@@ -64,7 +64,8 @@ function addProgress(user, diet, queryInterface) {
         a2: getRandomAnswer(),
         q3: "What was your weight today?",
         a3: getRandomWeight(),
-        reportDay: (Date.now() - (86400000 * 4)  + (86400000 * i))
+        reportDay: (Date.now() - (86400000 * 10)  + (86400000 * i)),
+        reportNum: (i+1)
         // ^^^ the current day, minus 28 days, plus one day times the value of i
       })
       // then, with the dietProg passed,

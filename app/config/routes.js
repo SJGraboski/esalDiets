@@ -12,7 +12,7 @@ import Profile from '../components/Profile';
 // import LoginRequired from './util/RouteHelpers';
 
 module.exports = (
-  <Route path="/" component={App}>
+  <Route path ="/" component={App}>
     <IndexRoute component={Profile} />
     <Route component={Profile} name="Profile" path="/graph" />
   </Route>
