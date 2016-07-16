@@ -65,24 +65,27 @@ module.exports = function(app) {
 					}
 				}
 			)
-			// then take the results and save them to the res.send
-			.then(function(result){
-				if(result.a1 || result.a2 || result.a3){
-					answered = true;
-				}
-				else {
-					answered = false;
-				}
-				return res.send({
-					userId: result.UserId,
-					dietId: result.DietId,
-					reportId: result.id,
-					reportDay: result.reportDay,
-					startDate: currentDay,
-					answers: theAnswers,
-					answered: answered
-				});
-			})
+			.then(function(dietProg){
+				dietProg.getDiet()
+				.then(function(diet){
+					if(dietProg.a1 || dietProg.a2 || dietProg.a3){
+						answered = true;
+					}
+					else {
+						answered = false;
+					}
+					return res.send({
+						userId: dietProg.UserId,
+						dietId: dietProg.DietId,
+						reportId: dietProg.id,
+						reportDay: dietProg.reportDay,
+						startDate: currentDay,
+						answers: theAnswers,
+						answered: answered,
+						diet: diet
+					})
+				})
+			})			
 		})
 	});
 
