@@ -122,12 +122,7 @@ var Home = React.createClass({
 			</div>
 			<div className="col-md-12" id="userdata">
 				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
-
 			</div>
-			
-
-
-
 			</div>
 		)
 	}
