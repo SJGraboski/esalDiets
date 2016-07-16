@@ -37,8 +37,8 @@ var App = React.createClass({
 							    </div>
 
 
-							    <div className="navbar-collapse collapse" id="">
-							    <ul className="nav navbar-nav navbar-right">
+							    <div className="navbar-collapse collapse">
+							    <ul className="nav navbar-nav navbar-right icon">
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
@@ -46,9 +46,9 @@ var App = React.createClass({
 							      <form className="navbar-form navbar-left" role="search">
 
 							   	<div className="input-group">
-							      <input type="text" className="form-control" id="dietSearch" placeholder="Diet Search"/>
+							      <input type="text" className="form-control dietSearch" id="dietSearch" placeholder="Diet Search"/>
 							      <span className="input-group-btn">
-							        <button className="btn btn-default" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true"></i></button>
+							        <button className="btn btn-default dietSearchBTN" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true"></i></button>
 							      </span>
 							    </div>
 

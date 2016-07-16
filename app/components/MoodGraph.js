@@ -19,15 +19,14 @@ class MoodGraph extends React.Component {
     render () {
         return (
             <div className="col-md-4">
+            <div className="panel panel-default moodpanel">
+                <div className="panel-heading moodhead">Mood</div>
+                    <div className="panel-body moodbody">
             <svg width="1200" height="300">
 
                 <VictoryChart>
 
-                    <VictoryLabel
-                        x={150}
-                        y={150}>
-                        Mood
-                    </VictoryLabel>
+                    
 
                     <VictoryAxis
 
@@ -51,13 +50,15 @@ class MoodGraph extends React.Component {
 
                     <VictoryLine
                         style={{data:
-              {stroke: "#6ec32a", strokeWidth: 7}
+              {stroke: "#8cc632", strokeWidth: 7}
             }}
                         data={this.state.mood}
                     />
 
                 </VictoryChart>
             </svg>
+            </div>
+            </div>
                 </div>
 
 

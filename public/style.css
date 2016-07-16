@@ -35,6 +35,10 @@ header {
     z-index:1000;
 }
 
+.navbar-default {
+	color: #318dbe;
+}
+
 #content {
 	height:1000px;
 	background-color: #d5d5d5;
@@ -43,9 +47,10 @@ header {
 }
 
 #analytics {
-	margin-bottom: 100px;
+	margin-bottom: 50px;
 
 }
+
 
 #placeholder{
 	min-height: 200px;
@@ -53,21 +58,31 @@ header {
 
 #dietSearch {
 	height: 40px;
+	border-color: #318dbe;
 }
 
 #childrenContainer{
-	margin-top: -100px;
+	margin-top: 25px;
 }
 
 #dietSearchBTN {
 	height: 40px;
+	border-color: #318dbe;
+	background-color: #318dbe;
+	color: #fff;
 }
 
-.form-control {
+.icon {
+	font-size: 1.2em;
+}
+
+
+
+.dietSearch {
 	border-radius: 20px;
 }
 
-.btn {
+.dietSearchBTN {
 	border-radius: 20px;
 }
 
@@ -75,18 +90,31 @@ header {
 	background-color: #fff;
 	border-radius: 0px;
 	border-style: solid;
-    border-width: 1px 0px 1px 0px;
-    border-color: #000;
+    border-width: 3px 0px 3px 0px;
+    border-color: #318dbe;
     padding-top: 10px;
     padding-bottom: 10px;
     transition: all 0.5s;
 }
 
+.navbar-default .navbar-nav>li>a {
+    color: #318dbe;
+    margin-top: 5px;
+   	margin-bottom: 5px;
+   	border-radius: 4px;
+   	transition: all 0.5s;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    background-color: rgba(256, 256, 256, 0.5);
+}
+
+
 .on {
 	padding-top: 0px;
     padding-bottom: 0px;
-	background-color: rgba(256, 256, 256, 1);
-	border-color: #000;
+	background-color: #d4e0ed;
+	border-color: #318dbe;
 	box-shadow: 0px 10px 15px -7px rgba(0, 0, 0, 0.2);
 
 }
@@ -100,6 +128,62 @@ header {
 }
 
 svg {
-	margin-top: 60px;
 	width: 100%;
+}
+
+.panel-default {
+	border-width: 3px;
+}
+
+.panel-head {
+	border-width: 4px;
+}
+
+.panel-body {
+	border-width: 4px;
+}
+
+.panel > .moodhead {
+    background-image: none;
+    background-color: #edf6cd;
+    border-color: #8cc632;
+    color: #8cc632;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.moodpanel {
+	border-color: #8cc632;
+}
+
+.panel > .energyhead {
+    background-image: none;
+    background-color: #fdd4a0;
+    border-color: #f69c16;
+    color: #f69c16;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.energypanel {
+	border-color: #f69c16;
+}
+
+.panel > .weighthead {
+    background-image: none;
+    background-color: #f9b8af;
+    border-color: #f54f5b;
+    color: #f54f5b;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.weightpanel {
+	border-color: #f54f5b;
 }
