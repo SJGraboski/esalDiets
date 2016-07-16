@@ -26804,7 +26804,7 @@
 			setTimeout(function () {
 				var suggestions = matches[Object.keys(matches).find(function (partial) {
 					return input.match(new RegExp(partial), 'i');
-				})] || ['macbook', 'macbook air', 'macbook pro'];
+				})] || ['1 banana', '2 banana', 'paleo', 'low carb', 'low calorie', 'low sugar'];
 
 				resolve(suggestions.filter(function (suggestion) {
 					return suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'));
