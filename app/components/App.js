@@ -14,7 +14,7 @@ var App = React.createClass({
 				  <div className="container">
 				  <div className="row">
 				    <div>
-				      <h1 className="dietName">2 Bannana Diet</h1>
+				      <h1 className="dietName">ESAL</h1>
 				    </div>
 				  </div>
 				  </div>
