@@ -46,7 +46,7 @@ var Calendar = React.createClass({
     var a = moment(nextProps.startDate);
     var b = moment();
     var c = 28 - b.diff(a, 'days');
-    alert(c);
+    //alert(c);
 
     for (var i = 1; i < 365; i++){
       exDates.push(moment().subtract(parseInt([i]), 'days'))

@@ -33,7 +33,8 @@ var App = React.createClass({
 							        <span className="icon-bar"></span>
 							        <span className="icon-bar"></span>
 							      </a>
-							      <a className="navbar-brand" href="#">EASL</a>
+									<a href="#" className="navbar-left"><img className="navbar-left" src="./assets/images/esallogosmall.gif" id="navlogo" /></a>
+							      
 							    </div>
 
 

@@ -9,9 +9,9 @@ body {
 
 header {
 	height:280px;
-	background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");
+	/*background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");*/
 	background-size: cover;
-	background-color: #d5d5d5;
+	background-color: #318dbe;
 	display: flex;
   	align-items: center;
   	justify-content: center;
@@ -38,6 +38,13 @@ header {
 .navbar-default {
 	color: #318dbe;
 }
+
+#navlogo{
+	
+	padding-top: 3px;
+}
+
+
 
 #content {
 	height:1000px;
