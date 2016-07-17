@@ -8,9 +8,13 @@ module.exports = function(sequelize, DataTypes) {
     q3: DataTypes.STRING,
     a3: DataTypes.INTEGER,
     reportDay: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    reportNum:{
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     classMethods: {
       associate: function(models) {

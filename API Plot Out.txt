@@ -1,0 +1,6 @@
+API Plot Out
+
+Grabbing average map data
+
+Sequelize FindAll for DietProgress with Diet ID, sorted by User Id then CreateID,
+	group by User Id

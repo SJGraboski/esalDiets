@@ -39,7 +39,7 @@ var App = React.createClass({
 
 							    <div className="navbar-collapse collapse">
 							    <ul className="nav navbar-nav navbar-right icon">
-				      <li><a href="#placeholderspace"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
+				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
 

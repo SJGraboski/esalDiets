@@ -6,7 +6,6 @@ var React = require('react');
 var Router = require('react-router');
 
 // get components
-var Usertitle = require('./Usertitle.js');
 var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
@@ -31,32 +30,29 @@ const matches = {
 // helpers functions
 var helpers = require('../utils/helpers.js');
 
-// create Profile component
-var Profile = React.createClass({
+// create Home component
+var Home = React.createClass({
 	// state initialized for form queries and results
 	getInitialState: function() {
 		return {
 			userId: null,
 			dietId: null,
-			reportId: null,
-			answered: null,
-			startDay: null,
 			reportUpdate: null,
-			answers: [[],[],[]]
+			answers: [[],[],[]],
+			dietName: null,
+			dietDescription: null,
+			dietCreated: null,
+			dietImage: null
+
 		}
 	},
+	// grab profile data
 	componentWillMount: function(){
 		helpers.getProfileData()
 		.then(function(result){
 			var data = result.data;
 			return this.setState({
 				userId: data.userId,
-				dietId: data.dietId,
-				reportId: data.reportId,
-				answered: data.answered,
-				startDate: data.startDate,
-				answers: data.answers,
-				reportUpdate: null
 			})
 		}.bind(this));
 	},
@@ -108,33 +104,28 @@ var Profile = React.createClass({
 	onSearch(input) {
 		if (!input) return;
 		console.info(`Searching "${input}"`);
+		// run the search query
+		helpers.getSearchResults(input)
+		.then(function(results){
+			console.log(results);
+		})
 	},
 	// render function
 	render: function() {
 		return (
 			<div className="row graphContainer">
-				<div className="col-md-12">
-					<Usertitle />
-				</div>
-				<div className="placeholderspace" id="placeholderspace">
-				<div className="col-md-12" id="analytics">
-					<MoodGraph mood={this.state.answers[0]} />
-					<EnergyGraph energy={this.state.answers[1]} />
-					<WeightGraph weight={this.state.answers[2]} />
-				</div>
-				
-				<div className="col-md-12" id="userdata">
-					<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
-					<div className="extraspace"></div>
-				</div>
-				</div>
 			
-
-
-
+			<div className="col-md-12" id="analytics">
+				<MoodGraph mood={this.state.answers[0]} />
+				<EnergyGraph energy={this.state.answers[1]} />
+				<WeightGraph weight={this.state.answers[2]} />
+			</div>
+			<div className="col-md-12" id="userdata">
+				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
+			</div>
 			</div>
 		)
 	}
 })
 
-module.exports = Profile;
+module.exports = Home;
