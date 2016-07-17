@@ -42,13 +42,13 @@ var App = React.createClass({
 							        <span className="icon-bar"></span>
 							        <span className="icon-bar"></span>
 							      </a>
-							      <a className="navbar-brand" href="#">EASL</a>
+							      <a href="#" className="navbar-left"><img className="navbar-left" src="./assets/images/esallogosmall.png" id="navlogo" /></a>
 							    </div>
 
 
 							    <div className="navbar-collapse collapse">
 							    <ul className="nav navbar-nav navbar-right icon">
-				      <li><a href="#placeholderspace"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
+				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
 				    	<SearchBar />

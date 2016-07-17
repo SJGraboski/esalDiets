@@ -1,5 +1,13 @@
+/* 
+
+font-family: 'Lato', sans-serif;
+font-family: 'Merriweather', serif;
+
+
+ */
+
 body {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 
@@ -9,16 +17,16 @@ body {
 
 header {
 	height:280px;
-	background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");
+	/*background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");*/
 	background-size: cover;
-	background-color: #d5d5d5;
+	background-color: #318dbe;
 	display: flex;
   	align-items: center;
   	justify-content: center;
 }
 
 .nav-wrapper {
-    min-height: 119px;
+    min-height: 85px;
 }
 
 .navbar-form input, .form-inline input {
@@ -39,6 +47,14 @@ header {
 	color: #318dbe;
 }
 
+#navlogo{
+	
+	padding-top: 3px;
+	height: 50px;
+}
+
+
+
 #content {
 	height:1000px;
 	background-color: #d5d5d5;
@@ -52,13 +68,13 @@ header {
 }
 
 
-#placeholder{
-	min-height: 200px;
+#analytics{
+	margin-top: 20px;
 }
 
 #dietSearch {
 	height: 40px;
-	border-color: #318dbe;
+	border-color: #125072;
 }
 
 #childrenContainer{
@@ -67,8 +83,8 @@ header {
 
 #dietSearchBTN {
 	height: 40px;
-	border-color: #318dbe;
-	background-color: #318dbe;
+	border-color: #125072;
+	background-color: #125072;
 	color: #fff;
 }
 
@@ -76,8 +92,25 @@ header {
 	font-size: 1.2em;
 }
 
+.dietcontainer {
+	height:140px;
+	border-radius: 4px;
+	background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");
+	background-size: cover;
+	background-color: #d5d5d5;
+	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	max-width: 100%;
+  	margin-bottom: 40px;
+}
+
 #placeholderspace{
 	height: 0px;
+}
+
+.extraspace {
+	height: 300px;
 }
 
 .dietSearch {
@@ -100,7 +133,7 @@ header {
 }
 
 .navbar-default .navbar-nav>li>a {
-    color: #318dbe;
+    color: #125072;
     margin-top: 5px;
    	margin-bottom: 5px;
    	border-radius: 4px;
@@ -149,10 +182,11 @@ svg {
     background-image: none;
     background-color: #edf6cd;
     border-color: #8cc632;
-    color: #8cc632;
+    color: #517a38;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: .3em;
     text-align: center;
 }
 
@@ -164,10 +198,11 @@ svg {
     background-image: none;
     background-color: #fdd4a0;
     border-color: #f69c16;
-    color: #f69c16;
+    color: #a86628;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: .3em;
     text-align: center;
 }
 
@@ -179,10 +214,11 @@ svg {
     background-image: none;
     background-color: #f9b8af;
     border-color: #f54f5b;
-    color: #f54f5b;
+    color: #a42630;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: .3em;
     text-align: center;
 }
 
