@@ -1,10 +1,19 @@
 // App
 // ===
 var React = require('react');
+var Navigation = require('react-router').Navigation;
+
+
+// bring in the search bar
+var SearchBar = require('./SearchBar.js');
 
 var App = React.createClass({
 
-// main component app. Takes in the other routes
+	// Allow for transitions between elements.
+	mixins: [Navigation],
+
+
+	// main component app. Takes in the other routes
 	render: function() {
 		return (
 			<div>
@@ -42,17 +51,7 @@ var App = React.createClass({
 				      <li><a href="#placeholderspace"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-
-							      <form className="navbar-form navbar-left" role="search">
-
-							   	<div className="input-group">
-							      <input type="text" className="form-control dietSearch" id="dietSearch" placeholder="Diet Search"/>
-							      <span className="input-group-btn">
-							        <button className="btn btn-default dietSearchBTN" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true"></i></button>
-							      </span>
-							    </div>
-
-							      </form>
+				    	<SearchBar />
 							      
 							    </div>
 

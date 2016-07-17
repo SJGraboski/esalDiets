@@ -4,6 +4,8 @@
 // dependencies
 var React = require('react');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
+
 
 // get components
 var Calendar = require('./Calendar/Calendar.js');
@@ -41,17 +43,28 @@ var Diet = React.createClass({
 			dietDescription: null,
 			dietCreated: null,
 			dietImage: null
-
 		}
 	},
-	// grab Diet data
-	componentWillMount: function(){
-		helpers.getDietData(2)
+
+  componentWillReceiveProps: function(nextProps){
+  	helpers.getDietData(nextProps.params.dietId)
 		.then(function(result){
-			console.log(result);
 			var data = result.data;
 			return this.setState({
-				dietId: data.dietId,
+				dietId: nextProps.params.dietId,
+				dietName: data.name,
+				answers: data.answers
+			})
+		}.bind(this));
+  },
+
+	// grab Diet data
+	componentWillMount: function(){
+		helpers.getDietData(this.props.params.dietId)
+		.then(function(result){
+			var data = result.data;
+			return this.setState({
+				dietId: this.props.params.dietId,
 				dietName: data.name,
 				answers: data.answers
 			})

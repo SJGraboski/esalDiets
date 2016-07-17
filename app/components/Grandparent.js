@@ -10,24 +10,10 @@ var App = React.createClass({
 	getInitialState: function() {
 		return {
 			// user info
-			user: {
-				userId: null,
-				dietId: null,
-				reportUpdate: null,
-				answers: [[],[],[]],
-				curDiet: null,
-				active: null
-			}
-
-
-			// diet info
-			diet:
-				dietName: null,
-				dietDescription: null,
-				dietCreated: null,
-				dietImage: null,
-				active: null
-		}
+			userId: 1,
+			dietNow: null,
+			profileNow: null,
+			homeNow: null
 	},
 	// render function
 	render: function() {
