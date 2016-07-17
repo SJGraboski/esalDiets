@@ -9,9 +9,20 @@ class SearchBar extends Component {
     render() {
         return (
             <div className="search-bar">
-                <input
-                    value={this.state.term}
-                    onChange= {event => this.onInputChange(event.target.value) } />
+            <form className="navbar-form navbar-left" role="search">
+                <div className="input-group">
+                        <input
+                            type="text" 
+                            className="form-control dietSearch" 
+                            id="dietSearch" 
+                            placeholder="Diet Search"
+                            value={this.state.term}
+                            onChange= {event => this.onInputChange(event.target.value) } />
+                <span className="input-group-btn">
+                        <button className="btn btn-default dietSearchBTN" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true"></i></button>
+                </span>
+                </div>
+                </form>
             </div>
         );
     }
