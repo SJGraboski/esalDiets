@@ -42,28 +42,42 @@ var Calendar = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
+    var exDates = [];
+    var a = moment(nextProps.startDate);
+    var b = moment();
+    var c = 28 - b.diff(a, 'days');
+    //alert(c);
+
+    for (var i = 1; i < 365; i++){
+      exDates.push(moment().subtract(parseInt([i]), 'days'))
+    }
+    for (var j = c; j < 365; j++){
+      exDates.push(moment().add(parseInt([j]), 'days'))
+    }
+    
     console.log(moment(nextProps.startDate));
     console.log(moment());
     return this.setState({
       reportId: nextProps.reportId,
       answered: nextProps.answered,
       startDate: moment(nextProps.startDate),
-      endDate: moment(nextProps.startDate).add(27, 'days')
+      endDate: moment(nextProps.startDate).add(27, 'days'),
+      excludeDates: exDates
     })
   },
 
   componentWillMount: function(){
-    var exDates = [];
+    // var exDates = [];
 
-    for (var i = 1; i < 365; i++){
-      exDates.push(moment().subtract(parseInt([i]), 'days'))
-    }
-    for (var j = 29; j < 365; j++){
-      exDates.push(moment().add(parseInt([j]), 'days'))
-    }
-    return this.setState({
-      excludeDates: exDates
-    });
+    // for (var i = 1; i < 365; i++){
+    //   exDates.push(moment().subtract(parseInt([i]), 'days'))
+    // }
+    // for (var j = 29; j < 365; j++){
+    //   exDates.push(moment().add(parseInt([j]), 'days'))
+    // }
+    // return this.setState({
+    //   excludeDates: exDates
+    // });
   },
 
 
