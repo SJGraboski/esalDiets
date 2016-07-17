@@ -24,9 +24,12 @@ $(window).bind('scroll', function() {
         var navHeight = $(window).height() - 500;
         if ($(window).scrollTop() > navHeight) {
             $('.navbar-default').addClass('on');
-            $('#placeholderspace').animate({height:'150px'});
+           $('#analytics').css('margin-top',120);
+           
+           //$('#userdata').css('margin-top',200);
         } else {
             $('.navbar-default').removeClass('on');
+            $('#analytics').css('margin-top',0);
         }
     });
 

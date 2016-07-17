@@ -18,7 +18,7 @@ header {
 }
 
 .nav-wrapper {
-    min-height: 119px;
+    min-height: 85px;
 }
 
 .navbar-form input, .form-inline input {
@@ -52,8 +52,8 @@ header {
 }
 
 
-#placeholder{
-	min-height: 200px;
+#analytics{
+	margin-top: 20px;
 }
 
 #dietSearch {
@@ -76,8 +76,25 @@ header {
 	font-size: 1.2em;
 }
 
+.dietcontainer {
+	height:140px;
+	border-radius: 4px;
+	background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");
+	background-size: cover;
+	background-color: #d5d5d5;
+	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	max-width: 100%;
+  	margin-bottom: 40px;
+}
+
 #placeholderspace{
 	height: 0px;
+}
+
+.extraspace {
+	height: 300px;
 }
 
 .dietSearch {

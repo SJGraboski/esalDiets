@@ -6,6 +6,7 @@ var React = require('react');
 var Router = require('react-router');
 
 // get components
+var Usertitle = require('./Usertitle.js');
 var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
@@ -82,16 +83,21 @@ var Profile = React.createClass({
 	render: function() {
 		return (
 			<div className="row graphContainer">
-			<div className="placeholderspace" id="placeholderspace"></div>
-			<div className="col-md-12" id="analytics">
-				<MoodGraph mood={this.state.answers[0]} />
-				<EnergyGraph energy={this.state.answers[1]} />
-				<WeightGraph weight={this.state.answers[2]} />
-			</div>
-			<div className="col-md-12" id="userdata">
-				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
-
-			</div>
+				<div className="col-md-12">
+					<Usertitle />
+				</div>
+				<div className="placeholderspace" id="placeholderspace">
+				<div className="col-md-12" id="analytics">
+					<MoodGraph mood={this.state.answers[0]} />
+					<EnergyGraph energy={this.state.answers[1]} />
+					<WeightGraph weight={this.state.answers[2]} />
+				</div>
+				
+				<div className="col-md-12" id="userdata">
+					<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
+					<div className="extraspace"></div>
+				</div>
+				</div>
 			
 
 
