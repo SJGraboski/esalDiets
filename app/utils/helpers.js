@@ -16,7 +16,6 @@ var helpers = {
 	getDietData: function(dietId) {
 		return axios.get("/api/diet-info/" + dietId)
 		.then(function(response){
-			console.log(response);
 			return response;
 		})
 	},

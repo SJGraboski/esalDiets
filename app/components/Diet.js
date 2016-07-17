@@ -4,6 +4,8 @@
 // dependencies
 var React = require('react');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
+
 
 // get components
 var Calendar = require('./Calendar/Calendar.js');
@@ -35,52 +37,38 @@ var Diet = React.createClass({
 	// state initialized for form queries and results
 	getInitialState: function() {
 		return {
-			userId: null,
 			dietId: null,
-			reportUpdate: null,
 			answers: [[],[],[]],
 			dietName: null,
 			dietDescription: null,
 			dietCreated: null,
 			dietImage: null
-
 		}
 	},
-	// grab profile data
-	componentWillMount: function(){
-		helpers.getProfileData()
+
+  componentWillReceiveProps: function(nextProps){
+  	helpers.getDietData(nextProps.params.dietId)
 		.then(function(result){
 			var data = result.data;
 			return this.setState({
-				userId: data.userId,
+				dietId: nextProps.params.dietId,
+				dietName: data.name,
+				answers: data.answers
 			})
 		}.bind(this));
-	},
-	// componentDidUpdate: grab articles whenever update comes in
-	componentDidUpdate: function(prevProps, prevState){
-		// check to make sure at least one of the search inputs are different
-		if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null){
-			// helpers reportAnswer
-			helpers.reportUpdate(this.state.reportUpdate)
-			.then(function(data){
-				// check response
-				if (data != false) {
-					return helpers.getProfileData()
-					.then(function(result){
-						var data = result.data;
-						return this.setState({
-							userId: data.userId,
-							dietId: data.dietId,
-							reportId: data.reportId,
-							answered: data.answered,
-							startDate: data.startDate,
-							answers: data.answers,
-							reportUpdate: null
-						})
-					}.bind(this)); // make "this" function as expected)
-				}
-			}.bind(this)); // make "this" function as expected
-		}
+  },
+
+	// grab Diet data
+	componentWillMount: function(){
+		helpers.getDietData(this.props.params.dietId)
+		.then(function(result){
+			var data = result.data;
+			return this.setState({
+				dietId: this.props.params.dietId,
+				dietName: data.name,
+				answers: data.answers
+			})
+		}.bind(this));
 	},
 	// set Query to inputs
 	updateQuery: function(newAnswers){
@@ -121,7 +109,6 @@ var Diet = React.createClass({
 				<WeightGraph weight={this.state.answers[2]} />
 			</div>
 			<div className="col-md-12" id="userdata">
-				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
 			</div>
 			</div>
 		)
