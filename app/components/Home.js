@@ -113,7 +113,7 @@ var Home = React.createClass({
 	// render function
 	render: function() {
 		return (
-			<p>eh</p>
+			<h1>eh</h1>
 		)
 	}
 })
