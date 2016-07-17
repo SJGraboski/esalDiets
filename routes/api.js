@@ -99,12 +99,13 @@ module.exports = function(app) {
 		var theAnswers = [ [], [], [] ];
 
 		
+		// we first pass a query to set up some variables
+		var setUp = 'SET @container := 0, @orig_a3 := 0; '
 
-		// first, we define the raw query we'll run to grab
 		// the average answers from every day
-
+		var avgAnswers =  
 											// Select the reportNum, the average answers of a1 and a2.
-		var avgAnswers = 'SELECT reportNum, AVG(a1) as a1, AVG(a2) as a2, ' + 
+											'SELECT reportNum, AVG(a1) as a1, AVG(a2) as a2, ' + 
 
 												// We set up a conditional for our weight change result.
 												// If it's the first report day, there can't be a change in weight.
@@ -159,6 +160,10 @@ module.exports = function(app) {
 		})
 		// then, grab all of the answer averages from that diet.
 		.then(function(diet) {
+			return sequelize.query(setUp)
+			.then(function() {
+
+
 			// we pass this raw query.
 			return sequelize.query(avgAnswers, {replacements: [dietId], type: sequelize.QueryTypes.SELECT})
 			// then pass the results
@@ -181,6 +186,7 @@ module.exports = function(app) {
 				console.log(diet);
 				return res.json(diet);
 			})
+		})
 		})
 		// error check the Diet query
 		.catch(function(error){
