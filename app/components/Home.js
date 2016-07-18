@@ -113,7 +113,49 @@ var Home = React.createClass({
 	// render function
 	render: function() {
 		return (
-			<h1>eh</h1>
+			<div>
+				<div id="homepage" className="text-center">
+	        
+	            <div className="col-md-12 content top">
+	                
+	            
+	                <img className="logobig" src="./assets/images/esallogobig.svg" id="logobigsvg" />
+	                <div><span id="arrow"><a href="#about" className="fa fa-angle-double-down"></a></span></div>
+	            </div>
+	    	</div>
+	    	<div id="about">
+		    	<div className="col-md-4 aboutContainer">
+		    		<div className="fbox">
+		    		<div className="ficon iconOne"><i className="fa fa-user" aria-hidden="true"></i></div>
+		    		</div>
+		    		<h1 className="aboutTitle" id="sectionOne">User Data</h1>
+		    		<p className="aboutCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida. Sed eget ornare magna. Sed ut imperdiet augue. Maecenas sed congue purus. Curabitur efficitur aliquet mi, eget maximus quam lacinia ac. Aliquam erat volutpat. Fusce sed convallis nulla.
+		    		</p>
+		    		
+		    	</div>
+		    	<div className="col-md-4 aboutContainer">
+		    		<div className="fbox">
+		    		<div className="ficon iconTwo"><i className="fa fa-line-chart" aria-hidden="true"></i></div>
+		    		</div>
+		    		<h1 className="aboutTitle" id="sectionTwo">Analytics</h1>
+		    		<p className="aboutCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida. Sed eget ornare magna. Sed ut imperdiet augue. Maecenas sed congue purus. Curabitur efficitur aliquet mi, eget maximus quam lacinia ac. Aliquam erat volutpat. Fusce sed convallis nulla.
+		    		</p>
+
+		    	</div>
+		    	<div className="col-md-4 aboutContainer">
+		    		<div className="fbox">
+		    		<div className="ficon iconThree"><i className="fa fa-calendar" aria-hidden="true"></i></div>
+		    		</div>
+		    		<h1 className="aboutTitle"id="sectionThree">Reminders</h1>
+		    		<p className="aboutCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida. Sed eget ornare magna. Sed ut imperdiet augue. Maecenas sed congue purus. Curabitur efficitur aliquet mi, eget maximus quam lacinia ac. Aliquam erat volutpat. Fusce sed convallis nulla.
+		    		</p>
+		    		
+		    	</div>
+			</div>
+			</div>
 		)
 	}
 })
