@@ -23,7 +23,7 @@ var App = React.createClass({
 				  <div className="container">
 				  <div className="row">
 				    <div>
-				      <img className="pagebanner" src="./assets/images/easlBanner.png" id="profilepagebanner" />
+				      <img className="pagebanner" src="./assets/images/esalBanner.png" id="profilepagebanner" />
 				    </div>
 				  </div>
 				  </div>
