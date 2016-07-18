@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class SearchBar extends Component {
     constructor(props){
         super(props);
         this.state = {term: ''};
-
+        console.log(this);
     }
     render() {
         return (
@@ -28,8 +28,8 @@ class SearchBar extends Component {
     }
 
     onInputChange(term) {
-        this.setState({term});
         this.props.onSearchTermChange(term);
+        this.setState({term});
     }
 
 }

@@ -1,6 +1,7 @@
 // App
 // ===
 var React = require('react');
+var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
 
 
@@ -8,6 +9,19 @@ var Navigation = require('react-router').Navigation;
 var SearchBar = require('./SearchBar.js');
 
 var App = React.createClass({
+
+	getInitialState: function(){
+		return {
+			searchQuery: null
+		}
+	},
+
+	searchQuery: function(term){
+		helpers.getSearchResults(term)
+		.then(function(results){
+			console.log(results);
+		})
+	},
 
 	// Allow for transitions between elements.
 	mixins: [Navigation],
@@ -51,7 +65,7 @@ var App = React.createClass({
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-				    	<SearchBar />
+				    	<SearchBar onSearchTermChange={this.searchQuery} />
 							      
 							    </div>
 
