@@ -3,6 +3,8 @@
 var path = require('path');
 var request = require('request');
 var moment = require('moment')
+// dependencies
+var jwt = require('jsonwebtoken');
 
 // load our models
 var models = require('../models');
@@ -241,4 +243,89 @@ module.exports = function(app) {
       console.log(err);
   	})
 	})
+
+
+
+
+
+
+	// API LOGIN AND REGISTER FUNCTIONS
+
+    // login post
+    app.post('/api/session', function(req, res){
+        
+        // grab username and password from form
+        var email = req.body.email;
+        var password = req.body.password;
+
+        // find user by searching for username and password
+        models.User.findAll({
+            where: {
+                email: email,
+                password: password
+            }
+        }).then(function(result){ // then save the result as the user obj
+            var user = result[0].dataValues;
+            // create JSON token
+            var token = jwt.sign(user, app.get('jwtSecret'), {
+                expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
+            });
+
+            // Then send success message with token
+            res.json({
+                success: true,
+                message: "Access granted.",
+                token: token
+            });
+        }).catch(function(err) { // catch any errors
+            res.status(403).json("{'error':'" + err + "'");
+        })
+    });
+
+    // // register post for students
+    // app.post('/api/register', function(req, res){
+
+    //     // grab username and password from form
+    //     var username = req.body.username;
+    //     var password = req.body.password;
+
+    //     // insert sequelize here to grab the username, password, role and latest from database
+    //     Users.create({
+    //             username: username,
+    //             password: password,
+    //             role: "student",
+    //             instructorName: "Instructor"
+    //     }).then(function(result){
+    //         // get the user from the result
+    //         var user = result.dataValues;
+    //         // create JSON token
+            
+    //         var token = jwt.sign(user, app.get('jwtSecret'), {
+    //             expiresIn: 1440 // Token is given but will expire in 24 hours (requiring a re-login)
+    //         });
+
+    //         // Then send it to the user. This token will need to be used to access the API
+    //         res.json({
+    //             success: true,
+    //             message: "Access granted.",
+    //             token: token
+    //         });
+
+    //         // send response
+    //         res.send("{'message':'Success! You're in!'")
+    //     }).catch(function(err) {
+    //         // log errors
+    //         console.log(err);
+    //         // send error message
+    //         res.status(403).json("{'error':'" + err + "'");
+    //     })
+    // })
+
+    // logout function
+    app.get("/api/logout", function(req, res){
+        // this simple command grabs the access token cookie, then deletes it.
+        new Cookies(req, res).set('access_token');
+        // send success to ajax
+        res.status(200).end();
+    })
 }
