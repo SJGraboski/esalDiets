@@ -4,8 +4,10 @@ var React = require('react');
 var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
 
+// Auth0
+import Login from '../components/Login';
+import auth from '../utils/authentication.js';
 
-// bring in the search bar
 var SearchBar = require('./SearchBar.js');
 
 var App = React.createClass({
@@ -15,6 +17,24 @@ var App = React.createClass({
 			searchQuery: null
 		}
 	},
+
+	  login: function() {
+    // We can call the show method from Auth0Lock,
+    // which is passed down as a prop, to allow
+    // the user to log in
+    this.props.lock.show((err, profile, token) => {
+      if (err) {
+        alert(err);
+        return;
+      }
+      this.setState({authenticated: true});
+    })
+  },
+
+  logout: function() {
+    // AuthActions.logUserOut();
+    this.setState({authenticated: false});
+  },
 
 	searchQuery: function(term){
 		helpers.getSearchResults(term)

@@ -59,7 +59,7 @@ var Profile = React.createClass({
 			})
 		}.bind(this));
 	},
-	// componentDidUpdate: grab articles whenever update comes in
+	// componentDidUpdate: grab user info whenever update comes in
 	componentDidUpdate: function(prevProps, prevState){
 		// check to make sure at least one of the search inputs are different
 		if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null){
