@@ -10,7 +10,6 @@ var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
-var SearchBar = require('react-search-bar');
 
 const matches = {
 	'macbook a': [

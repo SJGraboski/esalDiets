@@ -1,20 +1,20 @@
 import React from 'react';
-import VideoListItem from './videolistitem';
+import Listitem from './ListItem';
 
-const VideoList = (props) => {
-    const videoItems = props.videos.map((video) => {
+const DietList = (props) => {
+    const dietItems = props.diets.map((diet) => {
         return (
-            <VideoListItem
-                onVideoSelect= {props.onVideoSelect}
-                key={video.etag} video={video} />
+            <Listitem
+                onDietSelect= {props.onDietSelect}
+                diet={diet} />
         )
     });
 
     return(
         <ul className="col-md-4 list-group">
-            {videoItems}
+            {dietItems}
         </ul>
     )
 };
 
-export default VideoList;
+module.exports = DietList;

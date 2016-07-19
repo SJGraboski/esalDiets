@@ -3,7 +3,7 @@ import React from 'react';
 const DietProfile = ({diet}) => {
 
     const dietId = diet.id;
-    const dietPicture = diet.picture;
+    const dietImage = diet.image;
     const dietName = diet.name;
     const dietDescription = diet.description;
 
@@ -13,7 +13,7 @@ const DietProfile = ({diet}) => {
                 {dietName}
             </div>
             <div>
-                {dietPicture}
+                {dietImage}
             </div>
             <div>
                 {dietDescription}
