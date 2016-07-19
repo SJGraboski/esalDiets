@@ -5,9 +5,20 @@ var Navigation = require('react-router').Navigation;
 
 
 // bring in the search bar
-var SearchBar = require('./SearchBar.js');
+var SearchBar = require('./Diets/SearchBar.js');
 
 var App = React.createClass({
+
+	getInitialState: function() {
+		return {
+			dietId: null,
+			answers: [[],[],[]],
+			dietName: null,
+			dietDescription: null,
+			dietCreated: null,
+			dietImage: null
+		}
+	},
 
 	// Allow for transitions between elements.
 	mixins: [Navigation],
@@ -51,8 +62,9 @@ var App = React.createClass({
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-				    	<SearchBar />
-							      
+									<SearchBar
+										onSearchTermChange={dietSearch} />
+
 							    </div>
 
 							  </div>
