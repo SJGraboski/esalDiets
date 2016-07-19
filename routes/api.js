@@ -282,6 +282,27 @@ module.exports = function(app) {
         })
     });
 
+    // Verify authentication
+    app.get('/api/session', function(req, res) {
+
+    	console.log(req);
+
+    	// grab the token
+    	var token = req.headers.token;
+
+			// verify the token
+        jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+            if (err) {
+                // return error if there is one
+                return res.json({success: false, message: "access denied"})
+            }
+            else {
+            	// give the user access
+            	return res.json({success:true, message:'You\'re in!'});
+            }
+        })
+    })
+
     // // register post for students
     // app.post('/api/register', function(req, res){
 

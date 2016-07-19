@@ -27,11 +27,9 @@ export default class Login extends React.Component {
 				this.context.router.push({pathname: '/profile'})
 			}
 			else {
-				this.context.router.push({pathname: '/profile'})
+				this.setState({error:true})
 			}
 		})
-
-
 	}
 
 	render() {
@@ -39,7 +37,7 @@ export default class Login extends React.Component {
 			<div>
 				<form role='form'>
 					<div className='form-group'>
-						<input type='text' ref='email' placeholder='Username' />
+						<input type='text' ref='email' placeholder='Email' />
 						<input type='text' ref='pass' placeholder='Password' />
 					</div>
 					<button type='submit' onClick={this.login.bind(this)}>Submit</button>
