@@ -4,19 +4,39 @@ var React = require('react');
 var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
 
-// Auth0
+// Auth
 import Login from '../components/Login';
 import auth from '../utils/authentication.js';
+import eventManager from '../utils/event_manager';
 
-var SearchBar = require('./SearchBar.js');
+
+var SearchBar = require('./Diets/SearchBar.js');
 
 var App = React.createClass({
 
 	getInitialState: function(){
 		return {
-			searchQuery: null
+			searchQuery: null,
+			loggedIn: false
 		}
 	},
+
+	updateAuth(loggedIn) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  },
+
+  componentDidMount () {
+    this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
+    const promise = auth.isAuthenticated();
+    promise.then(resp => {this.setState({loggedIn: true})})
+      .catch(err => {this.setState({loggedIn: false})});
+  },
+
+  componentWillUnmount () {
+    this.subscription.remove();
+  },
 
 	  login: function() {
     // We can call the show method from Auth0Lock,
@@ -42,7 +62,6 @@ var App = React.createClass({
 			console.log(results);
 		})
 	},
-
 	// Allow for transitions between elements.
 	mixins: [Navigation],
 
@@ -56,8 +75,8 @@ var App = React.createClass({
 				<header className="masthead">
 				  <div className="container">
 				  <div className="row">
-				    <div>
-				      <h1 className="dietName">ESAL</h1>
+				    <div className="pagebanner">
+				      <img src="./assets/images/esalBanner.png" id="profilepagebanner" />
 				    </div>
 				  </div>
 				  </div>
@@ -86,7 +105,6 @@ var App = React.createClass({
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
 				    	<SearchBar onSearchTermChange={this.searchQuery} />
-							      
 							    </div>
 
 							  </div>
@@ -98,7 +116,7 @@ var App = React.createClass({
 
 
 			<div className="container" id="childrenContainer">
-				{this.props.children}
+				{React.cloneElement(this.props.children, { loggedIn: this.state.loggedIn })}
 			</div>
 			<div id="placeholder"></div>
 			</div>

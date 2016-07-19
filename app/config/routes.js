@@ -13,9 +13,23 @@ import Login from '../components/Login';
 import auth from '../utils/authentication.js';
 
 // our security components
-// import Login from './components/Login';
-// import LoginRequired from './util/RouteHelpers';
+var eventManager = require('../utils/event_manager');
 
+// check if the user is authenticated
+function checkAuth(nextState, replace, cb) {
+  const promise = authentication.isAuthenticated();
+  promise.then(function(resp) {
+    eventManager.getEmitter().emit(eventManager.authChannel, true);
+    cb();
+  }).catch(function(err) {
+    eventManager.getEmitter().emit(eventManager.authChannel, false);
+    replace({
+      pathname: '/login',
+      state: { nextPathname: nextState.location.pathname }
+    });
+    cb();
+  });
+}
 module.exports = (
   <Route path ="/" component={App}>
     <IndexRoute component={Login} />
