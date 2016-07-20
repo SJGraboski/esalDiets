@@ -10,7 +10,6 @@ var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
-var SearchBar = require('react-search-bar');
 
 const matches = {
 	'macbook a': [
@@ -157,23 +156,29 @@ var Home = React.createClass({
 			</div>
 			
 			<div id="topDietContainer" className="row text-center">
+			<div className="col-md-12 col-xs-12">
+			<h1 className="topDietsTitle text-center" id="topDietsTitle">Top Diets</h1>
+			</div>
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
-		    		<h2 className="dietTitle">Diet 1</h2>
+		    		<h2 className="dietTitle">2 Bannana Diet</h2>
+		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
 		    	</div>
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
-		    		<h2 className="dietTitle">Diet 2</h2>
+		    		<h2 className="dietTitle">All Kale Diet</h2>
+		    		<img src="./assets/images/dietTwo.png" className="smDietImg" alt="All Kale Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
 		    	</div>
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
-		    		<h2 className="dietTitle">Diet 3</h2>
+		    		<h2 className="dietTitle">Nothing but Berries</h2>
+		    		<img src="./assets/images/dietThree.png" className="smDietImg" alt="Nothing but Berries"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
@@ -181,6 +186,7 @@ var Home = React.createClass({
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
 		    		<h2 className="dietTitle">Diet 4</h2>
+		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
@@ -188,6 +194,7 @@ var Home = React.createClass({
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
 		    		<h2 className="dietTitle">Diet 5</h2>
+		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
@@ -195,6 +202,7 @@ var Home = React.createClass({
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
 		    		<h2 className="dietTitle">Diet 6</h2>
+		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
