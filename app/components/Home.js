@@ -155,7 +155,53 @@ var Home = React.createClass({
 		    		
 		    	</div>
 			</div>
+			
+			<div id="topDietContainer" className="row text-center">
+		    	<div className="col-md-6 dietPadding">
+		    	<div className="dietbox">
+		    		<h2 className="dietTitle">Diet 1</h2>
+		    		<p className="dietCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
+		    	</div>
+		    	</div>
+		    	<div className="col-md-6 dietPadding">
+		    	<div className="dietbox">
+		    		<h2 className="dietTitle">Diet 2</h2>
+		    		<p className="dietCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
+		    	</div>
+		    	</div>
+		    	<div className="col-md-6 dietPadding">
+		    	<div className="dietbox">
+		    		<h2 className="dietTitle">Diet 3</h2>
+		    		<p className="dietCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
+		    	</div>
+		    	</div>
+		    	<div className="col-md-6 dietPadding">
+		    	<div className="dietbox">
+		    		<h2 className="dietTitle">Diet 4</h2>
+		    		<p className="dietCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
+		    	</div>
+		    	</div>
+		    	<div className="col-md-6 dietPadding">
+		    	<div className="dietbox">
+		    		<h2 className="dietTitle">Diet 5</h2>
+		    		<p className="dietCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
+		    	</div>
+		    	</div>
+		    	<div className="col-md-6 dietPadding">
+		    	<div className="dietbox">
+		    		<h2 className="dietTitle">Diet 6</h2>
+		    		<p className="dietCopy">
+		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
+		    	</div>
+		    	</div>
 			</div>
+			</div>
+			
 		)
 	}
 })
