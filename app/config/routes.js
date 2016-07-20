@@ -9,11 +9,16 @@ import Profile from '../components/Profile';
 import Home from '../components/Home';
 import Diet from '../components/Diet';
 
+// our login and Register components
 import Login from '../components/Login';
+import Register from '../components/Register';
+import Logout from '../components/Logout';
+
+
 import auth from '../utils/authentication.js';
 
 // our security components
-var eventManager = require('../utils/event_manager');
+import eventManager from '../utils/event_manager';
 
 // check if the user is authenticated
 function checkAuth(nextState, replace, cb) {
@@ -32,7 +37,8 @@ function checkAuth(nextState, replace, cb) {
 }
 module.exports = (
   <Route path ="/" component={App}>
-    <IndexRoute component={Login} />
+    <IndexRoute component={Logout} />
+    <Route component={Login} name='Login' path="login" />
     <Route component={Diet} name="Diet" path="diet/:dietId" />
     <Route component={Profile} name="Profile" path="profile" />
   </Route>

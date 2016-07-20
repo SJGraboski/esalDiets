@@ -32,28 +32,11 @@ var App = React.createClass({
     const promise = auth.isAuthenticated();
     promise.then(resp => {this.setState({loggedIn: true})})
       .catch(err => {this.setState({loggedIn: false})});
+    console.log(this.state);
   },
 
   componentWillUnmount () {
     this.subscription.remove();
-  },
-
-	  login: function() {
-    // We can call the show method from Auth0Lock,
-    // which is passed down as a prop, to allow
-    // the user to log in
-    this.props.lock.show((err, profile, token) => {
-      if (err) {
-        alert(err);
-        return;
-      }
-      this.setState({authenticated: true});
-    })
-  },
-
-  logout: function() {
-    // AuthActions.logUserOut();
-    this.setState({authenticated: false});
   },
 
 	searchQuery: function(term){
