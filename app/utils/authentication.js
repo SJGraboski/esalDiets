@@ -27,15 +27,17 @@ var auth = {
   },
 
   // log the user out by deleting the token, then send a success delete
-  logout () {
+  logout (cb) {
     var token = localStorage.getItem('token');
     localStorage.removeItem('token');
 
     // grab the token again (though it won't grab a thing)
     var token = localStorage.getItem('token');
 
-    axios.delete("/api/session", {headers: {"Authorization": token}});
-    return true;
+    axios.delete("/api/session", {headers: {"Authorization": token}})
+    .then(function(response){
+      cb(response);
+    })
   },
 
   // save tokens to local storage

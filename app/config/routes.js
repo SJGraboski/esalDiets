@@ -37,8 +37,10 @@ function checkAuth(nextState, replace, cb) {
 }
 module.exports = (
   <Route path ="/" component={App}>
-    <IndexRoute component={Logout} />
+    <IndexRoute component={Home} />
     <Route component={Login} name='Login' path="login" />
+    <Route component={Logout} name='Logout' path="logout" />
+    <Route component={Register} name='Register' path="register" />
     <Route component={Diet} name="Diet" path="diet/:dietId" />
     <Route component={Profile} name="Profile" path="profile" />
   </Route>
