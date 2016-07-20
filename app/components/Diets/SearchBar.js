@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+var PropTypes = React.PropTypes;
+
+
 
 class SearchBar extends Component {
-    constructor(props){
+    constructor(props, context){
         super(props);
+        context.router;
         this.state = {term: ''};
 
     }
@@ -19,7 +23,7 @@ class SearchBar extends Component {
                             value={this.state.term}
                             onChange= {event => this.onInputChange(event.target.value) } />
                 <span className="input-group-btn">
-                        <button className="btn btn-default dietSearchBTN" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true"></i></button>
+                        <button className="btn btn-default dietSearchBTN" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true" /> </button>
                 </span>
                 </div>
                 </form>
@@ -32,7 +36,13 @@ class SearchBar extends Component {
         this.props.onSearchTermChange(term);
     }
 
+
+
 }
+
+SearchBar.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
 
 
 module.exports = SearchBar;
