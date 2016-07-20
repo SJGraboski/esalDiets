@@ -2,6 +2,10 @@
 // ===
 var React = require('react');
 var Navigation = require('react-router').Navigation;
+import _ from 'lodash';
+import helpers from '../utils/helpers';
+var PropTypes = React.PropTypes;
+
 
 
 // bring in the search bar
@@ -16,8 +20,29 @@ var App = React.createClass({
 			dietName: null,
 			dietDescription: null,
 			dietCreated: null,
-			dietImage: null
+			dietImage: null,
+			diets: [],
+			selectedDiet: null
 		}
+	},
+
+
+	dietSearch(term) {
+
+		var self = this;
+		helpers.getSearchResults(term)
+		.then(function(diets){
+			var dietName = diets.data[0].name;
+			console.log('result: ' + diets.data[0].name)
+			// updateDiet(dietName);
+			self.setState({
+				diets: diets.data,
+				selectedDiet: diets.data[0]
+			});
+			console.log(self.state.diets)
+		})
+
+
 	},
 
 	// Allow for transitions between elements.
@@ -26,6 +51,9 @@ var App = React.createClass({
 
 	// main component app. Takes in the other routes
 	render: function() {
+		const dietSearch = _.debounce((term) => { this.dietSearch(term)}, 300);
+
+
 		return (
 			<div>
 			<div className="container" id="main">
