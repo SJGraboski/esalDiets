@@ -421,4 +421,41 @@ svg {
 	letter-spacing: .3em;
 	text-transform: uppercase;
 }
+
+/*Footer */
+.footer {
+	min-height: 165px;
+	margin-top: 40px;
+	background-color: #125072;
+}
+
+#footerLeft {
+	float: left;
+}
+
+#footerRight {
+	float: right;
+}
+
+.fboxFooter {
+	text-align: center;
+	display: inline-block;
+	margin-top: 40px;
+}
+
+.footericon {
+	display: inline-block;
+	background-color: #eee;
+	color: #125072;
+	font-size: 15px;
+	padding: 10px;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.footerlogo {
+	height: 40px;
+}
 /* Media Queries */
