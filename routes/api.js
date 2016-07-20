@@ -5,6 +5,7 @@ var request = require('request');
 var moment = require('moment')
 // dependencies
 var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
 
 // load our models
 var models = require('../models');
@@ -246,113 +247,148 @@ module.exports = function(app) {
 
 	// API LOGIN AND REGISTER FUNCTIONS
 
-    // login post
-    app.post('/api/session', function(req, res){
-        
-        // grab username and password from form
-        var email = req.body.email;
-        var password = req.body.password;
+  // login a user
+  app.post('/api/session', function(req, res){
+      
+    // grab username from form
+    var email = req.body.email;
+    var password = req.body.password;
 
-        // find user by searching for username and password
-        models.User.findOne({
-            where: {
-                email: email,
-                password: password
-            }
-        }).then(function(result){ // then save the result as the user obj
-            var userId = result.dataValues.id;
-            var username = result.dataValues.username;
-            // create JSON token
-            var token = jwt.sign({id:userId, name:username}, app.get('jwtSecret'), {
-                expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
-            });
+    // find user by searching for username and password
+    models.User.findOne({
+        where: {
+            email: email
+        }
+    }).then(function(db_result){ // then save the result as the user obj
 
-            // Then send success message with token
-            res.json({
-                success: true,
-                message: "Access granted.",
-                token: token
-            });
-        }).catch(function(err) { // catch any errors
-            res.status(403).json("{'error':'" + err + "'");
-        })
-    });
+  		// We first need to compare the user's entry pass
+  		// with the hash stored in the db
+      var hash = db_result.dataValues.password;
 
-    // Verify authentication
-    app.get('/api/session', function(req, res) {
+      // We use bcrypts compare function to test 
+      // whether we found a good password.
+      bcrypt.compare(password, hash, function(err, goodPass) {
+				// If the password doesn't hash into our stored hash
+				if (!goodPass) {
+					// give the user an error prompt.
+          res.status(403).json("{'error':'" + err + "'")
+				}
+				// otherwise, continue with the rest of our function
+				else {
 
-    	// grab the token
-    	var token = req.headers.authorization;
+					// grab the userID and Username from our sequelize results
+          userData = {
+          	userId: db_result.dataValues.id,
+          	username: db_result.dataValues.username
+          }
+          
+          // create JSON token with the our user info
+          var token = jwt.sign(userData, app.get('jwtSecret'), {
+              expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
+          })
 
-			// verify the token
-        jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
-            if (err) {
-            	console.log("badtoken");
-                // return error if there is one
-                return res.status(400).json("{'error':'" + err + "'")
-            }
-            else {
-            	console.log("good")
-            	// give the user access
-            	return res.json({success:true, message:'You\'re in!'});
-            }
-        })
+          // Then send success message with our token
+          res.json({
+            success: true,
+            message: 'Access granted.',
+            token: token
+          })
+      	}
+			})
+		})
+  	.catch(function(err) { // catch any errors
+    	res.status(403).json("{'error':'" + err + "'");
+  	})
+  });
+
+  // Verify authentication
+  app.get('/api/session', function(req, res) {
+
+  	// grab the token
+  	var token = req.headers.authorization;
+
+		// verify the token
+    jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+      if (err) {
+      	console.log("badtoken");
+          // return error if there is one
+          return res.status(400).json("{'error':'" + err + "'")
+      }
+      else {
+      	console.log("good")
+      	// give the user access
+      	return res.json({success:true, message:'You\'re in!'});
+      }
     })
-
-    // register a user
-    app.post('/api/register', function(req, res){
-
-        // grab user info from the req
-        var user = req.body;
-
-        // create a User with Sequelize
-        models.User.create({
-                username: user.username,
-                email: user.email,
-                password: user.pass,
-                firstname: user.f_name,
-                lastname: user.l_name,
-                gender: user.gender
-        }).then(function(result){
-            // get the apropos user data from the result
-            var userId = result.dataValues.id;
-            var username = result.dataValues.username;
-
-            // create JSON token
-            var token = jwt.sign({id:userId, name:username}, app.get('jwtSecret'), {
-                expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
-            });
-
-            // Then send success message with token
-            res.json({
-                success: true,
-                message: "Access granted.",
-                token: token
-            });
-        }).catch(function(err) { // catch any errors
-            res.status(403).json("{'error':'" + err + "'");
-        })
-    });
+  })
 
 
-    // logout function
-    app.delete("/api/session", function(req, res){
-	   	
-	   	// grab the token (which shouldn't exist)
-    	var token = req.headers.authorization;
+  // Register a user
+  app.post('/api/register', function(req, res){
 
-			// verify the token
-        jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
-            if (err) {
-            	console.log("notLoggedIn");
-                // return error if there is one
-                return res.status(200).json("{'success:true':'Logged Out!'")
-            }
-            else {
-            	console.log("Logged In")
-            	// give the user access
-            	return res.status(400).json({success:false, message:'You\'re still logged in!'});
-            }
-        })
+    // grab user info from the req
+    var user = req.body;
+
+    // generate a 10 round salt
+    var salt = 	bcrypt.genSaltSync(10);
+
+    // create a bcrypted hash of the password,
+    // using our salt.
+		var hash = bcrypt.hashSync(user.pass, salt);
+
+    // create a User with Sequelize
+    models.User.create({
+	    username: user.username,
+	    email: user.email,
+	    password: hash,
+	    firstname: user.f_name,
+	    lastname: user.l_name,
+	    gender: user.gender
+    }).then(function(result){
+      // get the apropos user data from the result
+      var userId = result.dataValues.id;
+      var username = result.dataValues.username;
+
+      // create JSON token
+      var token = jwt.sign({id:userId, name:username}, app.get('jwtSecret'), {
+          expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
+      });
+
+      // Then send success message with token
+      res.json({
+          success: true,
+          message: "Access granted.",
+          token: token
+      });
+    }).catch(function(err) { // catch any errors
+        res.status(403).json("{'error':'" + err + "'");
     })
+  });
+
+
+  // Logout a user
+  app.delete("/api/session", function(req, res){
+   	
+   	// grab the token (which shouldn't exist)
+  	var token = req.headers.authorization;
+
+		// make sure that a token doesn't verify
+    jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+        // If no token is verified, then we know the user is logged out
+        if (err) {
+        	// so if there's an error,
+        	console.log("notLoggedIn");
+            // then send a success message
+            return res.status(200).json("{'success:true':'Logged Out!'")
+        }
+        // If there's no error, 
+        else {
+        	// then we know the user is still logged in, 
+        	// and logout did not work.
+        	console.log("Logged In")
+        	// send a fail message
+        	return res.status(400).json({success:false, message:'You\'re still logged in!'});
+        }
+      })
+  })
 }
