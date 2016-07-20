@@ -38,7 +38,6 @@ module.exports = function(app) {
 		)
 		// now we need to parse every one for answers
 		.then(function(theReports){
-			console.log(theReports);
 			currentDay = theReports[0].reportDay;
 			for (var i = 1; i <= theReports.length; i++) {
 				if (theReports[i-1].a1){
@@ -51,7 +50,6 @@ module.exports = function(app) {
 					theAnswers[2].push({x:i, y:theReports[i-1].a3})
 				}
 			}
-			console.log(theAnswers);
 			// We're going to check whether the user answered a question today.
 			return models.DietProgress.findOne(
 				{
@@ -170,7 +168,6 @@ module.exports = function(app) {
 			return sequelize.query(avgAnswers, {replacements: [dietId], type: sequelize.QueryTypes.SELECT})
 			// then pass the results
 			.then(function(results){
-				console.log(results);
 				for (var i = 1; i <= results.length; i++) {
 					if (results[i-1].a1) {
 						theAnswers[0].push({x:i, y:results[i-1].a1})
@@ -184,8 +181,6 @@ module.exports = function(app) {
 				}
 				theAnswers[2].unshift({x:1, y:0});
 				diet.dataValues.answers = theAnswers;
-				console.log(theAnswers);
-				console.log(diet);
 				return res.json(diet);
 			})
 		})
@@ -259,15 +254,16 @@ module.exports = function(app) {
         var password = req.body.password;
 
         // find user by searching for username and password
-        models.User.findAll({
+        models.User.findOne({
             where: {
                 email: email,
                 password: password
             }
         }).then(function(result){ // then save the result as the user obj
-            var user = result[0].dataValues;
+            var userId = result.dataValues.id;
+            var username = result.dataValues.username;
             // create JSON token
-            var token = jwt.sign(user, app.get('jwtSecret'), {
+            var token = jwt.sign({id:userId, name:username}, app.get('jwtSecret'), {
                 expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
             });
 
@@ -285,68 +281,78 @@ module.exports = function(app) {
     // Verify authentication
     app.get('/api/session', function(req, res) {
 
-    	console.log(req);
-
     	// grab the token
-    	var token = req.headers.token;
+    	var token = req.headers.authorization;
 
 			// verify the token
         jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
             if (err) {
+            	console.log("badtoken");
                 // return error if there is one
-                return res.json({success: false, message: "access denied"})
+                return res.status(400).json("{'error':'" + err + "'")
             }
             else {
+            	console.log("good")
             	// give the user access
             	return res.json({success:true, message:'You\'re in!'});
             }
         })
     })
 
-    // // register post for students
-    // app.post('/api/register', function(req, res){
+    // register a user
+    app.post('/api/register', function(req, res){
 
-    //     // grab username and password from form
-    //     var username = req.body.username;
-    //     var password = req.body.password;
+        // grab user info from the req
+        var user = req.body;
 
-    //     // insert sequelize here to grab the username, password, role and latest from database
-    //     Users.create({
-    //             username: username,
-    //             password: password,
-    //             role: "student",
-    //             instructorName: "Instructor"
-    //     }).then(function(result){
-    //         // get the user from the result
-    //         var user = result.dataValues;
-    //         // create JSON token
-            
-    //         var token = jwt.sign(user, app.get('jwtSecret'), {
-    //             expiresIn: 1440 // Token is given but will expire in 24 hours (requiring a re-login)
-    //         });
+        // create a User with Sequelize
+        models.User.create({
+                username: user.username,
+                email: user.email,
+                password: user.pass,
+                firstname: user.f_name,
+                lastname: user.l_name,
+                gender: user.gender
+        }).then(function(result){
+            // get the apropos user data from the result
+            var userId = result.dataValues.id;
+            var username = result.dataValues.username;
 
-    //         // Then send it to the user. This token will need to be used to access the API
-    //         res.json({
-    //             success: true,
-    //             message: "Access granted.",
-    //             token: token
-    //         });
+            // create JSON token
+            var token = jwt.sign({id:userId, name:username}, app.get('jwtSecret'), {
+                expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
+            });
 
-    //         // send response
-    //         res.send("{'message':'Success! You're in!'")
-    //     }).catch(function(err) {
-    //         // log errors
-    //         console.log(err);
-    //         // send error message
-    //         res.status(403).json("{'error':'" + err + "'");
-    //     })
-    // })
+            // Then send success message with token
+            res.json({
+                success: true,
+                message: "Access granted.",
+                token: token
+            });
+        }).catch(function(err) { // catch any errors
+            res.status(403).json("{'error':'" + err + "'");
+        })
+    });
+
 
     // logout function
-    app.get("/api/logout", function(req, res){
-        // this simple command grabs the access token cookie, then deletes it.
-        new Cookies(req, res).set('access_token');
-        // send success to ajax
-        res.status(200).end();
+    app.delete("/api/session", function(req, res){
+	   	
+	   	// grab the token (which shouldn't exist)
+    	var token = req.headers.authorization;
+
+			// verify the token
+        jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+            if (err) {
+            	console.log("notLoggedIn");
+                // return error if there is one
+                return res.status(200).json("{'success:true':'Logged Out!'")
+            }
+            else {
+            	console.log("Logged In")
+            	// give the user access
+            	return res.status(400).json({success:false, message:'You\'re still logged in!'});
+            }
+        })
     })
 }

@@ -4,6 +4,7 @@ var axios = require('axios');
 // set up an authentication object
 var auth = {
 
+  // check if the user is authenticated
   isAuthenticated () {
     const token = localStorage.getItem('token');
     if(token) {
@@ -19,20 +20,25 @@ var auth = {
     this.handleAuth(promise, cb);
   },
 
-  register (email, password, passwordConfirmation, cb) {
-    const promise = axios.post("/api/users", {email: email,
-                                              password: password,
-                                              passwordConfirmation: passwordConfirmation});
+  // grab new user info, create new user, send a token
+  register (newUser, cb) {
+    const promise = axios.post("/api/register", newUser);
     this.handleAuth(promise, cb);
   },
 
+  // log the user out by deleting the token, then send a success delete
   logout () {
-    const token = localStorage.getItem('token');
+    var token = localStorage.getItem('token');
     localStorage.removeItem('token');
+
+    // grab the token again (though it won't grab a thing)
+    var token = localStorage.getItem('token');
+
     axios.delete("/api/session", {headers: {"Authorization": token}});
     return true;
   },
 
+  // save tokens to local storage
   handleAuth (promise, cb) {
     promise.then((resp) => {
       if (resp.data.token) {
