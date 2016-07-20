@@ -347,5 +347,9 @@ svg {
     color: #fff;
 }
 
-
+/* input boxes for login and register */
+.regInput, .logInput {
+	display: block;
+	margin-bottom: 5px;
+}
 /* Media Queries */
