@@ -1,14 +1,50 @@
 // App
 // ===
 var React = require('react');
+var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
 
+// Auth
+import Login from '../components/Login';
+import auth from '../utils/authentication.js';
+import eventManager from '../utils/event_manager';
 
-// bring in the search bar
-var SearchBar = require('./SearchBar.js');
+
+var SearchBar = require('./Diets/SearchBar.js');
 
 var App = React.createClass({
 
+	getInitialState: function(){
+		return {
+			searchQuery: null,
+			loggedIn: false
+		}
+	},
+
+	updateAuth(loggedIn) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  },
+
+  componentDidMount () {
+    this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
+    const promise = auth.isAuthenticated();
+    promise.then(resp => {this.setState({loggedIn: true})})
+      .catch(err => {this.setState({loggedIn: false})});
+    console.log(this.state);
+  },
+
+  componentWillUnmount () {
+    this.subscription.remove();
+  },
+
+	searchQuery: function(term){
+		helpers.getSearchResults(term)
+		.then(function(results){
+			console.log(results);
+		})
+	},
 	// Allow for transitions between elements.
 	mixins: [Navigation],
 
@@ -51,8 +87,7 @@ var App = React.createClass({
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-				    	<SearchBar />
-							      
+				    	<SearchBar onSearchTermChange={this.searchQuery} />
 							    </div>
 
 							  </div>
@@ -64,7 +99,7 @@ var App = React.createClass({
 
 
 			<div className="container" id="childrenContainer">
-				{this.props.children}
+				{React.cloneElement(this.props.children, { loggedIn: this.state.loggedIn })}
 			</div>
 			<div id="placeholder"></div>
 			</div>

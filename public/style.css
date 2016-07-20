@@ -377,10 +377,10 @@ svg {
 .dietTitle {
 	font-size: 1.5em;
 	text-align: center;
-	border-bottom: 1px solid #777;
-	font-weight: 700;
+	/*border-bottom: 1px solid #777;*/
+	font-weight: 900;
 	padding-bottom: 10px;
-	color: #444;
+	color: #125072;
 	letter-spacing: .1em;
 	text-transform: uppercase;
 }
@@ -389,6 +389,7 @@ svg {
 	font-size: 16px;
 	color: #777;
 	padding-top: 10px;
+	/*border-top: 1px solid #777;*/
 	line-height: 1.5;
 }
 
@@ -399,11 +400,25 @@ svg {
 	min-width: 100%;
 	border-radius: 4px;
 	border: 2px solid #777;
+	overflow: none;
 }
 
 .dietPadding {
 	padding: 15px;
 }
 
+.smDietImg {
+	max-width: 100%;
+	padding-bottom: 10px;
+}
 
+.topDietsTitle{
+	font-size: 2em;
+	text-align: center;
+	font-weight: 700;
+	padding-bottom: 20px;
+	color: #444;
+	letter-spacing: .3em;
+	text-transform: uppercase;
+}
 /* Media Queries */
