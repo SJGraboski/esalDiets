@@ -4,19 +4,16 @@ var React = require('react');
 var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
 import _ from 'lodash';
-import helpers from '../utils/helpers';
 var PropTypes = React.PropTypes;
-import DietList from './Diets/DietList';
-import DietProfile from './Diets/DietProfile';
+var SearchBar = require('./Diets/SearchBar');
+var DietList = require('./Diets/DietList');
+
 
 
 // Auth
 import Login from '../components/Login';
 import auth from '../utils/authentication.js';
 import eventManager from '../utils/event_manager';
-
-
-var SearchBar = require('./Diets/SearchBar.js');
 
 var App = React.createClass({
 
@@ -37,8 +34,7 @@ var App = React.createClass({
 
 
 
-	dietSearch(term) {
-
+	searchQuery(term) {
 		var self = this;
 		helpers.getSearchResults(term)
 		.then(function(diets){
@@ -47,8 +43,13 @@ var App = React.createClass({
 				selectedDiet: diets.data[0],
 				query: term
 			});
-
 		})
+	},
+
+	componentDidUpdate: function(prevProps, prevState) {
+		if (prevState.selectedDiet != this.state.selectedDiet) {
+			this.context.router.push({pathname: '/diet/' + this.state.selectedDiet});
+		}
 	},
 
 	updateAuth(loggedIn) {
@@ -73,66 +74,6 @@ var App = React.createClass({
 	render: function() {
 		const dietSearch = _.debounce((term) => { this.dietSearch(term)}, 300);
 
-		if(this.state.query == ''){
-			return (
-				<div>
-					<div className="container" id="main">
-
-						<header className="masthead">
-							<div className="container">
-								<div className="row">
-									<div>
-										<h1 className="dietName">ESAL</h1>
-									</div>
-								</div>
-							</div>
-						</header>
-
-						<div className="nav-wrapper">
-							<div id="nav">
-								<nav className="navbar navbar-default navbar-static">
-									<div className="container">
-
-
-										<div className="navbar-header">
-											<a className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-												<span className="sr-only">Toggle navigation</span>
-												<span className="icon-bar"></span>
-												<span className="icon-bar"></span>
-												<span className="icon-bar"></span>
-											</a>
-											<a href="#" className="navbar-left"><img className="navbar-left" src="./assets/images/esallogosmall.png" id="navlogo" /></a>
-										</div>
-
-
-										<div className="navbar-collapse collapse">
-											<ul className="nav navbar-nav navbar-right icon">
-												<li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
-												<li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
-											</ul>
-											<SearchBar
-												onSearchTermChange={dietSearch} />
-
-										</div>
-
-									</div>
-								</nav>
-							</div>
-						</div>
-					</div>
-
-
-
-					<div className="container" id="childrenContainer">
-						{this.props.children}
-					</div>
-					<div id="placeholder"></div>
-				</div>
-			)
-		}
-
-
-
 		return (
 			<div>
 			<div className="container" id="main">
@@ -151,8 +92,6 @@ var App = React.createClass({
 				<div className="nav-wrapper">
 				<div 
 					id="nav" 
-					data-spy="affix"
-					data-offset-top={this.offset()}
 				>
 					<nav className="navbar navbar-default navbar-static">
 				  			<div className="container">
@@ -174,7 +113,7 @@ var App = React.createClass({
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-				    	<SearchBar onSearchTermChange={this.searchQuery} />
+				    	<SearchBar onSearch={this.searchQuery} />
 							    </div>
 
 							  </div>
@@ -220,6 +159,10 @@ var App = React.createClass({
 		)
 	}
 })
+
+App.contextTypes = {
+  router: React.PropTypes.func.isRequired
+}
 
 // export, where config/router will require it.
 module.exports = App;
