@@ -42,28 +42,42 @@ var Calendar = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
+    var exDates = [];
+    var a = moment(nextProps.startDate);
+    var b = moment();
+    var c = 28 - b.diff(a, 'days');
+    //alert(c);
+
+    for (var i = 1; i < 365; i++){
+      exDates.push(moment().subtract(parseInt([i]), 'days'))
+    }
+    for (var j = c; j < 365; j++){
+      exDates.push(moment().add(parseInt([j]), 'days'))
+    }
+    
     console.log(moment(nextProps.startDate));
     console.log(moment());
     return this.setState({
       reportId: nextProps.reportId,
       answered: nextProps.answered,
       startDate: moment(nextProps.startDate),
-      endDate: moment(nextProps.startDate).add(27, 'days')
+      endDate: moment(nextProps.startDate).add(27, 'days'),
+      excludeDates: exDates
     })
   },
 
   componentWillMount: function(){
-    var exDates = [];
+    // var exDates = [];
 
-    for (var i = 1; i < 365; i++){
-      exDates.push(moment().subtract(parseInt([i]), 'days'))
-    }
-    for (var j = 29; j < 365; j++){
-      exDates.push(moment().add(parseInt([j]), 'days'))
-    }
-    return this.setState({
-      excludeDates: exDates
-    });
+    // for (var i = 1; i < 365; i++){
+    //   exDates.push(moment().subtract(parseInt([i]), 'days'))
+    // }
+    // for (var j = 29; j < 365; j++){
+    //   exDates.push(moment().add(parseInt([j]), 'days'))
+    // }
+    // return this.setState({
+    //   excludeDates: exDates
+    // });
   },
 
 
@@ -116,36 +130,34 @@ var Calendar = React.createClass({
           dialogClassName="custom-modal"
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-lg">How Are You Feeling?</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Daily Assesment</h4>
-            <p>Enter you information here:</p>
+            <h4 className="modalTitle">Daily Assesment</h4>
              <form>
               <FormGroup controlId="formControlsSelect">
-                  <ControlLabel>How's your mood?</ControlLabel>
-                  <FormControl componentClass="select" placeholder="select" ref="Qone">
+                  <ControlLabel className="modalQuestion">How's your mood?</ControlLabel>
+                  <FormControl className="modalEnter" componentClass="select" placeholder="select" ref="Qone">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </FormControl>
-                  <ControlLabel>How's your energy level?</ControlLabel>
-                  <FormControl componentClass="select" placeholder="select" ref="Qtwo">
+                  <ControlLabel className="modalQuestion">How's your energy level?</ControlLabel>
+                  <FormControl className="modalEnter" componentClass="select" placeholder="select" ref="Qtwo">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </FormControl>
-                  <ControlLabel>What is your current weight?</ControlLabel>
-                  <FormControl type="text" placeholder="Enter weight" ref="Qthree"/>
+                  <ControlLabel className="modalQuestion">What is your current weight?</ControlLabel>
+                  <FormControl className="modalEnter" type="text" placeholder="Enter weight" ref="Qthree"/>
               </FormGroup>
               </form>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.update}>Submit</Button>
+            <Button className="formSubmit" onClick={this.update}>Submit</Button>
           </Modal.Footer>
         </Modal>
       </ButtonToolbar>

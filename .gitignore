@@ -39,4 +39,7 @@ jspm_packages
 # Get rid of .DS_Store 
 .DS_Store
 
+# remove bundle from git
+public/bundle.js
+
 # remove config folder from github

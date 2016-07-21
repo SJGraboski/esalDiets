@@ -1,5 +1,13 @@
+/* 
+
+font-family: 'Lato', sans-serif;
+font-family: 'Merriweather', serif;
+
+
+ */
+
 body {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 
@@ -9,16 +17,16 @@ body {
 
 header {
 	height:280px;
-	background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");
+	/*background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");*/
 	background-size: cover;
-	background-color: #d5d5d5;
+	background-color: #318dbe;
 	display: flex;
   	align-items: center;
   	justify-content: center;
 }
 
 .nav-wrapper {
-    min-height: 119px;
+    min-height: 85px;
 }
 
 .navbar-form input, .form-inline input {
@@ -39,6 +47,14 @@ header {
 	color: #318dbe;
 }
 
+#navlogo{
+	
+	padding-top: 3px;
+	height: 50px;
+}
+
+
+
 #content {
 	height:1000px;
 	background-color: #d5d5d5;
@@ -52,13 +68,13 @@ header {
 }
 
 
-#placeholder{
-	min-height: 200px;
+#analytics{
+	margin-top: 20px;
 }
 
 #dietSearch {
 	height: 40px;
-	border-color: #318dbe;
+	border-color: #125072;
 }
 
 #childrenContainer{
@@ -67,8 +83,8 @@ header {
 
 #dietSearchBTN {
 	height: 40px;
-	border-color: #318dbe;
-	background-color: #318dbe;
+	border-color: #125072;
+	background-color: #125072;
 	color: #fff;
 }
 
@@ -76,8 +92,25 @@ header {
 	font-size: 1.2em;
 }
 
+.dietcontainer {
+	height:140px;
+	border-radius: 4px;
+	background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");
+	background-size: cover;
+	background-color: #d5d5d5;
+	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	max-width: 100%;
+  	margin-bottom: 40px;
+}
+
 #placeholderspace{
 	height: 0px;
+}
+
+.extraspace {
+	height: 300px;
 }
 
 .dietSearch {
@@ -92,15 +125,16 @@ header {
 	background-color: #fff;
 	border-radius: 0px;
 	border-style: solid;
-    border-width: 3px 0px 3px 0px;
-    border-color: #318dbe;
+    border-width: 2px 0px 2px 0px;
+    border-bottom-color: #318dbe;
+    border-top-color: #000;
     padding-top: 10px;
     padding-bottom: 10px;
     transition: all 0.5s;
 }
 
 .navbar-default .navbar-nav>li>a {
-    color: #318dbe;
+    color: #125072;
     margin-top: 5px;
    	margin-bottom: 5px;
    	border-radius: 4px;
@@ -116,7 +150,8 @@ header {
 	padding-top: 0px;
     padding-bottom: 0px;
 	background-color: #d4e0ed;
-	border-color: #318dbe;
+	border-bottom-color: #318dbe;
+	border-top-color: #000;
 	box-shadow: 0px 10px 15px -7px rgba(0, 0, 0, 0.2);
 
 }
@@ -149,10 +184,11 @@ svg {
     background-image: none;
     background-color: #edf6cd;
     border-color: #8cc632;
-    color: #8cc632;
+    color: #517a38;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: .3em;
     text-align: center;
 }
 
@@ -164,10 +200,11 @@ svg {
     background-image: none;
     background-color: #fdd4a0;
     border-color: #f69c16;
-    color: #f69c16;
+    color: #a86628;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: .3em;
     text-align: center;
 }
 
@@ -179,13 +216,463 @@ svg {
     background-image: none;
     background-color: #f9b8af;
     border-color: #f54f5b;
-    color: #f54f5b;
+    color: #a42630;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.8em;
+    letter-spacing: .3em;
     text-align: center;
 }
 
 .weightpanel {
 	border-color: #f54f5b;
 }
+
+/* home page */
+
+#homepage {
+	margin-top: -50px;
+	background-image: url("./assets/images/esalhomeimg.png");
+	height: 100vh;
+	background-size: cover;
+	margin-bottom: 0px;
+	background-repeat: no-repeat;
+	color: #fff;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: center;
+	justify-content: center;
+	align-items: center;
+	background-attachment: fixed;
+}
+
+#logobigsvg{
+	height: 65vh;
+}
+
+.fa-angle-double-down {
+	padding-top: 10px;
+	color: #fff !important;
+	font-size: 7em;
+	text-decoration: none !important;
+	
+}
+
+.fa-angle-double-down:hover {
+	padding-top: 10px;
+	color: #fff !important;
+	font-size: 7em;
+	text-decoration: none !important;
+}
+
+.fa-angle-double-down:active {
+	padding-top: 10px;
+	color: #fff !important;
+	font-size: 7em;
+	text-decoration: none !important;
+}
+
+#about{
+	min-width: 100%;
+	padding-top: 20px;
+	min-height: 400px;
+	margin: auto 0px;
+	background-color: #fff;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	-webkit-justify-content: center;
+	justify-content: center;
+	align-items: center;
+}
+
+.aboutContainer{
+	min-height: 350px;
+	margin: 10px;
+	background-color: #fff;
+
+}
+
+.aboutTitle {
+	font-size: 2em;
+	text-align: center;
+	border-bottom: 1px solid #777;
+	font-weight: 700;
+	padding-bottom: 20px;
+	color: #444;
+	letter-spacing: .3em;
+	text-transform: uppercase;
+}
+
+.aboutCopy{
+	font-size: 16px;
+	color: #777;
+	padding-top: 10px;
+	line-height: 1.5;
+}
+
+.fbox {
+	text-align: center;
+	display: block;
+	margin-top: 20px;
+
+}
+
+.ficon {
+	display: inline-block;
+	background-color: #777;
+	color: #fff;
+	font-size: 35px;
+	padding: 10px;
+	width: 75px;
+	height: 75px;
+	border-radius: 50%;
+}
+
+.iconOne {
+	background-color: #318dbe;
+    color: #fff;
+}
+
+.iconTwo {
+	background-color: #f54f5b;
+    color: #fff;
+}
+
+.iconThree {
+	background-color: #8cc632;
+    color: #fff;
+}
+
+/* TOP DIETS */
+
+#topDietContainer {
+	min-width: 100%;
+	padding-top: 40px;
+	padding-bottom: 40px; 
+	min-height: 400px;
+	margin: auto 0px;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	background-color: #eee;
+	display: -webkit-flex;
+	display: flex;
+	flex-flow: row wrap;
+  justify-content: space-between;
+  align-content: space-between;
+	
+
+}
+
+.dietContainer {
+	min-height: 350px;
+	margin: 0px;
+	background-color: #fff;
+
+}
+
+.dietTitle {
+	font-size: 1.5em;
+	text-align: center;
+	/*border-bottom: 1px solid #777;*/
+	font-weight: 900;
+	padding-bottom: 10px;
+	color: #125072;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.dietCopy {
+	font-size: 16px;
+	color: #777;
+	padding-top: 10px;
+	/*border-top: 1px solid #777;*/
+	line-height: 1.5;
+}
+
+.dietbox {
+	background-color: #fff;
+	padding: 5px;
+	margin: 0px;
+	min-width: 100%;
+	border-radius: 4px;
+	border: 2px solid #777;
+	overflow: none;
+}
+
+.dietPadding {
+	padding: 15px;
+}
+
+.smDietImg {
+	max-width: 100%;
+	padding-bottom: 10px;
+}
+
+.topDietsTitle{
+	font-size: 2em;
+	text-align: center;
+	font-weight: 700;
+	padding-bottom: 20px;
+	color: #444;
+	letter-spacing: .3em;
+	text-transform: uppercase;
+}
+
+/*Footer */
+.footer {
+	min-height: 155px;
+	
+	background-color: #125072;
+	padding: 20px; 
+}
+
+#footerLeft {
+	float: left;
+}
+
+#footerRight {
+	float: right;
+}
+
+.fboxFooter {
+	text-align: center;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.footericon {
+	display: inline-block;
+	background-color: #eee;
+	color: #125072;
+	font-size: 20px;
+	padding: 5px 10px 10px 8px; 
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: 1px solid #125072;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	transition: all 0.5s;
+}
+
+.footericon:hover {
+	display: inline-block;
+	background-color: #125072;
+	color: #fff;
+	font-size: 20px;
+	padding: 5px 10px 10px 8px; 
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: 1px solid #fff;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	transition: all 0.5s;
+}
+.footerlogo {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: 40px;
+}
+
+.footerText {
+	font-size: 14px;
+	color: #eee;
+	line-height: .7;
+}
+
+.footerTextRight {
+	text-align: right;
+}
+
+/* Modal */
+
+.modalBox {
+	border: 2px solid #777;
+}
+
+.modalInstruction {
+	font-size: 1em;
+	color: #777;
+}
+
+.modalQuestion {
+	font-size: 1.5em;
+	color: #444;
+
+}
+
+.modalTitle {
+	font-size: 2.5em;
+	text-align: center;
+	font-weight: 900;
+	padding-bottom: 40px;
+	color: #318dbe;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+
+}
+
+.modalEnter {
+	font-size: 1.5em;
+	border: none;
+	border-bottom: 2px solid #318dbe;
+	border-radius: 0px;
+	width: 100%;
+	height: 50px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding-left: 15px;
+	color: #777; 
+ 	-webkit-appearance: none;
+  	-webkit-border-radius: 0px;
+}
+
+.form-control:focus {
+	box-shadow: none !important;
+}
+
+.form-control {
+	box-shadow: none !important;
+}
+
+.modal-header {
+	border-bottom: none;
+}
+
+.modal-footer {
+	border-top: none;
+	text-align: center !important;
+}
+
+/* Diet Description */
+
+/* Diet Page Name */
+
+.dietPageName {
+	font-size: 3em;
+	text-align: center;
+	font-weight: 700;
+	padding-bottom: 40px;
+	color: #444;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+/* Login / Registration */
+
+.formContainer {
+	min-width: 100%;
+	min-height: 500px;
+	margin-top: -44px;
+	background-color: #fff;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: center;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.formBox {
+	max-width: 550px;
+	min-width: 300px;
+	background-color: #fff;
+	padding: 25px;
+	margin: 40px 0px;
+	border-radius: 4px;
+	border: 2px solid #777;
+	overflow: none;
+}
+
+.formTitle {
+	font-size: 2.5em;
+	text-align: center;
+	font-weight: 900;
+	padding-bottom: 20px;
+	color: #318dbe;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+
+}
+
+.formEnter {
+	font-size: 1.5em;
+	border: none;
+	border-bottom: 2px solid #318dbe;
+	width: 100%;
+	height: 50px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding-left: 15px;
+	color: #777; 
+
+}
+
+.formSubmit {
+	color: #fff;
+	background-color: #318dbe;
+	padding: 15px;
+	border-radius: 4px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: .3em;
+	margin: 10px auto;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	outline: none;
+	border:none;
+	border-bottom: 4px solid rgba(0,0,0,0.15);
+	transition: all 0.3s;
+}
+
+.formSubmit:hover {
+	color: #fff;
+	background-color: #125072;
+	padding: 15px;
+	border-radius: 4px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: .3em;
+	margin: 10px auto;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	outline: none;
+	border:none;
+	border-bottom: 4px solid rgba(0,0,0,0.15);
+}
+
+.formSubmit:active {
+	color: #fff;
+	background-color: #125072;
+	padding: 15px;
+	border-radius: 4px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: .3em;
+	margin: 10px auto;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	outline: none;
+	border:none;
+	border-bottom: 4px solid rgba(0,0,0,0.15);
+}
+
+.error {
+	margin-top: 10px;
+	color: #a42630;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 1em;
+}
+
+input:focus,input:active {
+   outline: none !important;
+}
+/* Media Queries */

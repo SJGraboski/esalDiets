@@ -1,10 +1,55 @@
 // App
 // ===
 var React = require('react');
+var helpers = require('../utils/helpers.js');
+var Navigation = require('react-router').Navigation;
+
+// Auth
+import Login from '../components/Login';
+import auth from '../utils/authentication.js';
+import eventManager from '../utils/event_manager';
+
+
+var SearchBar = require('./Diets/SearchBar.js');
 
 var App = React.createClass({
 
-// main component app. Takes in the other routes
+	getInitialState: function(){
+		return {
+			searchQuery: null,
+			loggedIn: false
+		}
+	},
+
+	updateAuth(loggedIn) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  },
+
+  componentDidMount () {
+    this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
+    const promise = auth.isAuthenticated();
+    promise.then(resp => {this.setState({loggedIn: true})})
+      .catch(err => {this.setState({loggedIn: false})});
+    console.log(this.state);
+  },
+
+  componentWillUnmount () {
+    this.subscription.remove();
+  },
+
+	searchQuery: function(term){
+		helpers.getSearchResults(term)
+		.then(function(results){
+			console.log(results);
+		})
+	},
+	// Allow for transitions between elements.
+	mixins: [Navigation],
+
+
+	// main component app. Takes in the other routes
 	render: function() {
 		return (
 			<div>
@@ -13,8 +58,8 @@ var App = React.createClass({
 				<header className="masthead">
 				  <div className="container">
 				  <div className="row">
-				    <div>
-				      <h1 className="dietName">2 Bannana Diet</h1>
+				    <div className="pagebanner">
+				      <img src="./assets/images/esalBanner.png" id="profilepagebanner" />
 				    </div>
 				  </div>
 				  </div>
@@ -33,27 +78,16 @@ var App = React.createClass({
 							        <span className="icon-bar"></span>
 							        <span className="icon-bar"></span>
 							      </a>
-							      <a className="navbar-brand" href="#">EASL</a>
+							      <a href="#" className="navbar-left"><img className="navbar-left" src="./assets/images/esallogosmall.png" id="navlogo" /></a>
 							    </div>
 
 
 							    <div className="navbar-collapse collapse">
 							    <ul className="nav navbar-nav navbar-right icon">
-				      <li><a href="#placeholderspace"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
+				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-
-							      <form className="navbar-form navbar-left" role="search">
-
-							   	<div className="input-group">
-							      <input type="text" className="form-control dietSearch" id="dietSearch" placeholder="Diet Search"/>
-							      <span className="input-group-btn">
-							        <button className="btn btn-default dietSearchBTN" id="dietSearchBTN" type="button"><i className="fa fa-search" aria-hidden="true"></i></button>
-							      </span>
-							    </div>
-
-							      </form>
-							      
+				    	<SearchBar onSearchTermChange={this.searchQuery} />
 							    </div>
 
 							  </div>
@@ -65,9 +99,33 @@ var App = React.createClass({
 
 
 			<div className="container" id="childrenContainer">
-				{this.props.children}
+				{React.cloneElement(this.props.children, { loggedIn: this.state.loggedIn })}
 			</div>
 			<div id="placeholder"></div>
+			<div className="container">
+			<div className="footer" id="footer">
+			<div id="footerLeft">
+			<img src="./assets/images/footerlogo.svg" className="footerlogo" alt="esal"/>
+			<p className="footerText">Copyrights © 2016 All Rights Reserved by EASL.</p>
+			<p className="footerText">Terms of Use / Privacy Policy</p>
+			</div>
+			<div id="footerRight">
+				<div className="fboxFooter">
+		    		<div className="footericon"><i className="fa fa-facebook" aria-hidden="true"></i></div>
+		    	</div>
+		    	<div className="fboxFooter">
+		    		<div className="footericon"><i className="fa fa-instagram" aria-hidden="true"></i></div>
+		    	</div>
+		    	<div className="fboxFooter">
+		    		<div className="footericon"><i className="fa fa-pinterest-p" aria-hidden="true"></i></div>
+		    	</div>
+		    	<div className="fboxFooter">
+		    		<div className="footericon"><i className="fa fa-twitter" aria-hidden="true"></i></div>
+		    	</div>
+		    	<div className="footerTextRight"><p className="footerText"><i className="fa fa-envelope-o" aria-hidden="true"></i> info@easldiets.com</p></div>
+			</div>
+			</div>
+			</div>
 			</div>
 		)
 	}
