@@ -1,6 +1,10 @@
 import React from 'react';
 
-const DietProfile = ({diet}) => {
+const DietProfile = ({diet, home}) => {
+
+    if (!diet){
+        return <div>Loading...</div>
+    }
 
     const dietId = diet.id;
     const dietImage = diet.image;
@@ -12,9 +16,7 @@ const DietProfile = ({diet}) => {
             <div>
                 {dietName}
             </div>
-            <div>
-                {dietImage}
-            </div>
+            <img className="media-object" src={dietImage} />
             <div>
                 {dietDescription}
             </div>

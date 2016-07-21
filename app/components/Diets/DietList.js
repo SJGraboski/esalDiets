@@ -1,10 +1,11 @@
 import React from 'react';
-import Listitem from './ListItem';
+import ListItem from './ListItem';
 
 const DietList = (props) => {
     const dietItems = props.diets.map((diet) => {
         return (
-            <Listitem
+            <ListItem
+                key={diet.id}
                 onDietSelect= {props.onDietSelect}
                 diet={diet} />
         )
