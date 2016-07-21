@@ -48,13 +48,19 @@ var App = React.createClass({
 	// Allow for transitions between elements.
 	mixins: [Navigation],
 
+	offset: function(){
+		if (this.props.location.pathname === "/") {
+			return "0";
+		}
+	},
+
 
 	// main component app. Takes in the other routes
 	render: function() {
 		return (
 			<div>
 			<div className="container" id="main">
-
+				<div className={this.props.location.pathname === "/" && ("hideIt")} >  
 				<header className="masthead">
 				  <div className="container">
 				  <div className="row">
@@ -63,10 +69,15 @@ var App = React.createClass({
 				    </div>
 				  </div>
 				  </div>
-				</header>	
+				</header>
+				</div>
 
 				<div className="nav-wrapper">
-				<div id="nav">
+				<div 
+					id="nav" 
+					data-spy="affix"
+					data-offset-top={this.offset()}
+				>
 					<nav className="navbar navbar-default navbar-static">
 				  			<div className="container">
 
