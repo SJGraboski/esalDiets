@@ -5,7 +5,7 @@ var path = require('path');
 var helpers = {
 	// get Profile Data
 	getProfileData: function(userId, dietId) {
-		return axios.get("/api/profile-data")
+		return axios.get("/api/profile-data/" + userId + "/" + dietId)
 		.then(function(response){
 			console.log(response);
 			return response;

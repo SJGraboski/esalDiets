@@ -22,9 +22,9 @@ import eventManager from '../utils/event_manager';
 
 // check if the user is authenticated
 function checkAuth(nextState, replace, cb) {
-  const promise = authentication.isAuthenticated();
+  const promise = auth.isAuthenticated();
   promise.then(function(resp) {
-    eventManager.getEmitter().emit(eventManager.authChannel, true);
+    eventManager.getEmitter().emit(eventManager.authChannel, true, resp);
     cb();
   }).catch(function(err) {
     eventManager.getEmitter().emit(eventManager.authChannel, false);
@@ -42,6 +42,6 @@ module.exports = (
     <Route component={Logout} name='Logout' path="logout" />
     <Route component={Register} name='Register' path="register" />
     <Route component={Diet} name="Diet" path="diet/:dietId" />
-    <Route component={Profile} name="Profile" path="profile" />
+    <Route component={Profile} name="Profile" path="profile" onEnter={checkAuth} />
   </Route>
 );
