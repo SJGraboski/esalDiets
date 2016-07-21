@@ -675,4 +675,9 @@ svg {
 input:focus,input:active {
    outline: none !important;
 }
+
+/* Hide homepage header */
+div.hideIt {
+	display:none;
+}
 /* Media Queries */

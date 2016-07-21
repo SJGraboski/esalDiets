@@ -3,29 +3,58 @@
 var React = require('react');
 var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
+import _ from 'lodash';
+var PropTypes = React.PropTypes;
+var SearchBar = require('./Diets/SearchBar');
+var DietList = require('./Diets/DietList');
+
+
 
 // Auth
 import Login from '../components/Login';
 import auth from '../utils/authentication.js';
 import eventManager from '../utils/event_manager';
 
-
-var SearchBar = require('./Diets/SearchBar.js');
-
 var App = React.createClass({
 
 	getInitialState: function(){
 		return {
-			searchQuery: null,
+			answers: [[],[],[]],
+			dietName: null,
+			dietDescription: null,
+			dietCreated: null,
+			dietImage: null,
+			diets: [],
+			selectedDiet: null,
+			query: '',
 			loggedIn: false,
 			userId: null,
-			userName: null,
+			username: false,
 			dietId: null
 		}
 	},
 
-	updateAuth(loggedIn, resp) {
-		console.log(loggedIn);
+
+
+	searchQuery(term) {
+		var self = this;
+		helpers.getSearchResults(term)
+		.then(function(diets){
+			self.setState({
+				diets: diets.data,
+				selectedDiet: diets.data[0],
+				query: term
+			});
+		})
+	},
+
+	componentDidUpdate: function(prevProps, prevState) {
+		if (prevState.selectedDiet != this.state.selectedDiet) {
+			this.context.router.push({pathname: '/diet/' + this.state.selectedDiet.id});
+		}
+	},
+
+	updateAuth(loggedIn) {
     this.setState({
       loggedIn: loggedIn
     })
@@ -35,6 +64,7 @@ var App = React.createClass({
     this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
     const promise = auth.isAuthenticated();
     promise.then(resp => {
+    	console.log(resp.data);
     	this.setState({
     		loggedIn: true,
 	  		userId: resp.data.userId,
@@ -53,22 +83,14 @@ var App = React.createClass({
     this.subscription.remove();
   },
 
-	searchQuery: function(term){
-		helpers.getSearchResults(term)
-		.then(function(results){
-			console.log(results);
-		})
-	},
-	// Allow for transitions between elements.
-	mixins: [Navigation],
-
-
 	// main component app. Takes in the other routes
 	render: function() {
+		const searchQuery = _.debounce((term) => { this.searchQuery(term)}, 300);
+
 		return (
 			<div>
 			<div className="container" id="main">
-
+				<div className={this.props.location.pathname === "/" && ("hideIt")} >  
 				<header className="masthead">
 				  <div className="container">
 				  <div className="row">
@@ -77,10 +99,13 @@ var App = React.createClass({
 				    </div>
 				  </div>
 				  </div>
-				</header>	
+				</header>
+				</div>
 
 				<div className="nav-wrapper">
-				<div id="nav">
+				<div 
+					id="nav" 
+				>
 					<nav className="navbar navbar-default navbar-static">
 				  			<div className="container">
 
@@ -101,7 +126,7 @@ var App = React.createClass({
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-				    	<SearchBar onSearchTermChange={this.searchQuery} />
+				    	<SearchBar onSearch={searchQuery} />
 							    </div>
 
 							  </div>
@@ -113,6 +138,9 @@ var App = React.createClass({
 
 
 			<div className="container" id="childrenContainer">
+				<DietList
+					onDietSelect={selectedDiet => this.setState({selectedDiet}) }
+					diets={this.state.diets} />
 				{React.cloneElement(this.props.children, 
 					{
 				 		loggedIn: this.state.loggedIn,
@@ -151,6 +179,10 @@ var App = React.createClass({
 		)
 	}
 })
+
+App.contextTypes = {
+  router: React.PropTypes.func.isRequired
+}
 
 // export, where config/router will require it.
 module.exports = App;

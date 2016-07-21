@@ -124,7 +124,7 @@ var Profile = React.createClass({
 		setTimeout(() => {
 			const suggestions = matches[Object.keys(matches).find((partial) => {
 					return input.match(new RegExp(partial), 'i');
-				})] || ['macbook', 'macbook air', 'macbook pro'];
+				})] || ['1 banana', '2 banana', 'paleo', 'low carb', 'low calorie', 'low sugar', 'low sodium'];
 
 			resolve(suggestions.filter((suggestion) =>
 				suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'))

@@ -43,3 +43,6 @@ jspm_packages
 public/bundle.js
 
 # remove config folder from github
+
+# remove .idea folder
+.idea
