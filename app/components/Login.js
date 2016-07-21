@@ -34,17 +34,26 @@ export default class Login extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="">
+			<div className="formContainer">
+			<div className="row text-center">
+				<div className="formBox">
+				<div>	
+				<h1 className="formTitle">Login</h1>
+				</div>
 				<form role='form'>
 					<div className='form-group'>
-						<input type='text' ref='email' placeholder='Email' />
-						<input type='text' ref='pass' placeholder='Password' />
+						<input type='text' className="formEnter" ref='email' placeholder='Email' />
+						<input type='text' className="formEnter" ref='pass' placeholder='Password' />
 					</div>
-					<button type='submit' onClick={this.login.bind(this)}>Submit</button>
+					<button type='submit' className="formSubmit" onClick={this.login.bind(this)}>Submit</button>
 				</form>
 			{this.state.error && (
 				<p className='error'>invalid email and/or password</p>
 			)}
+			</div>
+			</div>
+			</div>
 			</div>
 
 		)
