@@ -449,10 +449,11 @@ svg {
 	background-color: #eee;
 	color: #125072;
 	font-size: 20px;
-	padding: 5px 10px 10px 10px; 
+	padding: 5px 10px 10px 8px; 
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
+	border: 1px solid #125072;
 	margin-left: 10px;
 	margin-bottom: 20px;
 	transition: all 0.5s;
@@ -460,13 +461,14 @@ svg {
 
 .footericon:hover {
 	display: inline-block;
-	background-color: #d4e0ed;
-	color: #125072;
+	background-color: #125072;
+	color: #fff;
 	font-size: 20px;
-	padding: 5px 10px 10px 10px; 
+	padding: 5px 10px 10px 8px; 
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
+	border: 1px solid #fff;
 	margin-left: 10px;
 	margin-bottom: 20px;
 	transition: all 0.5s;
@@ -485,5 +487,192 @@ svg {
 
 .footerTextRight {
 	text-align: right;
+}
+
+/* Modal */
+
+.modalBox {
+	border: 2px solid #777;
+}
+
+.modalInstruction {
+	font-size: 1em;
+	color: #777;
+}
+
+.modalQuestion {
+	font-size: 1.5em;
+	color: #444;
+
+}
+
+.modalTitle {
+	font-size: 2.5em;
+	text-align: center;
+	font-weight: 900;
+	padding-bottom: 40px;
+	color: #318dbe;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+
+}
+
+.modalEnter {
+	font-size: 1.5em;
+	border: none;
+	border-bottom: 2px solid #318dbe;
+	border-radius: 0px;
+	width: 100%;
+	height: 50px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding-left: 15px;
+	color: #777; 
+ 	-webkit-appearance: none;
+  	-webkit-border-radius: 0px;
+}
+
+.form-control:focus {
+	box-shadow: none !important;
+}
+
+.form-control {
+	box-shadow: none !important;
+}
+
+.modal-header {
+	border-bottom: none;
+}
+
+.modal-footer {
+	border-top: none;
+	text-align: center !important;
+}
+
+/* Diet Description */
+
+/* Diet Page Name */
+
+.dietPageName {
+	font-size: 3em;
+	text-align: center;
+	font-weight: 700;
+	padding-bottom: 40px;
+	color: #444;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+/* Login / Registration */
+
+.formContainer {
+	min-width: 100%;
+	min-height: 500px;
+	margin-top: -44px;
+	background-color: #fff;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: center;
+	justify-content: center;
+	align-items: center;
+}
+
+
+.formBox {
+	max-width: 550px;
+	min-width: 300px;
+	background-color: #fff;
+	padding: 25px;
+	margin: 40px 0px;
+	border-radius: 4px;
+	border: 2px solid #777;
+	overflow: none;
+}
+
+.formTitle {
+	font-size: 2.5em;
+	text-align: center;
+	font-weight: 900;
+	padding-bottom: 20px;
+	color: #318dbe;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+
+}
+
+.formEnter {
+	font-size: 1.5em;
+	border: none;
+	border-bottom: 2px solid #318dbe;
+	width: 100%;
+	height: 50px;
+	margin-bottom: 20px;
+	background-color: #fff;
+	padding-left: 15px;
+	color: #777; 
+
+}
+
+.formSubmit {
+	color: #fff;
+	background-color: #318dbe;
+	padding: 15px;
+	border-radius: 4px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: .3em;
+	margin: 10px auto;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	outline: none;
+	border:none;
+	border-bottom: 4px solid rgba(0,0,0,0.15);
+	transition: all 0.3s;
+}
+
+.formSubmit:hover {
+	color: #fff;
+	background-color: #125072;
+	padding: 15px;
+	border-radius: 4px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: .3em;
+	margin: 10px auto;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	outline: none;
+	border:none;
+	border-bottom: 4px solid rgba(0,0,0,0.15);
+}
+
+.formSubmit:active {
+	color: #fff;
+	background-color: #125072;
+	padding: 15px;
+	border-radius: 4px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: .3em;
+	margin: 10px auto;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+	outline: none;
+	border:none;
+	border-bottom: 4px solid rgba(0,0,0,0.15);
+}
+
+.error {
+	margin-top: 10px;
+	color: #a42630;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 1em;
+}
+
+input:focus,input:active {
+   outline: none !important;
 }
 /* Media Queries */

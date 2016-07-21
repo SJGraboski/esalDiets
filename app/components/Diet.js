@@ -101,6 +101,12 @@ var Diet = React.createClass({
 	// render function
 	render: function() {
 		return (
+			<div>
+			<div className="container">
+			<div className="col-md-12">
+			<h1 className="dietPageName">Diet Name Goes Here</h1>
+			</div>
+			</div>
 			<div className="row graphContainer">
 			<div className="placeholderspace" id="placeholderspace"></div>
 			<div className="col-md-12" id="analytics">
@@ -109,6 +115,7 @@ var Diet = React.createClass({
 				<WeightGraph weight={this.state.answers[2]} />
 			</div>
 			<div className="col-md-12" id="userdata">
+			</div>
 			</div>
 			</div>
 		)
