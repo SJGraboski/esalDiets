@@ -19,7 +19,6 @@ var App = React.createClass({
 
 	getInitialState: function(){
 		return {
-			dietId: null,
 			answers: [[],[],[]],
 			dietName: null,
 			dietDescription: null,
@@ -28,7 +27,10 @@ var App = React.createClass({
 			diets: [],
 			selectedDiet: null,
 			query: '',
-			loggedIn: false
+			loggedIn: false,
+			userId: null,
+			username: false,
+			dietId: null
 		}
 	},
 
@@ -48,7 +50,7 @@ var App = React.createClass({
 
 	componentDidUpdate: function(prevProps, prevState) {
 		if (prevState.selectedDiet != this.state.selectedDiet) {
-			this.context.router.push({pathname: '/diet/' + this.state.selectedDiet});
+			this.context.router.push({pathname: '/diet/' + this.state.selectedDiet.id});
 		}
 	},
 
@@ -61,9 +63,20 @@ var App = React.createClass({
   componentDidMount () {
     this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
     const promise = auth.isAuthenticated();
-    promise.then(resp => {this.setState({loggedIn: true})})
-      .catch(err => {this.setState({loggedIn: false})});
-    console.log(this.state);
+    promise.then(resp => {
+    	console.log(resp.data);
+    	this.setState({
+    		loggedIn: true,
+	  		userId: resp.data.userId,
+	  		userName: resp.data.username,
+	  		dietId: resp.data.dietId
+    	})
+    })
+    .catch(err => {
+    	this.setState({
+    		loggedIn: false
+    	})
+    });
   },
 
   componentWillUnmount () {
@@ -72,7 +85,7 @@ var App = React.createClass({
 
 	// main component app. Takes in the other routes
 	render: function() {
-		const dietSearch = _.debounce((term) => { this.dietSearch(term)}, 300);
+		const searchQuery = _.debounce((term) => { this.searchQuery(term)}, 300);
 
 		return (
 			<div>
@@ -113,7 +126,7 @@ var App = React.createClass({
 				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
 				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
 				    </ul>
-				    	<SearchBar onSearch={this.searchQuery} />
+				    	<SearchBar onSearch={searchQuery} />
 							    </div>
 
 							  </div>
@@ -128,7 +141,14 @@ var App = React.createClass({
 				<DietList
 					onDietSelect={selectedDiet => this.setState({selectedDiet}) }
 					diets={this.state.diets} />
-				{React.cloneElement(this.props.children, { loggedIn: this.state.loggedIn })}
+				{React.cloneElement(this.props.children, 
+					{
+				 		loggedIn: this.state.loggedIn,
+				 		username: this.state.username,
+				 		userId: this.state.userId,
+				 		dietId: this.state.dietId
+					}
+				)}
 			</div>
 			<div id="placeholder"></div>
 			<div className="container">

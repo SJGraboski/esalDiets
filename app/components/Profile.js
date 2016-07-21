@@ -48,19 +48,42 @@ var Profile = React.createClass({
 		}
 	},
 	componentWillMount: function(){
-		helpers.getProfileData()
-		.then(function(result){
-			var data = result.data;
-			return this.setState({
-				userId: data.userId,
-				dietId: data.dietId,
-				reportId: data.reportId,
-				answered: data.answered,
-				startDate: data.startDate,
-				answers: data.answers,
-				reportUpdate: null
-			})
-		}.bind(this));
+		if(this.props.userId != null) {
+			helpers.getProfileData(this.props.userId, this.props.dietId)
+			.then(function(result){
+				var data = result.data;
+				console.log(result);
+				return this.setState({
+					userId: this.props.userId,
+					dietId: this.props.dietId,
+					reportId: data.reportId,
+					answered: data.answered,
+					startDate: data.startDate,
+					answers: data.answers,
+					reportUpdate: null
+				})
+			}.bind(this));
+		}
+	},
+	componentWillReceiveProps: function(nextProps) {
+		if (this.props != nextProps && nextProps.userId != null) {
+			console.log(nextProps)
+			helpers.getProfileData(nextProps.userId, nextProps.dietId)
+			.then(function(result){
+				var data = result.data;
+				console.log(result);
+				console.log(nextProps);
+				return this.setState({
+					userId: nextProps.userId,
+					dietId: nextProps.dietId,
+					reportId: data.reportId,
+					answered: data.answered,
+					startDate: data.startDate,
+					answers: data.answers,
+					reportUpdate: null
+				})
+			}.bind(this));
+		}
 	},
 	// componentDidUpdate: grab user info whenever update comes in
 	componentDidUpdate: function(prevProps, prevState){
@@ -69,21 +92,22 @@ var Profile = React.createClass({
 			// helpers reportAnswer
 			helpers.reportUpdate(this.state.reportUpdate)
 			.then(function(data){
+				console.log(data);
 				// check response
 				if (data != false) {
-					return helpers.getProfileData()
+					return helpers.getProfileData(this.props.userId, this.props.dietId)
 					.then(function(result){
 						var data = result.data;
 						return this.setState({
-							userId: data.userId,
-							dietId: data.dietId,
+							userId: this.props.userId,
+							dietId: this.props.dietId,
 							reportId: data.reportId,
 							answered: data.answered,
 							startDate: data.startDate,
 							answers: data.answers,
 							reportUpdate: null
 						})
-					}.bind(this)); // make "this" function as expected)
+					}.bind(this)); // make "this" function as expected
 				}
 			}.bind(this)); // make "this" function as expected
 		}

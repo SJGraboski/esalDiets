@@ -45,7 +45,7 @@ var auth = {
     promise.then((resp) => {
       if (resp.data.token) {
         localStorage.setItem('token', resp.data.token);
-        cb(true);
+        cb(true, resp.data.token);
       }
     }).catch((error) => cb(false));
   }
