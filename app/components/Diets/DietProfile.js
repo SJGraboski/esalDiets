@@ -1,6 +1,11 @@
 import React from 'react';
 
-const DietProfile = ({diet}) => {
+const DietProfile = ({diet, home}) => {
+    const imgURL = 'http://www.clipartbest.com/cliparts/ace/6oX/ace6oXBc4.jpeg';
+
+    if (!diet){
+        return <div><img src={imgURL} /><div>Cannot find a match...</div></div>
+    }
 
     const dietId = diet.id;
     const dietImage = diet.image;
@@ -12,9 +17,7 @@ const DietProfile = ({diet}) => {
             <div>
                 {dietName}
             </div>
-            <div>
-                {dietImage}
-            </div>
+            <img className="media-object" src={dietImage} />
             <div>
                 {dietDescription}
             </div>
