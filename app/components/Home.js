@@ -185,24 +185,24 @@ var Home = React.createClass({
 		    	</div>
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
-		    		<h2 className="dietTitle">Diet 4</h2>
-		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
+		    		<h2 className="dietTitle">Salmon and Potato Diet</h2>
+		    		<img src="./assets/images/dietFour.png" className="smDietImg" alt="Salmon and Potato Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
 		    	</div>
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
-		    		<h2 className="dietTitle">Diet 5</h2>
-		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
+		    		<h2 className="dietTitle">Lotus Root Diet</h2>
+		    		<img src="./assets/images/dietFive.png" className="smDietImg" alt="Lotus Root Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>
 		    	</div>
 		    	<div className="col-md-6 dietPadding">
 		    	<div className="dietbox">
-		    		<h2 className="dietTitle">Diet 6</h2>
-		    		<img src="./assets/images/dietOne.png" className="smDietImg" alt="2 Bannana Diet"/>
+		    		<h2 className="dietTitle">Lemon Water Diet</h2>
+		    		<img src="./assets/images/dietSix.png" className="smDietImg" alt="Lemon Water Diet"/>
 		    		<p className="dietCopy">
 		    		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.</p>
 		    	</div>

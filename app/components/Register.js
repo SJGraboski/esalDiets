@@ -76,28 +76,37 @@ export default class Register extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="">
+			<div className="formContainer">
+			<div className="row text-center">
+				<div className="formBox">
+				<div>	
+				<h1 className="formTitle">Register</h1>
+				</div>
 				<form role='form'>
 					<div className='form-group'>
-						<input className="regInput" type='text' ref='email' placeholder='Email' />
+						<input className="regInput formEnter" type='text' ref='email' placeholder='Email' />
 						{this.state.emailError && (
 							<p className='error'>That doesn't look like a valid email...</p>
 						)}
-						<input className="regInput" type='password' ref='pass' placeholder='Password' />
-						<input className="regInput" type='password' ref='conPass' placeholder='Confirm Password' />
+						<input className="regInput formEnter" type='password' ref='pass' placeholder='Password' />
+						<input className="regInput formEnter" type='password' ref='conPass' placeholder='Confirm Password' />
 						{this.state.passError && (
 							<p className='error'>Your passwords don't match! :C</p>
 						)}
-						<input className="regInput" type='text' ref='username' placeholder='Username' />
-						<input className="regInput" type='text' ref='f_name' placeholder='First Name' />
-						<input className="regInput" type='text' ref='l_name' placeholder='Last Name' />
-						<input className="regInput" type='text' ref='gender' placeholder='Gender' />
+						<input className="regInput formEnter" type='text' ref='username' placeholder='Username' />
+						<input className="regInput formEnter" type='text' ref='f_name' placeholder='First Name' />
+						<input className="regInput formEnter" type='text' ref='l_name' placeholder='Last Name' />
+						<input className="regInput formEnter" type='text' ref='gender' placeholder='Gender' />
 					</div>
-					<button type='submit' onClick={this.register.bind(this)}>Submit</button>
+					<button type='submit' className="formSubmit" onClick={this.register.bind(this)}>Submit</button>
 				</form>
 			{this.state.regError && (
 				<p className='error'>Well, crud, we couldn't register you...a user might already have that email or name.</p>
 			)}
+			</div>
+			</div>
+			</div>
 			</div>
 
 		)
