@@ -24,9 +24,11 @@ var App = React.createClass({
 			dietCreated: null,
 			dietImage: null,
 			diets: [],
-			selectedDiet: null
+			selectedDiet: null,
+			query: ''
 		}
 	},
+
 
 
 	dietSearch(term) {
@@ -36,10 +38,10 @@ var App = React.createClass({
 		.then(function(diets){
 			self.setState({
 				diets: diets.data,
-				selectedDiet: diets.data[0]
+				selectedDiet: diets.data[0],
+				query: term
 			});
-			console.log(self.state.diets)
-			console.log(self.state.selectedDiet)
+
 		})
 	},
 
@@ -51,7 +53,7 @@ var App = React.createClass({
 	render: function() {
 		const dietSearch = _.debounce((term) => { this.dietSearch(term)}, 300);
 
-		if(!this.state.selectedDiet){
+		if(this.state.query == ''){
 			return (
 				<div>
 					<div className="container" id="main">
