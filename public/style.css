@@ -347,9 +347,143 @@ svg {
     color: #fff;
 }
 
-/* input boxes for login and register */
-.regInput, .logInput {
-	display: block;
-	margin-bottom: 5px;
+/* TOP DIETS */
+
+#topDietContainer {
+	min-width: 100%;
+	padding-top: 40px;
+	padding-bottom: 40px; 
+	min-height: 400px;
+	margin: auto 0px;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	background-color: #eee;
+	display: -webkit-flex;
+	display: flex;
+	flex-flow: row wrap;
+  justify-content: space-between;
+  align-content: space-between;
+	
+
+}
+
+.dietContainer {
+	min-height: 350px;
+	margin: 0px;
+	background-color: #fff;
+
+}
+
+.dietTitle {
+	font-size: 1.5em;
+	text-align: center;
+	/*border-bottom: 1px solid #777;*/
+	font-weight: 900;
+	padding-bottom: 10px;
+	color: #125072;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+
+.dietCopy {
+	font-size: 16px;
+	color: #777;
+	padding-top: 10px;
+	/*border-top: 1px solid #777;*/
+	line-height: 1.5;
+}
+
+.dietbox {
+	background-color: #fff;
+	padding: 5px;
+	margin: 0px;
+	min-width: 100%;
+	border-radius: 4px;
+	border: 2px solid #777;
+	overflow: none;
+}
+
+.dietPadding {
+	padding: 15px;
+}
+
+.smDietImg {
+	max-width: 100%;
+	padding-bottom: 10px;
+}
+
+.topDietsTitle{
+	font-size: 2em;
+	text-align: center;
+	font-weight: 700;
+	padding-bottom: 20px;
+	color: #444;
+	letter-spacing: .3em;
+	text-transform: uppercase;
+}
+
+/*Footer */
+.footer {
+	min-height: 155px;
+	
+	background-color: #125072;
+	padding: 20px; 
+}
+
+#footerLeft {
+	float: left;
+}
+
+#footerRight {
+	float: right;
+}
+
+.fboxFooter {
+	text-align: center;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.footericon {
+	display: inline-block;
+	background-color: #eee;
+	color: #125072;
+	font-size: 20px;
+	padding: 5px 10px 10px 10px; 
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	transition: all 0.5s;
+}
+
+.footericon:hover {
+	display: inline-block;
+	background-color: #d4e0ed;
+	color: #125072;
+	font-size: 20px;
+	padding: 5px 10px 10px 10px; 
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	transition: all 0.5s;
+}
+.footerlogo {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: 40px;
+}
+
+.footerText {
+	font-size: 14px;
+	color: #eee;
+	line-height: .7;
+}
+
+.footerTextRight {
+	text-align: right;
 }
 /* Media Queries */
