@@ -9,6 +9,8 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('passport');
 var logger = require('morgan');
+var jwt = require('jsonwebtoken');
+var cors = require('cors');
 
 
 
@@ -18,6 +20,7 @@ var logger = require('morgan');
 // instantiate our express
 var app = express();
 app.use(logger('dev'));
+app.use(cors());
 
 // set up bodyparser
 app.use(bodyParser.json());
@@ -29,8 +32,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 var staticContentFolder = './public';
 app.use(express.static(staticContentFolder));
 
-// get app to use passport
-app.use(passport.initialize());
+// set json webtokensecret
+app.set('jwtSecret', 'CODINGSCOOL');
 
 
 // Sequelize
@@ -47,9 +50,6 @@ models.DietProgress.findAll({
 		DietId: 2
 	},
 	order: ["UserId"]
-})
-.then(function(result) {
-	return console.log(result[0]);
 })
 // API routing
 // ===========

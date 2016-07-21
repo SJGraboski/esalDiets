@@ -53,6 +53,7 @@
   display: inline-block;
   position: relative;
   width: 98%;
+  margin-bottom: 80px;
 }
 
 .react-datepicker__triangle {

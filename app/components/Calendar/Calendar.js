@@ -130,36 +130,34 @@ var Calendar = React.createClass({
           dialogClassName="custom-modal"
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-lg">How Are You Feeling?</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Daily Assesment</h4>
-            <p>Enter you information here:</p>
+            <h4 className="modalTitle">Daily Assesment</h4>
              <form>
               <FormGroup controlId="formControlsSelect">
-                  <ControlLabel>How's your mood?</ControlLabel>
-                  <FormControl componentClass="select" placeholder="select" ref="Qone">
+                  <ControlLabel className="modalQuestion">How's your mood?</ControlLabel>
+                  <FormControl className="modalEnter" componentClass="select" placeholder="select" ref="Qone">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </FormControl>
-                  <ControlLabel>How's your energy level?</ControlLabel>
-                  <FormControl componentClass="select" placeholder="select" ref="Qtwo">
+                  <ControlLabel className="modalQuestion">How's your energy level?</ControlLabel>
+                  <FormControl className="modalEnter" componentClass="select" placeholder="select" ref="Qtwo">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </FormControl>
-                  <ControlLabel>What is your current weight?</ControlLabel>
-                  <FormControl type="text" placeholder="Enter weight" ref="Qthree"/>
+                  <ControlLabel className="modalQuestion">What is your current weight?</ControlLabel>
+                  <FormControl className="modalEnter" type="text" placeholder="Enter weight" ref="Qthree"/>
               </FormGroup>
               </form>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.update}>Submit</Button>
+            <Button className="formSubmit" onClick={this.update}>Submit</Button>
           </Modal.Footer>
         </Modal>
       </ButtonToolbar>

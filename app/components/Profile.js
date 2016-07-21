@@ -5,6 +5,9 @@
 var React = require('react');
 var Router = require('react-router');
 
+var PropTypes = React.PropTypes;
+
+
 // get components
 var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
@@ -59,7 +62,7 @@ var Profile = React.createClass({
 			})
 		}.bind(this));
 	},
-	// componentDidUpdate: grab articles whenever update comes in
+	// componentDidUpdate: grab user info whenever update comes in
 	componentDidUpdate: function(prevProps, prevState){
 		// check to make sure at least one of the search inputs are different
 		if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null){
@@ -97,7 +100,7 @@ var Profile = React.createClass({
 		setTimeout(() => {
 			const suggestions = matches[Object.keys(matches).find((partial) => {
 					return input.match(new RegExp(partial), 'i');
-				})] || ['macbook', 'macbook air', 'macbook pro'];
+				})] || ['1 banana', '2 banana', 'paleo', 'low carb', 'low calorie', 'low sugar', 'low sodium'];
 
 			resolve(suggestions.filter((suggestion) =>
 				suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'))
@@ -108,8 +111,18 @@ var Profile = React.createClass({
 		if (!input) return;
 		console.info(`Searching "${input}"`);
 	},
-	// render function
-	render: function() {
+
+	// how page should look when not logged
+	notLoggedIn() {
+		return (
+			<div>
+			<h2>AHHHHHHHH, YOU'RE NOT LOGGED IN!</h2>
+			<h3>Get out, Get Out, GET OUUUUUUUTTTT</h3>
+			</div>
+		)
+	},
+
+	loggedIn(){
 		return (
 			<div className="row graphContainer">
 			<div className="placeholderspace" id="placeholderspace"></div>
@@ -122,12 +135,12 @@ var Profile = React.createClass({
 				<Calendar updateQuery={this.updateQuery} startDate={this.state.startDate} reportId={this.state.reportId} answered={this.state.answered} />
 
 			</div>
-			
-
-
-
 			</div>
 		)
+	},
+	// render function
+	render() {
+		return this.props.loggedIn ? this.loggedIn() : this.notLoggedIn()
 	}
 })
 
