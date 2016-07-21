@@ -47,6 +47,7 @@ var Home = React.createClass({
 	},
 	// grab profile data
 	componentWillMount: function(){
+		console.log(this.props);
 		helpers.getProfileData()
 		.then(function(result){
 			var data = result.data;

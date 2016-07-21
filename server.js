@@ -51,9 +51,6 @@ models.DietProgress.findAll({
 	},
 	order: ["UserId"]
 })
-.then(function(result) {
-	return console.log(result[0]);
-})
 // API routing
 // ===========
 
