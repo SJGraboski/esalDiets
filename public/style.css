@@ -356,7 +356,7 @@ svg {
 	min-height: 400px;
 	margin: auto 0px;
 	margin-top: 40px;
-	margin-bottom: 500px;
+	margin-bottom: 40px;
 	background-color: #eee;
 	display: -webkit-flex;
 	display: flex;
@@ -424,9 +424,10 @@ svg {
 
 /*Footer */
 .footer {
-	min-height: 165px;
-	margin-top: 40px;
+	min-height: 155px;
+	
 	background-color: #125072;
+	padding: 20px; 
 }
 
 #footerLeft {
@@ -440,22 +441,49 @@ svg {
 .fboxFooter {
 	text-align: center;
 	display: inline-block;
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 .footericon {
 	display: inline-block;
 	background-color: #eee;
 	color: #125072;
-	font-size: 15px;
-	padding: 10px;
+	font-size: 20px;
+	padding: 5px 10px 10px 10px; 
 	width: 35px;
 	height: 35px;
 	border-radius: 50%;
-	margin-right: 10px;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	transition: all 0.5s;
 }
 
+.footericon:hover {
+	display: inline-block;
+	background-color: #d4e0ed;
+	color: #125072;
+	font-size: 20px;
+	padding: 5px 10px 10px 10px; 
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	transition: all 0.5s;
+}
 .footerlogo {
+	margin-top: 20px;
+	margin-bottom: 20px;
 	height: 40px;
+}
+
+.footerText {
+	font-size: 14px;
+	color: #eee;
+	line-height: .7;
+}
+
+.footerTextRight {
+	text-align: right;
 }
 /* Media Queries */

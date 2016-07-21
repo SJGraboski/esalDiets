@@ -106,6 +106,8 @@ var App = React.createClass({
 			<div className="footer" id="footer">
 			<div id="footerLeft">
 			<img src="./assets/images/footerlogo.svg" className="footerlogo" alt="esal"/>
+			<p className="footerText">Copyrights © 2016 All Rights Reserved by EASL.</p>
+			<p className="footerText">Terms of Use / Privacy Policy</p>
 			</div>
 			<div id="footerRight">
 				<div className="fboxFooter">
@@ -117,6 +119,10 @@ var App = React.createClass({
 		    	<div className="fboxFooter">
 		    		<div className="footericon"><i className="fa fa-pinterest-p" aria-hidden="true"></i></div>
 		    	</div>
+		    	<div className="fboxFooter">
+		    		<div className="footericon"><i className="fa fa-twitter" aria-hidden="true"></i></div>
+		    	</div>
+		    	<div className="footerTextRight"><p className="footerText"><i className="fa fa-envelope-o" aria-hidden="true"></i> info@easldiets.com</p></div>
 			</div>
 			</div>
 			</div>
