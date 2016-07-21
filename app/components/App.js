@@ -17,11 +17,15 @@ var App = React.createClass({
 	getInitialState: function(){
 		return {
 			searchQuery: null,
-			loggedIn: false
+			loggedIn: false,
+			userId: null,
+			userName: null,
+			dietId: null
 		}
 	},
 
-	updateAuth(loggedIn) {
+	updateAuth(loggedIn, resp) {
+		console.log(loggedIn);
     this.setState({
       loggedIn: loggedIn
     })
@@ -30,9 +34,19 @@ var App = React.createClass({
   componentDidMount () {
     this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
     const promise = auth.isAuthenticated();
-    promise.then(resp => {this.setState({loggedIn: true})})
-      .catch(err => {this.setState({loggedIn: false})});
-    console.log(this.state);
+    promise.then(resp => {
+    	this.setState({
+    		loggedIn: true,
+	  		userId: resp.data.userId,
+	  		userName: resp.data.username,
+	  		dietId: resp.data.dietId
+    	})
+    })
+    .catch(err => {
+    	this.setState({
+    		loggedIn: false
+    	})
+    });
   },
 
   componentWillUnmount () {
@@ -99,7 +113,14 @@ var App = React.createClass({
 
 
 			<div className="container" id="childrenContainer">
-				{React.cloneElement(this.props.children, { loggedIn: this.state.loggedIn })}
+				{React.cloneElement(this.props.children, 
+					{
+				 		loggedIn: this.state.loggedIn,
+				 		username: this.state.username,
+				 		userId: this.state.userId,
+				 		dietId: this.state.dietId
+					}
+				)}
 			</div>
 			<div id="placeholder"></div>
 			<div className="container">

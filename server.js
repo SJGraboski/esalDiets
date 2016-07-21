@@ -45,15 +45,6 @@ var models = require('./models');
 // and sync them with our db
 models.sequelize.sync();
 
-models.DietProgress.findAll({
-	where:{
-		DietId: 2
-	},
-	order: ["UserId"]
-})
-.then(function(result) {
-	return console.log(result[0]);
-})
 // API routing
 // ===========
 

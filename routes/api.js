@@ -17,11 +17,19 @@ var sequelize = models.sequelize;
 
 // export api routes for the express app
 module.exports = function(app) {
+
 	// Grab Profile Data
-	app.get('/api/profile-data', function(req, res){
+	app.get('/api/profile-data/:user/:diet', function(req, res){
+
+		// grab the userId
+		var userId = req.params.user;
+		var dietId = req.params.diet;
+
+		// container vars for our profile info
 		var answered;
 		var startDay;
 		var theAnswers = [[], [], []];
+
 		// in later versions, we'll actually grab the user's id and diet
 		// using req's cookies.
 		//
@@ -31,8 +39,8 @@ module.exports = function(app) {
 		models.DietProgress.findAll(
 			{
 				where: {
-					UserId: 1,
-					DietId: 1,
+					UserId: userId,
+					DietId: dietId
 				},
 				order: [['reportDay', 'ASC']]
 			}
@@ -55,8 +63,8 @@ module.exports = function(app) {
 			return models.DietProgress.findOne(
 				{
 					where: {
-						UserId: 1,
-						DietId: 1,
+						UserId: userId,
+						DietId: dietId,
 						// the report date must be less than or equal to the current time,
 						// while being greater than exactly a day from now (i.e., today)
 						reportDay: {
@@ -76,8 +84,6 @@ module.exports = function(app) {
 						answered = false;
 					}
 					return res.send({
-						userId: dietProg.UserId,
-						dietId: dietProg.DietId,
 						reportId: dietProg.id,
 						reportDay: dietProg.reportDay,
 						startDate: currentDay,
@@ -279,7 +285,8 @@ module.exports = function(app) {
 					// grab the userID and Username from our sequelize results
           userData = {
           	userId: db_result.dataValues.id,
-          	username: db_result.dataValues.username
+          	username: db_result.dataValues.username,
+          	dietId: db_result.dataValues.DietId
           }
           
           // create JSON token with the our user info
@@ -317,7 +324,13 @@ module.exports = function(app) {
       else {
       	console.log("good")
       	// give the user access
-      	return res.json({success:true, message:'You\'re in!'});
+      	return res.json({
+      		success:true, 
+      		message:'You\'re in!',
+      		userId: decoded.userId,
+      		username: decoded.username,
+      		dietId: decoded.dietId
+      	});
       }
     })
   })
@@ -344,13 +357,16 @@ module.exports = function(app) {
 	    firstname: user.f_name,
 	    lastname: user.l_name,
 	    gender: user.gender
-    }).then(function(result){
+    }).then(function(db_result){
       // get the apropos user data from the result
-      var userId = result.dataValues.id;
-      var username = result.dataValues.username;
+          userData = {
+          	userId: db_result.dataValues.id,
+          	username: db_result.dataValues.username,
+          	dietId: db_results.dataValues.dietId
+          }
 
       // create JSON token
-      var token = jwt.sign({id:userId, name:username}, app.get('jwtSecret'), {
+      var token = jwt.sign(userData, app.get('jwtSecret'), {
           expiresIn: 86400 // Token is given but will expire in 24 hours (each 1 in int is a second)
       });
 
