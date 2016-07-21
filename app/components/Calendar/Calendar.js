@@ -54,6 +54,7 @@ var Calendar = React.createClass({
 
   componentWillMount: function(){
     var exDates = [];
+
     for (var i = 1; i < 365; i++){
       exDates.push(moment().subtract(parseInt([i]), 'days'))
     }
