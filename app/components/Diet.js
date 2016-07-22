@@ -49,10 +49,13 @@ var Diet = React.createClass({
   componentWillReceiveProps: function(nextProps){
   	helpers.getDietData(nextProps.params.dietId)
 		.then(function(result){
+			console.log(result);
 			var data = result.data;
 			return this.setState({
 				dietId: nextProps.params.dietId,
 				dietName: data.name,
+				dietDescription: data.description,
+				dietImage: data.dietImage,
 				answers: data.answers
 			})
 		}.bind(this));
@@ -62,10 +65,13 @@ var Diet = React.createClass({
 	componentWillMount: function(){
 		helpers.getDietData(this.props.params.dietId)
 		.then(function(result){
+			console.log(result);
 			var data = result.data;
 			return this.setState({
-				dietId: this.props.params.dietId,
+				dietId: nextProps.params.dietId,
 				dietName: data.name,
+				dietDescription: data.description,
+				dietImage: data.dietImage,
 				answers: data.answers
 			})
 		}.bind(this));
@@ -104,7 +110,7 @@ var Diet = React.createClass({
 			<div>
 			<div className="container">
 			<div className="col-md-12">
-			<h1 className="dietPageName">Diet Name Goes Here</h1>
+			<h1 className="dietPageName">{this.state.dietName}</h1>
 			</div>
 			</div>
 			<div className="row graphContainer">
@@ -116,11 +122,9 @@ var Diet = React.createClass({
 			</div>
 			<div className="col-md-12" id="userdata">
 			<div className="dietBox">
-				<div className="dietUserTitle">Diet Title</div>
+				<div className="dietUserTitle">{this.state.dietName}</div>
 				<div className="dietDes">
-				<p className="dietCopy">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec maximus ante. Ut enim metus, auctor sed viverra quis, lacinia nec ipsum. Donec bibendum congue urna, non molestie tortor vestibulum a. Sed nisi nisl, consequat quis laoreet id, vestibulum ut nunc. Donec volutpat consequat aliquam. Suspendisse potenti. Maecenas suscipit, tortor vel tempus convallis, quam velit semper magna, ac vehicula sapien sem et urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus dignissim, ante eget imperdiet facilisis, leo urna ultrices diam, sit amet imperdiet neque felis ultrices dolor. Proin tempus interdum dictum. Donec eget porttitor ante. Nulla tempor tincidunt sem id mattis.
-				</p>
+				<p className="dietCopy">{this.state.dietDescription}</p>
 			</div>
 				<div className="text-center">
 				<button type='submit' className="formSubmit">Subscribe</button>

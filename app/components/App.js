@@ -3,6 +3,7 @@
 var React = require('react');
 var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
+var Link = require('react-router').Link;
 import _ from 'lodash';
 var PropTypes = React.PropTypes;
 var SearchBar = require('./Diets/SearchBar');
@@ -40,11 +41,19 @@ var App = React.createClass({
 		var self = this;
 		helpers.getSearchResults(term)
 		.then(function(diets){
-			self.setState({
+			if (term == '') {
+				self.setState({
+					diets: null,
+					query: term
+				})
+			}
+			else{
+				self.setState({
 				diets: diets.data,
 				selectedDiet: diets.data[0],
 				query: term
 			});
+			}
 		})
 	},
 
@@ -122,10 +131,27 @@ var App = React.createClass({
 
 
 							    <div className="navbar-collapse collapse">
-							    <ul className="nav navbar-nav navbar-right icon">
-				      <li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i> Analytics</a></li>
-				      <li><a href="#userdata"><i className="fa fa-user" aria-hidden="true"></i> User Data</a></li>
-				    </ul>
+
+				      {!this.state.loggedIn && 
+				      	(
+				      		<ul className="nav navbar-nav navbar-right icon">
+				      			<li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i>Analytics</a></li>
+				      			<li><a href="#userdata"><i className="fa fa-line-chart" aria-hidden="true"></i>User Data</a></li>
+				      			<li><Link to="login"><i className="fa fa-sign-in" aria-hidden="true"></i>Log In</Link></li>
+				      			<li><Link to="/register"><i className="fa fa-user-plus" aria-hidden="true"></i>Register</Link></li>
+				      		</ul>
+			      		)
+				      }
+				      {this.state.loggedIn &&
+				      	(
+			      			<ul className="nav navbar-nav navbar-right icon">
+				      			<li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i>Analytics</a></li>
+				      			<li><a href="#userdata"><i className="fa fa-line-chart" aria-hidden="true"></i>User Data</a></li>
+				      			<li><Link to="profile"><i className="fa fa-user" aria-hidden="true"></i>Profile</Link></li>
+				      			<li><Link to="logout"><i className="fa fa-sign-out" aria-hidden="true"></i>Sign Out</Link></li>
+				      		</ul>
+				      	)
+				      }
 				    	<SearchBar onSearch={searchQuery} />
 							    </div>
 
