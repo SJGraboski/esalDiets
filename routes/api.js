@@ -213,7 +213,8 @@ module.exports = function(app) {
 		     {name:  {like: '%' + query + '%' }},
 		     {description: { like: '%' + query + '%' }}
 		    ]
-		  }
+		  },
+		  limit: 5
 		})
 		.then(function(results){
 			return res.json(results);
