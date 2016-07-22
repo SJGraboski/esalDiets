@@ -552,13 +552,12 @@ svg {
 /* Diet Description */
 .dietBox{
 	border: 3px solid #318dbe;
-  	border-radius: 4px;
-  	width: 100%;
-  	min-height: 50px;
-  	margin-bottom: 80px;
-  	padding: 15px;
-  	position: relative;
-  	margin-bottom: 275px;
+	border-radius: 4px;
+	width: 100%;
+	min-height: 50px;
+	margin-bottom: 80px;
+	padding: 15px;
+	position: relative;
 }
 
 .dietUserTitle {
@@ -572,17 +571,14 @@ svg {
 	border-bottom: 1px solid #777;
 }
 
-
-.dietDes {
-	float: left;
-}
-
 .dietCopy{
 	font-size: 16px;
 	color: #777;
 	padding-top: 10px;
 	line-height: 1.5;
 	margin: 20px 0px;
+	display: block;
+	text-align: center;
 }
 /* Diet Page Name */
 
