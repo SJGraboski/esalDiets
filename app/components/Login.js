@@ -24,7 +24,7 @@ export default class Login extends React.Component {
 		// authenticate login
 		auth.login(email, pass, (loggedIn) => {
 			if (loggedIn) {
-				this.context.router.push({pathname: '/profile'})
+      	this.context.router.push({pathname: '/profile'})
 			}
 			else {
 				this.setState({error:true})
@@ -61,5 +61,5 @@ export default class Login extends React.Component {
 }
 
 Login.contextTypes = {
-  router: React.PropTypes.func.isRequired
+  router: React.PropTypes.object.isRequired
 }

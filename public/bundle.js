@@ -26662,11 +26662,11 @@
 
 	var _Profile2 = _interopRequireDefault(_Profile);
 
-	var _Home = __webpack_require__(974);
+	var _Home = __webpack_require__(968);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _Diet = __webpack_require__(975);
+	var _Diet = __webpack_require__(969);
 
 	var _Diet2 = _interopRequireDefault(_Diet);
 
@@ -26674,11 +26674,11 @@
 
 	var _Login2 = _interopRequireDefault(_Login);
 
-	var _Register = __webpack_require__(976);
+	var _Register = __webpack_require__(970);
 
 	var _Register2 = _interopRequireDefault(_Register);
 
-	var _Logout = __webpack_require__(977);
+	var _Logout = __webpack_require__(971);
 
 	var _Logout2 = _interopRequireDefault(_Logout);
 
@@ -26728,7 +26728,7 @@
 	  React.createElement(Route, { component: _Login2.default, name: 'Login', path: 'login' }),
 	  React.createElement(Route, { component: _Logout2.default, name: 'Logout', path: 'logout' }),
 	  React.createElement(Route, { component: _Register2.default, name: 'Register', path: 'register' }),
-	  React.createElement(Route, { component: _Diet2.default, name: 'Diet', path: 'diet/:dietId' }),
+	  React.createElement(Route, { component: _Diet2.default, name: 'Diet', path: 'diet/:dietId', onEnter: checkAuth }),
 	  React.createElement(Route, { component: _Profile2.default, name: 'Profile', path: 'profile', onEnter: checkAuth })
 	);
 
@@ -26822,33 +26822,34 @@
 			});
 		},
 
-
 		// Call this whenever the user clicks Logout
 		logOut: function logOut() {
 			var _this = this;
 
-			// authenticate login
+			// authenticate logout
 			_authentication2.default.logout(function (loggedOut) {
-				// if we register the user
+				// if we logout the user
 				if (loggedOut) {
 					_this.setState({
-						loggedIn: false
+						loggedIn: false,
+						userId: null
 					});
 					// send us to their profile page
 					_this.context.router.push({ pathname: '/' });
 				}
 			});
 		},
+
 		componentDidMount: function componentDidMount() {
 			var _this2 = this;
 
 			this.subscription = _event_manager2.default.getEmitter().addListener(_event_manager2.default.authChannel, this.updateAuth);
 			var promise = _authentication2.default.isAuthenticated();
 			promise.then(function (resp) {
-				return _this2.setState({
+				console.log(resp);
+				_this2.setState({
 					loggedIn: true,
-					userId: resp.data.userId,
-					userName: resp.data.username
+					userId: resp.data.userId
 				});
 			}).catch(function (err) {
 				_this2.setState({
@@ -26856,6 +26857,7 @@
 				});
 			});
 		},
+
 		componentWillUnmount: function componentWillUnmount() {
 			this.subscription.remove();
 		},
@@ -27039,7 +27041,6 @@
 						diets: this.state.diets }),
 					React.cloneElement(this.props.children, {
 						loggedIn: this.state.loggedIn,
-						username: this.state.username,
 						userId: this.state.userId,
 						selectedDiet: this.state.selectedDiet
 					})
@@ -27123,7 +27124,7 @@
 	});
 
 	App.contextTypes = {
-		router: React.PropTypes.func.isRequired
+		router: React.PropTypes.object.isRequired
 	};
 
 	// export, where config/router will require it.
@@ -43675,7 +43676,7 @@
 
 
 	Login.contextTypes = {
-		router: React.PropTypes.func.isRequired
+		router: React.PropTypes.object.isRequired
 	};
 
 /***/ },
@@ -43683,6 +43684,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	// This Authentication utility is based on the one found in the guide I listed,
+	// with alterations to make it work with the parts of the app I created:
+	// the API functions and JWT handling on the back end
+
+	// Guide: 
+	// Authentication Workflow with React by Rocky Jaiswal
+	// http://rockyj.in/2016/03/14/auth_workflow_react.html
 
 	// bring in axios
 	var axios = __webpack_require__(240);
@@ -46927,7 +46936,7 @@
 	}(_react.Component);
 
 	SearchBar.contextTypes = {
-	    router: _react2.default.PropTypes.func.isRequired
+	    router: _react2.default.PropTypes.object.isRequired
 	};
 
 	module.exports = SearchBar;
@@ -47032,7 +47041,6 @@
 	var MoodGraph = __webpack_require__(645);
 	var EnergyGraph = __webpack_require__(966);
 	var WeightGraph = __webpack_require__(967);
-	var SearchBar = __webpack_require__(968);
 
 	// helpers functions
 	var helpers = __webpack_require__(267);
@@ -47058,7 +47066,8 @@
 		},
 		componentWillMount: function componentWillMount() {
 			if (this.props.userId != null) {
-				helpers.getProfileData(this.props.userId).then(function (result) {
+				console.log(this.props);
+				return helpers.getProfileData(this.props.userId).then(function (result) {
 					var data = result.data;
 					console.log(result);
 					return this.setState({
@@ -47074,9 +47083,9 @@
 			}
 		},
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-			if (this.props != nextProps && nextProps.userId != null) {
+			if (this.props.userId != nextProps.userId && nextProps.userId != null) {
 				console.log(nextProps);
-				helpers.getProfileData(nextProps.userId).then(function (result) {
+				return helpers.getProfileData(nextProps.userId).then(function (result) {
 					var data = result.data;
 					console.log(result);
 					console.log(nextProps);
@@ -47103,14 +47112,14 @@
 				// if so, send token, userId and dietId into subscribe
 				promise.then(function (resp) {
 					// helpers reportAnswer
-					return helpers.reportUpdate(_this.state.reportUpdate, resp.data.token).then(function (data) {
+					helpers.reportUpdate(_this.state.reportUpdate, resp.data.token).then(function (data) {
 						// check response
 						if (data != false) {
-							return helpers.getProfileData(this.props.userId, this.props.dietId).then(function (result) {
+							return helpers.getProfileData(this.props.userId, this.state.dietId).then(function (result) {
 								var data = result.data;
 								return this.setState({
 									userId: this.props.userId,
-									dietId: this.props.dietId,
+									dietId: this.state.dietId,
 									reportId: data.reportId,
 									answered: data.answered,
 									startDate: data.startDate,
@@ -47130,24 +47139,6 @@
 				reportUpdate: newAnswers
 			});
 		},
-		onChange: function onChange(input, resolve) {
-			// Simulate AJAX request
-			setTimeout(function () {
-				var suggestions = matches[Object.keys(matches).find(function (partial) {
-					return input.match(new RegExp(partial), 'i');
-				})] || ['1 banana', '2 banana', 'paleo', 'low carb', 'low calorie', 'low sugar', 'low sodium'];
-
-				resolve(suggestions.filter(function (suggestion) {
-					return suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'));
-				}));
-			}, 25);
-		},
-		onSearch: function onSearch(input) {
-			if (!input) return;
-			console.info('Searching "' + input + '"');
-		},
-
-
 		// how page should look when not logged
 		notLoggedIn: function notLoggedIn() {
 			return React.createElement(
@@ -111004,1292 +110995,6 @@
 /* 968 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(969);
-
-
-/***/ },
-/* 969 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	__webpack_require__(970);
-
-	var _classnames = __webpack_require__(404);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Suggestions = __webpack_require__(973);
-
-	var _Suggestions2 = _interopRequireDefault(_Suggestions);
-
-	var KEY_CODES = {
-	  up: 38,
-	  down: 40
-	};
-
-	var SearchBar = _react2['default'].createClass({
-	  displayName: 'SearchBar',
-
-	  propTypes: {
-	    autoFocus: _react2['default'].PropTypes.bool,
-	    debounceDelay: _react2['default'].PropTypes.number,
-	    inputName: _react2['default'].PropTypes.string,
-	    placeholder: _react2['default'].PropTypes.string
-	  },
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      autoFocus: true,
-	      debounceDelay: 100,
-	      inputName: 'query'
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      highlightedItem: -1,
-	      searchTerm: '',
-	      suggestions: [],
-	      value: ''
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    if (this.props.autoFocus) {
-	      this.refs.input.focus();
-	    }
-	  },
-	  normalizeInput: function normalizeInput() {
-	    return this.state.value.toLowerCase().trim();
-	  },
-	  onChange: function onChange(e) {
-	    var _this = this;
-
-	    clearTimeout(this._timerId);
-	    var input = e.target.value;
-	    if (!input) return this.setState(this.getInitialState());
-	    this.setState({ value: input });
-
-	    this._timerId = setTimeout(function () {
-	      var searchTerm = _this.normalizeInput();
-	      if (!searchTerm) return;
-	      new Promise(function (resolve) {
-	        _this.props.onChange(input, resolve);
-	      }).then(function (suggestions) {
-	        if (!_this.state.value) return;
-	        _this.setState({
-	          highlightedItem: -1,
-	          searchTerm: searchTerm,
-	          suggestions: suggestions
-	        });
-	      });
-	    }, this.props.debounceDelay);
-	  },
-	  onKeyDown: function onKeyDown(e) {
-	    e.preventDefault();
-	    var _state = this.state;
-	    var item = _state.highlightedItem;
-	    var suggestions = _state.suggestions;
-
-	    var lastItem = suggestions.length - 1;
-
-	    if (e.which == KEY_CODES.up) {
-	      item = item <= 0 ? lastItem : item - 1;
-	    } else {
-	      item = item == lastItem ? 0 : item + 1;
-	    }
-
-	    this.setState({
-	      highlightedItem: item,
-	      value: suggestions[item]
-	    });
-	  },
-	  onSelection: function onSelection(suggestion) {
-	    this.setState({ value: suggestion });
-	    this.search(suggestion);
-	  },
-	  onSubmit: function onSubmit(e) {
-	    e.preventDefault();
-	    var input = this.normalizeInput();
-	    if (!input) return;
-	    this.search(input);
-	  },
-	  search: function search(value) {
-	    clearTimeout(this._timerId);
-	    this.refs.input.blur();
-
-	    var _getInitialState = this.getInitialState();
-
-	    var highlightedItem = _getInitialState.highlightedItem;
-	    var suggestions = _getInitialState.suggestions;
-
-	    this.setState({ highlightedItem: highlightedItem, suggestions: suggestions });
-	    this.props.onSubmit(value);
-	  },
-	  render: function render() {
-	    var _this2 = this;
-
-	    return _react2['default'].createElement(
-	      'div',
-	      { className: 'search-bar-wrapper' },
-	      _react2['default'].createElement(
-	        'div',
-	        { className: (0, _classnames2['default'])("search-bar-field", { "is-focused": this.state.isFocused }) },
-	        _react2['default'].createElement('input', {
-	          className: 'search-bar-input',
-	          name: this.props.inputName,
-	          type: 'text',
-	          maxLength: '100',
-	          autoCapitalize: 'none',
-	          autoComplete: 'off',
-	          autoCorrect: 'off',
-	          ref: 'input',
-	          value: this.state.value,
-	          placeholder: this.props.placeholder,
-	          onChange: this.onChange,
-	          onKeyDown: function (e) {
-	            (e.which == KEY_CODES.up || e.which == KEY_CODES.down) && _this2.state.suggestions.length != 0 && _this2.onKeyDown(e);
-	          },
-	          onBlur: function () {
-	            return _this2.setState({ isFocused: false, suggestions: [] });
-	          },
-	          onFocus: function () {
-	            return _this2.setState({ isFocused: true });
-	          } }),
-	        this.state.value && _react2['default'].createElement('span', {
-	          className: 'icon search-bar-cancel',
-	          onClick: function () {
-	            return _this2.setState(_this2.getInitialState());
-	          } }),
-	        _react2['default'].createElement('input', {
-	          className: 'icon search-bar-submit',
-	          type: 'submit',
-	          onClick: this.props.onSubmit && this.onSubmit })
-	      ),
-	      this.state.suggestions.length > 0 && _react2['default'].createElement(_Suggestions2['default'], {
-	        searchTerm: this.state.searchTerm,
-	        suggestions: this.state.suggestions,
-	        highlightedItem: this.state.highlightedItem,
-	        onSelection: this.onSelection })
-	    );
-	  }
-	});
-
-	exports['default'] = SearchBar;
-	module.exports = exports['default'];
-
-/***/ },
-/* 970 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var require;var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, global, module) {/*!
-	 * @overview es6-promise - a tiny implementation of Promises/A+.
-	 * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
-	 * @license   Licensed under MIT license
-	 *            See https://raw.githubusercontent.com/jakearchibald/es6-promise/master/LICENSE
-	 * @version   3.2.1
-	 */
-
-	(function() {
-	    "use strict";
-	    function lib$es6$promise$utils$$objectOrFunction(x) {
-	      return typeof x === 'function' || (typeof x === 'object' && x !== null);
-	    }
-
-	    function lib$es6$promise$utils$$isFunction(x) {
-	      return typeof x === 'function';
-	    }
-
-	    function lib$es6$promise$utils$$isMaybeThenable(x) {
-	      return typeof x === 'object' && x !== null;
-	    }
-
-	    var lib$es6$promise$utils$$_isArray;
-	    if (!Array.isArray) {
-	      lib$es6$promise$utils$$_isArray = function (x) {
-	        return Object.prototype.toString.call(x) === '[object Array]';
-	      };
-	    } else {
-	      lib$es6$promise$utils$$_isArray = Array.isArray;
-	    }
-
-	    var lib$es6$promise$utils$$isArray = lib$es6$promise$utils$$_isArray;
-	    var lib$es6$promise$asap$$len = 0;
-	    var lib$es6$promise$asap$$vertxNext;
-	    var lib$es6$promise$asap$$customSchedulerFn;
-
-	    var lib$es6$promise$asap$$asap = function asap(callback, arg) {
-	      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len] = callback;
-	      lib$es6$promise$asap$$queue[lib$es6$promise$asap$$len + 1] = arg;
-	      lib$es6$promise$asap$$len += 2;
-	      if (lib$es6$promise$asap$$len === 2) {
-	        // If len is 2, that means that we need to schedule an async flush.
-	        // If additional callbacks are queued before the queue is flushed, they
-	        // will be processed by this flush that we are scheduling.
-	        if (lib$es6$promise$asap$$customSchedulerFn) {
-	          lib$es6$promise$asap$$customSchedulerFn(lib$es6$promise$asap$$flush);
-	        } else {
-	          lib$es6$promise$asap$$scheduleFlush();
-	        }
-	      }
-	    }
-
-	    function lib$es6$promise$asap$$setScheduler(scheduleFn) {
-	      lib$es6$promise$asap$$customSchedulerFn = scheduleFn;
-	    }
-
-	    function lib$es6$promise$asap$$setAsap(asapFn) {
-	      lib$es6$promise$asap$$asap = asapFn;
-	    }
-
-	    var lib$es6$promise$asap$$browserWindow = (typeof window !== 'undefined') ? window : undefined;
-	    var lib$es6$promise$asap$$browserGlobal = lib$es6$promise$asap$$browserWindow || {};
-	    var lib$es6$promise$asap$$BrowserMutationObserver = lib$es6$promise$asap$$browserGlobal.MutationObserver || lib$es6$promise$asap$$browserGlobal.WebKitMutationObserver;
-	    var lib$es6$promise$asap$$isNode = typeof self === 'undefined' && typeof process !== 'undefined' && {}.toString.call(process) === '[object process]';
-
-	    // test for web worker but not in IE10
-	    var lib$es6$promise$asap$$isWorker = typeof Uint8ClampedArray !== 'undefined' &&
-	      typeof importScripts !== 'undefined' &&
-	      typeof MessageChannel !== 'undefined';
-
-	    // node
-	    function lib$es6$promise$asap$$useNextTick() {
-	      // node version 0.10.x displays a deprecation warning when nextTick is used recursively
-	      // see https://github.com/cujojs/when/issues/410 for details
-	      return function() {
-	        process.nextTick(lib$es6$promise$asap$$flush);
-	      };
-	    }
-
-	    // vertx
-	    function lib$es6$promise$asap$$useVertxTimer() {
-	      return function() {
-	        lib$es6$promise$asap$$vertxNext(lib$es6$promise$asap$$flush);
-	      };
-	    }
-
-	    function lib$es6$promise$asap$$useMutationObserver() {
-	      var iterations = 0;
-	      var observer = new lib$es6$promise$asap$$BrowserMutationObserver(lib$es6$promise$asap$$flush);
-	      var node = document.createTextNode('');
-	      observer.observe(node, { characterData: true });
-
-	      return function() {
-	        node.data = (iterations = ++iterations % 2);
-	      };
-	    }
-
-	    // web worker
-	    function lib$es6$promise$asap$$useMessageChannel() {
-	      var channel = new MessageChannel();
-	      channel.port1.onmessage = lib$es6$promise$asap$$flush;
-	      return function () {
-	        channel.port2.postMessage(0);
-	      };
-	    }
-
-	    function lib$es6$promise$asap$$useSetTimeout() {
-	      return function() {
-	        setTimeout(lib$es6$promise$asap$$flush, 1);
-	      };
-	    }
-
-	    var lib$es6$promise$asap$$queue = new Array(1000);
-	    function lib$es6$promise$asap$$flush() {
-	      for (var i = 0; i < lib$es6$promise$asap$$len; i+=2) {
-	        var callback = lib$es6$promise$asap$$queue[i];
-	        var arg = lib$es6$promise$asap$$queue[i+1];
-
-	        callback(arg);
-
-	        lib$es6$promise$asap$$queue[i] = undefined;
-	        lib$es6$promise$asap$$queue[i+1] = undefined;
-	      }
-
-	      lib$es6$promise$asap$$len = 0;
-	    }
-
-	    function lib$es6$promise$asap$$attemptVertx() {
-	      try {
-	        var r = require;
-	        var vertx = __webpack_require__(971);
-	        lib$es6$promise$asap$$vertxNext = vertx.runOnLoop || vertx.runOnContext;
-	        return lib$es6$promise$asap$$useVertxTimer();
-	      } catch(e) {
-	        return lib$es6$promise$asap$$useSetTimeout();
-	      }
-	    }
-
-	    var lib$es6$promise$asap$$scheduleFlush;
-	    // Decide what async method to use to triggering processing of queued callbacks:
-	    if (lib$es6$promise$asap$$isNode) {
-	      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useNextTick();
-	    } else if (lib$es6$promise$asap$$BrowserMutationObserver) {
-	      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMutationObserver();
-	    } else if (lib$es6$promise$asap$$isWorker) {
-	      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useMessageChannel();
-	    } else if (lib$es6$promise$asap$$browserWindow === undefined && "function" === 'function') {
-	      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$attemptVertx();
-	    } else {
-	      lib$es6$promise$asap$$scheduleFlush = lib$es6$promise$asap$$useSetTimeout();
-	    }
-	    function lib$es6$promise$then$$then(onFulfillment, onRejection) {
-	      var parent = this;
-
-	      var child = new this.constructor(lib$es6$promise$$internal$$noop);
-
-	      if (child[lib$es6$promise$$internal$$PROMISE_ID] === undefined) {
-	        lib$es6$promise$$internal$$makePromise(child);
-	      }
-
-	      var state = parent._state;
-
-	      if (state) {
-	        var callback = arguments[state - 1];
-	        lib$es6$promise$asap$$asap(function(){
-	          lib$es6$promise$$internal$$invokeCallback(state, child, callback, parent._result);
-	        });
-	      } else {
-	        lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection);
-	      }
-
-	      return child;
-	    }
-	    var lib$es6$promise$then$$default = lib$es6$promise$then$$then;
-	    function lib$es6$promise$promise$resolve$$resolve(object) {
-	      /*jshint validthis:true */
-	      var Constructor = this;
-
-	      if (object && typeof object === 'object' && object.constructor === Constructor) {
-	        return object;
-	      }
-
-	      var promise = new Constructor(lib$es6$promise$$internal$$noop);
-	      lib$es6$promise$$internal$$resolve(promise, object);
-	      return promise;
-	    }
-	    var lib$es6$promise$promise$resolve$$default = lib$es6$promise$promise$resolve$$resolve;
-	    var lib$es6$promise$$internal$$PROMISE_ID = Math.random().toString(36).substring(16);
-
-	    function lib$es6$promise$$internal$$noop() {}
-
-	    var lib$es6$promise$$internal$$PENDING   = void 0;
-	    var lib$es6$promise$$internal$$FULFILLED = 1;
-	    var lib$es6$promise$$internal$$REJECTED  = 2;
-
-	    var lib$es6$promise$$internal$$GET_THEN_ERROR = new lib$es6$promise$$internal$$ErrorObject();
-
-	    function lib$es6$promise$$internal$$selfFulfillment() {
-	      return new TypeError("You cannot resolve a promise with itself");
-	    }
-
-	    function lib$es6$promise$$internal$$cannotReturnOwn() {
-	      return new TypeError('A promises callback cannot return that same promise.');
-	    }
-
-	    function lib$es6$promise$$internal$$getThen(promise) {
-	      try {
-	        return promise.then;
-	      } catch(error) {
-	        lib$es6$promise$$internal$$GET_THEN_ERROR.error = error;
-	        return lib$es6$promise$$internal$$GET_THEN_ERROR;
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$tryThen(then, value, fulfillmentHandler, rejectionHandler) {
-	      try {
-	        then.call(value, fulfillmentHandler, rejectionHandler);
-	      } catch(e) {
-	        return e;
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$handleForeignThenable(promise, thenable, then) {
-	       lib$es6$promise$asap$$asap(function(promise) {
-	        var sealed = false;
-	        var error = lib$es6$promise$$internal$$tryThen(then, thenable, function(value) {
-	          if (sealed) { return; }
-	          sealed = true;
-	          if (thenable !== value) {
-	            lib$es6$promise$$internal$$resolve(promise, value);
-	          } else {
-	            lib$es6$promise$$internal$$fulfill(promise, value);
-	          }
-	        }, function(reason) {
-	          if (sealed) { return; }
-	          sealed = true;
-
-	          lib$es6$promise$$internal$$reject(promise, reason);
-	        }, 'Settle: ' + (promise._label || ' unknown promise'));
-
-	        if (!sealed && error) {
-	          sealed = true;
-	          lib$es6$promise$$internal$$reject(promise, error);
-	        }
-	      }, promise);
-	    }
-
-	    function lib$es6$promise$$internal$$handleOwnThenable(promise, thenable) {
-	      if (thenable._state === lib$es6$promise$$internal$$FULFILLED) {
-	        lib$es6$promise$$internal$$fulfill(promise, thenable._result);
-	      } else if (thenable._state === lib$es6$promise$$internal$$REJECTED) {
-	        lib$es6$promise$$internal$$reject(promise, thenable._result);
-	      } else {
-	        lib$es6$promise$$internal$$subscribe(thenable, undefined, function(value) {
-	          lib$es6$promise$$internal$$resolve(promise, value);
-	        }, function(reason) {
-	          lib$es6$promise$$internal$$reject(promise, reason);
-	        });
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$handleMaybeThenable(promise, maybeThenable, then) {
-	      if (maybeThenable.constructor === promise.constructor &&
-	          then === lib$es6$promise$then$$default &&
-	          constructor.resolve === lib$es6$promise$promise$resolve$$default) {
-	        lib$es6$promise$$internal$$handleOwnThenable(promise, maybeThenable);
-	      } else {
-	        if (then === lib$es6$promise$$internal$$GET_THEN_ERROR) {
-	          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$GET_THEN_ERROR.error);
-	        } else if (then === undefined) {
-	          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
-	        } else if (lib$es6$promise$utils$$isFunction(then)) {
-	          lib$es6$promise$$internal$$handleForeignThenable(promise, maybeThenable, then);
-	        } else {
-	          lib$es6$promise$$internal$$fulfill(promise, maybeThenable);
-	        }
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$resolve(promise, value) {
-	      if (promise === value) {
-	        lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$selfFulfillment());
-	      } else if (lib$es6$promise$utils$$objectOrFunction(value)) {
-	        lib$es6$promise$$internal$$handleMaybeThenable(promise, value, lib$es6$promise$$internal$$getThen(value));
-	      } else {
-	        lib$es6$promise$$internal$$fulfill(promise, value);
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$publishRejection(promise) {
-	      if (promise._onerror) {
-	        promise._onerror(promise._result);
-	      }
-
-	      lib$es6$promise$$internal$$publish(promise);
-	    }
-
-	    function lib$es6$promise$$internal$$fulfill(promise, value) {
-	      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
-
-	      promise._result = value;
-	      promise._state = lib$es6$promise$$internal$$FULFILLED;
-
-	      if (promise._subscribers.length !== 0) {
-	        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, promise);
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$reject(promise, reason) {
-	      if (promise._state !== lib$es6$promise$$internal$$PENDING) { return; }
-	      promise._state = lib$es6$promise$$internal$$REJECTED;
-	      promise._result = reason;
-
-	      lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publishRejection, promise);
-	    }
-
-	    function lib$es6$promise$$internal$$subscribe(parent, child, onFulfillment, onRejection) {
-	      var subscribers = parent._subscribers;
-	      var length = subscribers.length;
-
-	      parent._onerror = null;
-
-	      subscribers[length] = child;
-	      subscribers[length + lib$es6$promise$$internal$$FULFILLED] = onFulfillment;
-	      subscribers[length + lib$es6$promise$$internal$$REJECTED]  = onRejection;
-
-	      if (length === 0 && parent._state) {
-	        lib$es6$promise$asap$$asap(lib$es6$promise$$internal$$publish, parent);
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$publish(promise) {
-	      var subscribers = promise._subscribers;
-	      var settled = promise._state;
-
-	      if (subscribers.length === 0) { return; }
-
-	      var child, callback, detail = promise._result;
-
-	      for (var i = 0; i < subscribers.length; i += 3) {
-	        child = subscribers[i];
-	        callback = subscribers[i + settled];
-
-	        if (child) {
-	          lib$es6$promise$$internal$$invokeCallback(settled, child, callback, detail);
-	        } else {
-	          callback(detail);
-	        }
-	      }
-
-	      promise._subscribers.length = 0;
-	    }
-
-	    function lib$es6$promise$$internal$$ErrorObject() {
-	      this.error = null;
-	    }
-
-	    var lib$es6$promise$$internal$$TRY_CATCH_ERROR = new lib$es6$promise$$internal$$ErrorObject();
-
-	    function lib$es6$promise$$internal$$tryCatch(callback, detail) {
-	      try {
-	        return callback(detail);
-	      } catch(e) {
-	        lib$es6$promise$$internal$$TRY_CATCH_ERROR.error = e;
-	        return lib$es6$promise$$internal$$TRY_CATCH_ERROR;
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$invokeCallback(settled, promise, callback, detail) {
-	      var hasCallback = lib$es6$promise$utils$$isFunction(callback),
-	          value, error, succeeded, failed;
-
-	      if (hasCallback) {
-	        value = lib$es6$promise$$internal$$tryCatch(callback, detail);
-
-	        if (value === lib$es6$promise$$internal$$TRY_CATCH_ERROR) {
-	          failed = true;
-	          error = value.error;
-	          value = null;
-	        } else {
-	          succeeded = true;
-	        }
-
-	        if (promise === value) {
-	          lib$es6$promise$$internal$$reject(promise, lib$es6$promise$$internal$$cannotReturnOwn());
-	          return;
-	        }
-
-	      } else {
-	        value = detail;
-	        succeeded = true;
-	      }
-
-	      if (promise._state !== lib$es6$promise$$internal$$PENDING) {
-	        // noop
-	      } else if (hasCallback && succeeded) {
-	        lib$es6$promise$$internal$$resolve(promise, value);
-	      } else if (failed) {
-	        lib$es6$promise$$internal$$reject(promise, error);
-	      } else if (settled === lib$es6$promise$$internal$$FULFILLED) {
-	        lib$es6$promise$$internal$$fulfill(promise, value);
-	      } else if (settled === lib$es6$promise$$internal$$REJECTED) {
-	        lib$es6$promise$$internal$$reject(promise, value);
-	      }
-	    }
-
-	    function lib$es6$promise$$internal$$initializePromise(promise, resolver) {
-	      try {
-	        resolver(function resolvePromise(value){
-	          lib$es6$promise$$internal$$resolve(promise, value);
-	        }, function rejectPromise(reason) {
-	          lib$es6$promise$$internal$$reject(promise, reason);
-	        });
-	      } catch(e) {
-	        lib$es6$promise$$internal$$reject(promise, e);
-	      }
-	    }
-
-	    var lib$es6$promise$$internal$$id = 0;
-	    function lib$es6$promise$$internal$$nextId() {
-	      return lib$es6$promise$$internal$$id++;
-	    }
-
-	    function lib$es6$promise$$internal$$makePromise(promise) {
-	      promise[lib$es6$promise$$internal$$PROMISE_ID] = lib$es6$promise$$internal$$id++;
-	      promise._state = undefined;
-	      promise._result = undefined;
-	      promise._subscribers = [];
-	    }
-
-	    function lib$es6$promise$promise$all$$all(entries) {
-	      return new lib$es6$promise$enumerator$$default(this, entries).promise;
-	    }
-	    var lib$es6$promise$promise$all$$default = lib$es6$promise$promise$all$$all;
-	    function lib$es6$promise$promise$race$$race(entries) {
-	      /*jshint validthis:true */
-	      var Constructor = this;
-
-	      if (!lib$es6$promise$utils$$isArray(entries)) {
-	        return new Constructor(function(resolve, reject) {
-	          reject(new TypeError('You must pass an array to race.'));
-	        });
-	      } else {
-	        return new Constructor(function(resolve, reject) {
-	          var length = entries.length;
-	          for (var i = 0; i < length; i++) {
-	            Constructor.resolve(entries[i]).then(resolve, reject);
-	          }
-	        });
-	      }
-	    }
-	    var lib$es6$promise$promise$race$$default = lib$es6$promise$promise$race$$race;
-	    function lib$es6$promise$promise$reject$$reject(reason) {
-	      /*jshint validthis:true */
-	      var Constructor = this;
-	      var promise = new Constructor(lib$es6$promise$$internal$$noop);
-	      lib$es6$promise$$internal$$reject(promise, reason);
-	      return promise;
-	    }
-	    var lib$es6$promise$promise$reject$$default = lib$es6$promise$promise$reject$$reject;
-
-
-	    function lib$es6$promise$promise$$needsResolver() {
-	      throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
-	    }
-
-	    function lib$es6$promise$promise$$needsNew() {
-	      throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
-	    }
-
-	    var lib$es6$promise$promise$$default = lib$es6$promise$promise$$Promise;
-	    /**
-	      Promise objects represent the eventual result of an asynchronous operation. The
-	      primary way of interacting with a promise is through its `then` method, which
-	      registers callbacks to receive either a promise's eventual value or the reason
-	      why the promise cannot be fulfilled.
-
-	      Terminology
-	      -----------
-
-	      - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
-	      - `thenable` is an object or function that defines a `then` method.
-	      - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
-	      - `exception` is a value that is thrown using the throw statement.
-	      - `reason` is a value that indicates why a promise was rejected.
-	      - `settled` the final resting state of a promise, fulfilled or rejected.
-
-	      A promise can be in one of three states: pending, fulfilled, or rejected.
-
-	      Promises that are fulfilled have a fulfillment value and are in the fulfilled
-	      state.  Promises that are rejected have a rejection reason and are in the
-	      rejected state.  A fulfillment value is never a thenable.
-
-	      Promises can also be said to *resolve* a value.  If this value is also a
-	      promise, then the original promise's settled state will match the value's
-	      settled state.  So a promise that *resolves* a promise that rejects will
-	      itself reject, and a promise that *resolves* a promise that fulfills will
-	      itself fulfill.
-
-
-	      Basic Usage:
-	      ------------
-
-	      ```js
-	      var promise = new Promise(function(resolve, reject) {
-	        // on success
-	        resolve(value);
-
-	        // on failure
-	        reject(reason);
-	      });
-
-	      promise.then(function(value) {
-	        // on fulfillment
-	      }, function(reason) {
-	        // on rejection
-	      });
-	      ```
-
-	      Advanced Usage:
-	      ---------------
-
-	      Promises shine when abstracting away asynchronous interactions such as
-	      `XMLHttpRequest`s.
-
-	      ```js
-	      function getJSON(url) {
-	        return new Promise(function(resolve, reject){
-	          var xhr = new XMLHttpRequest();
-
-	          xhr.open('GET', url);
-	          xhr.onreadystatechange = handler;
-	          xhr.responseType = 'json';
-	          xhr.setRequestHeader('Accept', 'application/json');
-	          xhr.send();
-
-	          function handler() {
-	            if (this.readyState === this.DONE) {
-	              if (this.status === 200) {
-	                resolve(this.response);
-	              } else {
-	                reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
-	              }
-	            }
-	          };
-	        });
-	      }
-
-	      getJSON('/posts.json').then(function(json) {
-	        // on fulfillment
-	      }, function(reason) {
-	        // on rejection
-	      });
-	      ```
-
-	      Unlike callbacks, promises are great composable primitives.
-
-	      ```js
-	      Promise.all([
-	        getJSON('/posts'),
-	        getJSON('/comments')
-	      ]).then(function(values){
-	        values[0] // => postsJSON
-	        values[1] // => commentsJSON
-
-	        return values;
-	      });
-	      ```
-
-	      @class Promise
-	      @param {function} resolver
-	      Useful for tooling.
-	      @constructor
-	    */
-	    function lib$es6$promise$promise$$Promise(resolver) {
-	      this[lib$es6$promise$$internal$$PROMISE_ID] = lib$es6$promise$$internal$$nextId();
-	      this._result = this._state = undefined;
-	      this._subscribers = [];
-
-	      if (lib$es6$promise$$internal$$noop !== resolver) {
-	        typeof resolver !== 'function' && lib$es6$promise$promise$$needsResolver();
-	        this instanceof lib$es6$promise$promise$$Promise ? lib$es6$promise$$internal$$initializePromise(this, resolver) : lib$es6$promise$promise$$needsNew();
-	      }
-	    }
-
-	    lib$es6$promise$promise$$Promise.all = lib$es6$promise$promise$all$$default;
-	    lib$es6$promise$promise$$Promise.race = lib$es6$promise$promise$race$$default;
-	    lib$es6$promise$promise$$Promise.resolve = lib$es6$promise$promise$resolve$$default;
-	    lib$es6$promise$promise$$Promise.reject = lib$es6$promise$promise$reject$$default;
-	    lib$es6$promise$promise$$Promise._setScheduler = lib$es6$promise$asap$$setScheduler;
-	    lib$es6$promise$promise$$Promise._setAsap = lib$es6$promise$asap$$setAsap;
-	    lib$es6$promise$promise$$Promise._asap = lib$es6$promise$asap$$asap;
-
-	    lib$es6$promise$promise$$Promise.prototype = {
-	      constructor: lib$es6$promise$promise$$Promise,
-
-	    /**
-	      The primary way of interacting with a promise is through its `then` method,
-	      which registers callbacks to receive either a promise's eventual value or the
-	      reason why the promise cannot be fulfilled.
-
-	      ```js
-	      findUser().then(function(user){
-	        // user is available
-	      }, function(reason){
-	        // user is unavailable, and you are given the reason why
-	      });
-	      ```
-
-	      Chaining
-	      --------
-
-	      The return value of `then` is itself a promise.  This second, 'downstream'
-	      promise is resolved with the return value of the first promise's fulfillment
-	      or rejection handler, or rejected if the handler throws an exception.
-
-	      ```js
-	      findUser().then(function (user) {
-	        return user.name;
-	      }, function (reason) {
-	        return 'default name';
-	      }).then(function (userName) {
-	        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
-	        // will be `'default name'`
-	      });
-
-	      findUser().then(function (user) {
-	        throw new Error('Found user, but still unhappy');
-	      }, function (reason) {
-	        throw new Error('`findUser` rejected and we're unhappy');
-	      }).then(function (value) {
-	        // never reached
-	      }, function (reason) {
-	        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
-	        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
-	      });
-	      ```
-	      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
-
-	      ```js
-	      findUser().then(function (user) {
-	        throw new PedagogicalException('Upstream error');
-	      }).then(function (value) {
-	        // never reached
-	      }).then(function (value) {
-	        // never reached
-	      }, function (reason) {
-	        // The `PedgagocialException` is propagated all the way down to here
-	      });
-	      ```
-
-	      Assimilation
-	      ------------
-
-	      Sometimes the value you want to propagate to a downstream promise can only be
-	      retrieved asynchronously. This can be achieved by returning a promise in the
-	      fulfillment or rejection handler. The downstream promise will then be pending
-	      until the returned promise is settled. This is called *assimilation*.
-
-	      ```js
-	      findUser().then(function (user) {
-	        return findCommentsByAuthor(user);
-	      }).then(function (comments) {
-	        // The user's comments are now available
-	      });
-	      ```
-
-	      If the assimliated promise rejects, then the downstream promise will also reject.
-
-	      ```js
-	      findUser().then(function (user) {
-	        return findCommentsByAuthor(user);
-	      }).then(function (comments) {
-	        // If `findCommentsByAuthor` fulfills, we'll have the value here
-	      }, function (reason) {
-	        // If `findCommentsByAuthor` rejects, we'll have the reason here
-	      });
-	      ```
-
-	      Simple Example
-	      --------------
-
-	      Synchronous Example
-
-	      ```javascript
-	      var result;
-
-	      try {
-	        result = findResult();
-	        // success
-	      } catch(reason) {
-	        // failure
-	      }
-	      ```
-
-	      Errback Example
-
-	      ```js
-	      findResult(function(result, err){
-	        if (err) {
-	          // failure
-	        } else {
-	          // success
-	        }
-	      });
-	      ```
-
-	      Promise Example;
-
-	      ```javascript
-	      findResult().then(function(result){
-	        // success
-	      }, function(reason){
-	        // failure
-	      });
-	      ```
-
-	      Advanced Example
-	      --------------
-
-	      Synchronous Example
-
-	      ```javascript
-	      var author, books;
-
-	      try {
-	        author = findAuthor();
-	        books  = findBooksByAuthor(author);
-	        // success
-	      } catch(reason) {
-	        // failure
-	      }
-	      ```
-
-	      Errback Example
-
-	      ```js
-
-	      function foundBooks(books) {
-
-	      }
-
-	      function failure(reason) {
-
-	      }
-
-	      findAuthor(function(author, err){
-	        if (err) {
-	          failure(err);
-	          // failure
-	        } else {
-	          try {
-	            findBoooksByAuthor(author, function(books, err) {
-	              if (err) {
-	                failure(err);
-	              } else {
-	                try {
-	                  foundBooks(books);
-	                } catch(reason) {
-	                  failure(reason);
-	                }
-	              }
-	            });
-	          } catch(error) {
-	            failure(err);
-	          }
-	          // success
-	        }
-	      });
-	      ```
-
-	      Promise Example;
-
-	      ```javascript
-	      findAuthor().
-	        then(findBooksByAuthor).
-	        then(function(books){
-	          // found books
-	      }).catch(function(reason){
-	        // something went wrong
-	      });
-	      ```
-
-	      @method then
-	      @param {Function} onFulfilled
-	      @param {Function} onRejected
-	      Useful for tooling.
-	      @return {Promise}
-	    */
-	      then: lib$es6$promise$then$$default,
-
-	    /**
-	      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
-	      as the catch block of a try/catch statement.
-
-	      ```js
-	      function findAuthor(){
-	        throw new Error('couldn't find that author');
-	      }
-
-	      // synchronous
-	      try {
-	        findAuthor();
-	      } catch(reason) {
-	        // something went wrong
-	      }
-
-	      // async with promises
-	      findAuthor().catch(function(reason){
-	        // something went wrong
-	      });
-	      ```
-
-	      @method catch
-	      @param {Function} onRejection
-	      Useful for tooling.
-	      @return {Promise}
-	    */
-	      'catch': function(onRejection) {
-	        return this.then(null, onRejection);
-	      }
-	    };
-	    var lib$es6$promise$enumerator$$default = lib$es6$promise$enumerator$$Enumerator;
-	    function lib$es6$promise$enumerator$$Enumerator(Constructor, input) {
-	      this._instanceConstructor = Constructor;
-	      this.promise = new Constructor(lib$es6$promise$$internal$$noop);
-
-	      if (!this.promise[lib$es6$promise$$internal$$PROMISE_ID]) {
-	        lib$es6$promise$$internal$$makePromise(this.promise);
-	      }
-
-	      if (lib$es6$promise$utils$$isArray(input)) {
-	        this._input     = input;
-	        this.length     = input.length;
-	        this._remaining = input.length;
-
-	        this._result = new Array(this.length);
-
-	        if (this.length === 0) {
-	          lib$es6$promise$$internal$$fulfill(this.promise, this._result);
-	        } else {
-	          this.length = this.length || 0;
-	          this._enumerate();
-	          if (this._remaining === 0) {
-	            lib$es6$promise$$internal$$fulfill(this.promise, this._result);
-	          }
-	        }
-	      } else {
-	        lib$es6$promise$$internal$$reject(this.promise, lib$es6$promise$enumerator$$validationError());
-	      }
-	    }
-
-	    function lib$es6$promise$enumerator$$validationError() {
-	      return new Error('Array Methods must be provided an Array');
-	    }
-
-	    lib$es6$promise$enumerator$$Enumerator.prototype._enumerate = function() {
-	      var length  = this.length;
-	      var input   = this._input;
-
-	      for (var i = 0; this._state === lib$es6$promise$$internal$$PENDING && i < length; i++) {
-	        this._eachEntry(input[i], i);
-	      }
-	    };
-
-	    lib$es6$promise$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
-	      var c = this._instanceConstructor;
-	      var resolve = c.resolve;
-
-	      if (resolve === lib$es6$promise$promise$resolve$$default) {
-	        var then = lib$es6$promise$$internal$$getThen(entry);
-
-	        if (then === lib$es6$promise$then$$default &&
-	            entry._state !== lib$es6$promise$$internal$$PENDING) {
-	          this._settledAt(entry._state, i, entry._result);
-	        } else if (typeof then !== 'function') {
-	          this._remaining--;
-	          this._result[i] = entry;
-	        } else if (c === lib$es6$promise$promise$$default) {
-	          var promise = new c(lib$es6$promise$$internal$$noop);
-	          lib$es6$promise$$internal$$handleMaybeThenable(promise, entry, then);
-	          this._willSettleAt(promise, i);
-	        } else {
-	          this._willSettleAt(new c(function(resolve) { resolve(entry); }), i);
-	        }
-	      } else {
-	        this._willSettleAt(resolve(entry), i);
-	      }
-	    };
-
-	    lib$es6$promise$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
-	      var promise = this.promise;
-
-	      if (promise._state === lib$es6$promise$$internal$$PENDING) {
-	        this._remaining--;
-
-	        if (state === lib$es6$promise$$internal$$REJECTED) {
-	          lib$es6$promise$$internal$$reject(promise, value);
-	        } else {
-	          this._result[i] = value;
-	        }
-	      }
-
-	      if (this._remaining === 0) {
-	        lib$es6$promise$$internal$$fulfill(promise, this._result);
-	      }
-	    };
-
-	    lib$es6$promise$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
-	      var enumerator = this;
-
-	      lib$es6$promise$$internal$$subscribe(promise, undefined, function(value) {
-	        enumerator._settledAt(lib$es6$promise$$internal$$FULFILLED, i, value);
-	      }, function(reason) {
-	        enumerator._settledAt(lib$es6$promise$$internal$$REJECTED, i, reason);
-	      });
-	    };
-	    function lib$es6$promise$polyfill$$polyfill() {
-	      var local;
-
-	      if (typeof global !== 'undefined') {
-	          local = global;
-	      } else if (typeof self !== 'undefined') {
-	          local = self;
-	      } else {
-	          try {
-	              local = Function('return this')();
-	          } catch (e) {
-	              throw new Error('polyfill failed because global object is unavailable in this environment');
-	          }
-	      }
-
-	      var P = local.Promise;
-
-	      if (P && Object.prototype.toString.call(P.resolve()) === '[object Promise]' && !P.cast) {
-	        return;
-	      }
-
-	      local.Promise = lib$es6$promise$promise$$default;
-	    }
-	    var lib$es6$promise$polyfill$$default = lib$es6$promise$polyfill$$polyfill;
-
-	    var lib$es6$promise$umd$$ES6Promise = {
-	      'Promise': lib$es6$promise$promise$$default,
-	      'polyfill': lib$es6$promise$polyfill$$default
-	    };
-
-	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(972)['amd']) {
-	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return lib$es6$promise$umd$$ES6Promise; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	    } else if (typeof module !== 'undefined' && module['exports']) {
-	      module['exports'] = lib$es6$promise$umd$$ES6Promise;
-	    } else if (typeof this !== 'undefined') {
-	      this['ES6Promise'] = lib$es6$promise$umd$$ES6Promise;
-	    }
-
-	    lib$es6$promise$polyfill$$default();
-	}).call(this);
-
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), (function() { return this; }()), __webpack_require__(237)(module)))
-
-/***/ },
-/* 971 */
-/***/ function(module, exports) {
-
-	/* (ignored) */
-
-/***/ },
-/* 972 */
-/***/ function(module, exports) {
-
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
-
-
-/***/ },
-/* 973 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(404);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var Suggestions = _react2['default'].createClass({
-	  displayName: 'Suggestions',
-
-	  propTypes: {
-	    suggestions: _react2['default'].PropTypes.array.isRequired,
-	    highlightedItem: _react2['default'].PropTypes.number.isRequired,
-	    searchTerm: _react2['default'].PropTypes.string.isRequired
-	  },
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      highlightedItem: -1,
-	      searchTerm: '',
-	      suggestions: []
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      activeItem: -1
-	    };
-	  },
-	  onTouchStart: function onTouchStart(index) {
-	    var _this = this;
-
-	    this._timerId = setTimeout(function () {
-	      _this.setState({ activeItem: index });
-	    }, 200);
-	  },
-	  onTouchMove: function onTouchMove(e) {
-	    clearTimeout(this._timerId);
-	    this._touchMoved = true;
-	    this.setState({ activeItem: -1 });
-	  },
-	  onTouchEnd: function onTouchEnd(suggestion, e) {
-	    var _this2 = this;
-
-	    if (!this._touchMoved) {
-	      setTimeout(function () {
-	        _this2.props.onSelection(suggestion);
-	      }, 220);
-	    }
-	    this._touchMoved = false;
-	  },
-	  render: function render() {
-	    var _this3 = this;
-
-	    var _props = this.props;
-	    var highlightedItem = _props.highlightedItem;
-	    var searchTerm = _props.searchTerm;
-	    var suggestions = _props.suggestions;
-	    var activeItem = this.state.activeItem;
-
-	    return _react2['default'].createElement(
-	      'ul',
-	      {
-	        className: 'search-bar-suggestions',
-	        onMouseLeave: function () {
-	          return _this3.setState(_this3.getInitialState());
-	        } },
-	      suggestions.map(function (suggestion, index) {
-	        return _react2['default'].createElement(
-	          'li',
-	          {
-	            className: (0, _classnames2['default'])({
-	              highlighted: highlightedItem == index || activeItem == index
-	            }),
-	            key: index,
-	            onClick: function () {
-	              return _this3.props.onSelection(suggestion);
-	            },
-	            onMouseEnter: function () {
-	              return _this3.setState({ activeItem: index });
-	            },
-	            onMouseDown: function (e) {
-	              return e.preventDefault();
-	            },
-	            onTouchStart: function () {
-	              return _this3.onTouchStart(index);
-	            },
-	            onTouchMove: _this3.onTouchMove,
-	            onTouchEnd: function (e) {
-	              return _this3.onTouchEnd(suggestion, e);
-	            } },
-	          _react2['default'].createElement(
-	            'span',
-	            null,
-	            searchTerm,
-	            _react2['default'].createElement(
-	              'strong',
-	              null,
-	              suggestion.substr(searchTerm.length)
-	            )
-	          )
-	        );
-	      })
-	    );
-	  }
-	});
-
-	exports['default'] = Suggestions;
-	module.exports = exports['default'];
-
-/***/ },
-/* 974 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	// Query page
@@ -112329,68 +111034,6 @@
 
 			};
 		},
-		// grab profile data
-		componentWillMount: function componentWillMount() {
-			console.log(this.props);
-			helpers.getProfileData().then(function (result) {
-				var data = result.data;
-				return this.setState({
-					userId: data.userId
-				});
-			}.bind(this));
-		},
-		// componentDidUpdate: grab articles whenever update comes in
-		componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
-			// check to make sure at least one of the search inputs are different
-			if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null) {
-				// helpers reportAnswer
-				helpers.reportUpdate(this.state.reportUpdate, token).then(function (data) {
-					// check response
-					if (data != false) {
-						return helpers.getProfileData().then(function (result) {
-							var data = result.data;
-							return this.setState({
-								userId: data.userId,
-								dietId: data.dietId,
-								reportId: data.reportId,
-								answered: data.answered,
-								startDate: data.startDate,
-								answers: data.answers,
-								reportUpdate: null
-							});
-						}.bind(this)); // make "this" function as expected)
-					}
-				}.bind(this)); // make "this" function as expected
-			}
-		},
-		// set Query to inputs
-		updateQuery: function updateQuery(newAnswers) {
-			// set the state to the for inputs
-			this.setState({
-				reportUpdate: newAnswers
-			});
-		},
-		onChange: function onChange(input, resolve) {
-			// Simulate AJAX request
-			setTimeout(function () {
-				var suggestions = matches[Object.keys(matches).find(function (partial) {
-					return input.match(new RegExp(partial), 'i');
-				})] || ['macbook', 'macbook air', 'macbook pro'];
-
-				resolve(suggestions.filter(function (suggestion) {
-					return suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'));
-				}));
-			}, 25);
-		},
-		onSearch: function onSearch(input) {
-			if (!input) return;
-			console.info('Searching "' + input + '"');
-			// run the search query
-			helpers.getSearchResults(input).then(function (results) {
-				console.log(results);
-			});
-		},
-
 		// render function
 		render: function render() {
 			return React.createElement(
@@ -112621,7 +111264,7 @@
 	module.exports = Home;
 
 /***/ },
-/* 975 */
+/* 969 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -112917,13 +111560,13 @@
 	});
 
 	Diet.contextTypes = {
-		router: React.PropTypes.func.isRequired
+		router: React.PropTypes.object.isRequired
 	};
 
 	module.exports = Diet;
 
 /***/ },
-/* 976 */
+/* 970 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -113098,11 +111741,11 @@
 
 
 	Register.contextTypes = {
-		router: React.PropTypes.func.isRequired
+		router: React.PropTypes.object.isRequired
 	};
 
 /***/ },
-/* 977 */
+/* 971 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

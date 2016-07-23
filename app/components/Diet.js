@@ -190,7 +190,7 @@ var Diet = React.createClass({
 })
 
 Diet.contextTypes = {
-  router: React.PropTypes.func.isRequired
+  router: React.PropTypes.object.isRequired
 }
 
 module.exports = Diet;

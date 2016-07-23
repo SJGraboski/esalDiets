@@ -40,7 +40,7 @@ class SearchBar extends Component {
 }
 
 SearchBar.contextTypes = {
-    router: React.PropTypes.func.isRequired
+    router: React.PropTypes.object.isRequired
 };
 
 

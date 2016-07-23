@@ -41,7 +41,7 @@ module.exports = (
     <Route component={Login} name='Login' path="login" />
     <Route component={Logout} name='Logout' path="logout" />
     <Route component={Register} name='Register' path="register" />
-    <Route component={Diet} name="Diet" path="diet/:dietId" />
+    <Route component={Diet} name="Diet" path="diet/:dietId" onEnter={checkAuth} />
     <Route component={Profile} name="Profile" path="profile" onEnter={checkAuth} />
   </Route>
 );

@@ -13,7 +13,6 @@ var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
-var SearchBar = require('react-search-bar');
 
 // helpers functions
 var helpers = require('../utils/helpers.js');
@@ -37,7 +36,8 @@ var Profile = React.createClass({
 	},
 	componentWillMount: function(){
 		if(this.props.userId != null) {
-			helpers.getProfileData(this.props.userId)
+			console.log(this.props);
+			return helpers.getProfileData(this.props.userId)
 			.then(function(result){
 				var data = result.data;
 				console.log(result);
@@ -54,9 +54,9 @@ var Profile = React.createClass({
 		}
 	},
 	componentWillReceiveProps: function(nextProps) {
-		if (this.props != nextProps && nextProps.userId != null) {
+		if (this.props.userId != nextProps.userId && nextProps.userId != null) {
 			console.log(nextProps)
-			helpers.getProfileData(nextProps.userId)
+			return helpers.getProfileData(nextProps.userId)
 			.then(function(result){
 				var data = result.data;
 				console.log(result);
@@ -82,16 +82,16 @@ var Profile = React.createClass({
 	    // if so, send token, userId and dietId into subscribe
 	    promise.then(resp => {
 				// helpers reportAnswer
-				return helpers.reportUpdate(this.state.reportUpdate, resp.data.token)
+				helpers.reportUpdate(this.state.reportUpdate, resp.data.token)
 				.then(function(data){
 					// check response
 					if (data != false) {
-						return helpers.getProfileData(this.props.userId, this.props.dietId)
+						return helpers.getProfileData(this.props.userId, this.state.dietId)
 						.then(function(result){
 							var data = result.data;
 							return this.setState({
 								userId: this.props.userId,
-								dietId: this.props.dietId,
+								dietId: this.state.dietId,
 								reportId: data.reportId,
 								answered: data.answered,
 								startDate: data.startDate,
@@ -111,23 +111,6 @@ var Profile = React.createClass({
 			reportUpdate: newAnswers,
 		});
 	},
-	onChange(input, resolve) {
-		// Simulate AJAX request
-		setTimeout(() => {
-			const suggestions = matches[Object.keys(matches).find((partial) => {
-					return input.match(new RegExp(partial), 'i');
-				})] || ['1 banana', '2 banana', 'paleo', 'low carb', 'low calorie', 'low sugar', 'low sodium'];
-
-			resolve(suggestions.filter((suggestion) =>
-				suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'))
-			));
-		}, 25);
-	},
-	onSearch(input) {
-		if (!input) return;
-		console.info(`Searching "${input}"`);
-	},
-
 	// how page should look when not logged
 	notLoggedIn() {
 		return (
