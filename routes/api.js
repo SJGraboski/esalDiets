@@ -315,6 +315,8 @@ module.exports = function(app) {
 				// Now, grab the user and diet from req
 				var userId = req.body.userId;
 				var dietId = req.body.dietId;
+				console.log("User Id:" + userId);
+				console.log("Diet Id:" + dietId);
 
 				// If the user ever subscribed to this diet before
 				// we need to remove that data, so we don't have conflicts with data.

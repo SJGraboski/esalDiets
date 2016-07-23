@@ -93,7 +93,7 @@ var Diet = React.createClass({
     	// send us to the profile page after 2 secs
 	    setTimeout(
       	() => {this.context.router.push({pathname: '/profile'})},
-      2000
+      3000
     	)
     })
     .catch(err => {
