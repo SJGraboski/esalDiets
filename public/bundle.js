@@ -45563,8 +45563,8 @@
 		},
 
 		// subscribe user to diet
-		subscribe: function subscribe(user, diet, token) {
-			return axios.post("/api/subscribe", { userId: user, dietId: diet, token: token }).then(function (response) {
+		subscribe: function subscribe(newAnswers, user, diet, token) {
+			return axios.post("/api/subscribe", { userId: user, dietId: diet, answers: newAnswers, token: token }).then(function (response) {
 				return response;
 			}).catch(function (error) {
 				return error;
@@ -112305,6 +112305,9 @@
 	var EnergyGraph = __webpack_require__(966);
 	var WeightGraph = __webpack_require__(967);
 
+	// PropTypes
+	var PropTypes = React.PropTypes;
+
 	// helpers functions
 	var helpers = __webpack_require__(267);
 
@@ -112628,6 +112631,7 @@
 
 	// dependencies
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(33);
 	var Router = __webpack_require__(172);
 	var Navigation = Router.Navigation;
 
@@ -112636,7 +112640,16 @@
 	var MoodGraph = __webpack_require__(645);
 	var EnergyGraph = __webpack_require__(966);
 	var WeightGraph = __webpack_require__(967);
-	var SearchBar = __webpack_require__(968);
+
+	// bring in bootstrap for modal
+	var ReactBootstrap = __webpack_require__(382);
+	var ButtonToolbar = ReactBootstrap.ButtonToolbar;
+	var Button = ReactBootstrap.Button;
+	var Modal = ReactBootstrap.Modal;
+	var ButtonToolbar = ReactBootstrap.ButtonToolbar;
+	var FormGroup = ReactBootstrap.FormGroup;
+	var FormControl = ReactBootstrap.FormControl;
+	var ControlLabel = ReactBootstrap.ControlLabel;
 
 	// helpers functions
 	var helpers = __webpack_require__(267);
@@ -112651,11 +112664,12 @@
 		getInitialState: function getInitialState() {
 			return {
 				dietId: null,
-				answers: [[], [], []],
 				dietName: null,
 				dietDescription: null,
 				dietCreated: null,
-				dietImage: null
+				dietImage: null,
+				modal: false,
+				answers: [[], [], []]
 			};
 		},
 
@@ -112695,43 +112709,34 @@
 
 			// first check that user is logged in
 			var promise = auth.isAuthenticated();
+			// grab the answers from the modal
+
+			var newAnswers = [ReactDOM.findDOMNode(this.refs.Qone).value, ReactDOM.findDOMNode(this.refs.Qtwo).value, ReactDOM.findDOMNode(this.refs.Qthree).value];
 			// if so, send token, userId and dietId into subscribe
 			promise.then(function (resp) {
-				return helpers.subscribe(_this.props.userId, _this.state.dietId, resp.data.token);
+				helpers.subscribe(newAnswers, _this.props.userId, _this.state.dietId, resp.data.token);
+				// send us to the profile page after 2 secs
+				setTimeout(function () {
+					_this.context.router.push({ pathname: '/profile' });
+				}, 2000);
 			}).catch(function (err) {
-				_this.setState({
+				return _this.setState({
 					loggedIn: false
 				});
 			});
 		},
 
-		// set Query to inputs
-		updateQuery: function updateQuery(newAnswers) {
-			// set the state to the for inputs
-			this.setState({
-				reportUpdate: newAnswers
-			});
+		// open the modal
+		showModal: function showModal() {
+			this.setState({ modal: true });
 		},
-		onChange: function onChange(input, resolve) {
-			// Simulate AJAX request
-			setTimeout(function () {
-				var suggestions = matches[Object.keys(matches).find(function (partial) {
-					return input.match(new RegExp(partial), 'i');
-				})] || ['macbook', 'macbook air', 'macbook pro'];
 
-				resolve(suggestions.filter(function (suggestion) {
-					return suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'));
-				}));
-			}, 25);
+
+		// hide th modal
+		hideModal: function hideModal() {
+			this.setState({ modal: false });
 		},
-		onSearch: function onSearch(input) {
-			if (!input) return;
-			console.info('Searching "' + input + '"');
-			// run the search query
-			helpers.getSearchResults(input).then(function (results) {
-				console.log(results);
-			});
-		},
+
 
 		// render function
 		render: function render() {
@@ -112787,9 +112792,122 @@
 								{ className: 'text-center' },
 								React.createElement(
 									'button',
-									{ onClick: this.subscribe, type: 'submit', className: 'formSubmit' },
+									{ onClick: this.showModal, type: 'submit', className: 'formSubmit' },
 									'Subscribe'
 								)
+							)
+						)
+					)
+				),
+				React.createElement(
+					ButtonToolbar,
+					null,
+					React.createElement(
+						Modal,
+						{
+							show: this.state.modal,
+							onHide: this.hideModal,
+							dialogClassName: 'custom-modal'
+						},
+						React.createElement(Modal.Header, { closeButton: true }),
+						React.createElement(
+							Modal.Body,
+							null,
+							React.createElement(
+								'h4',
+								{ className: 'modalTitle' },
+								'Entry Report (required)'
+							),
+							React.createElement(
+								'form',
+								null,
+								React.createElement(
+									FormGroup,
+									{ controlId: 'formControlsSelect' },
+									React.createElement(
+										ControlLabel,
+										{ className: 'modalQuestion' },
+										'How\'s your mood?'
+									),
+									React.createElement(
+										FormControl,
+										{ className: 'modalEnter', componentClass: 'select', placeholder: 'select', ref: 'Qone' },
+										React.createElement(
+											'option',
+											{ value: '1' },
+											'1'
+										),
+										React.createElement(
+											'option',
+											{ value: '2' },
+											'2'
+										),
+										React.createElement(
+											'option',
+											{ value: '3' },
+											'3'
+										),
+										React.createElement(
+											'option',
+											{ value: '4' },
+											'4'
+										),
+										React.createElement(
+											'option',
+											{ value: '5' },
+											'5'
+										)
+									),
+									React.createElement(
+										ControlLabel,
+										{ className: 'modalQuestion' },
+										'How\'s your energy level?'
+									),
+									React.createElement(
+										FormControl,
+										{ className: 'modalEnter', componentClass: 'select', placeholder: 'select', ref: 'Qtwo' },
+										React.createElement(
+											'option',
+											{ value: '1' },
+											'1'
+										),
+										React.createElement(
+											'option',
+											{ value: '2' },
+											'2'
+										),
+										React.createElement(
+											'option',
+											{ value: '3' },
+											'3'
+										),
+										React.createElement(
+											'option',
+											{ value: '4' },
+											'4'
+										),
+										React.createElement(
+											'option',
+											{ value: '5' },
+											'5'
+										)
+									),
+									React.createElement(
+										ControlLabel,
+										{ className: 'modalQuestion' },
+										'What is your current weight?'
+									),
+									React.createElement(FormControl, { className: 'modalEnter', type: 'text', placeholder: 'Enter weight', ref: 'Qthree' })
+								)
+							)
+						),
+						React.createElement(
+							Modal.Footer,
+							null,
+							React.createElement(
+								Button,
+								{ className: 'formSubmit', onClick: this.subscribe },
+								'Submit'
 							)
 						)
 					)
@@ -112797,6 +112915,10 @@
 			);
 		}
 	});
+
+	Diet.contextTypes = {
+		router: React.PropTypes.func.isRequired
+	};
 
 	module.exports = Diet;
 

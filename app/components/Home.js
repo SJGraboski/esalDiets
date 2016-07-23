@@ -11,6 +11,9 @@ var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
 
+// PropTypes
+var PropTypes = React.PropTypes;
+
 
 // helpers functions
 var helpers = require('../utils/helpers.js');

@@ -255,12 +255,16 @@ module.exports = function(app) {
           return res.status(400).json("{'error':'" + err + "'")
       }
       else {
+      	// grab the newAnswers
+      	var answers = req.body.answers;
 				// First, make a function to add 28 progress reports
 				// function to add 28 diet progress reports to db
 				function addProgress(user, diet) {
 
+					// counter for our insert
+					var insertCheck = 0;
 				  // create a transaction
-				  return sequelize.transaction(function () {
+				  return sequelize.transaction(function() {
 				    // in the transaction, save promises in this empty array
 				    var promises = [];
 				    // for 28 iterations, 
@@ -268,11 +272,11 @@ module.exports = function(app) {
 				      // create one of the 28 progress reports, saving it as a promise
 				      var newPromise = models.DietProgress.create({
 				        q1: "How's your mood?",
-				        a1: null,
+				        a1: (i == 0) ? answers[0] : null, // if it's the first report,
 				        q2: "How's your energy?",
-				        a2: null,
+				        a2: (i == 0) ? answers[1] : null, // then we want to save answers.
 				        q3: "What was your weight today?",
-				        a3: null,
+				        a3: (i == 0) ? answers[2] : null, // otherwise their null
 				        reportDay: (Date.now() + (86400000 * i)),
 				        reportNum: (i+1)
 				        // ^^^ the current day, minus 28 days, plus one day times the value of i
@@ -293,6 +297,18 @@ module.exports = function(app) {
 				    // then, fulfill each sequelize promise,
 				    // or, in other words, create all 28 notifications
 				    return Promise.all(promises)
+				    // when the promise runs
+		        .then(function(){
+		        	// increase insertCheck by on
+				      insertCheck++;
+				      // if we did an insert
+				      if (insertCheck){
+				      	//send our json success message
+				        return res.json({success:true});
+				        	// the transaction method doesn't send promises correctly, 
+				        	// so this is the only way to send success.
+				      }
+				    });
 		    	});
 				}
 
@@ -327,16 +343,7 @@ module.exports = function(app) {
 						// and now update their diets
 						.then(function(){
 							// create 28 notifications for the user with this promise chain
-	            function promiseNotification(id, diet) {
-	              return new Promise(function(resolve, reject){
-	                addProgress(id, diet);
-	              })
-	            }
-              return promiseNotification(userId, dietId)
-              // send a success message when we're done
-              .then(function(){
-              	return res.json({success:true});
-              });
+							return addProgress(userId, dietId)              
             })
 					})
 				})
@@ -346,8 +353,61 @@ module.exports = function(app) {
 
 	// 2. First Report Answer
 	// ======================
+	app.post('api/first-report', function(req, res){
 
-	// Find the user's report 
+		// First check that the user is logged in
+		var token = req.body.token;
+
+		// verify the token
+    jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+      if (err) {
+      	console.log("badtoken");
+          // return error if there is one
+          return res.status(400).json("{'error':'" + err + "'")
+      }
+      else {
+				// grab userId
+				var userId = req.body.userId;
+
+				// Find the user's first prog report with diet id
+				models.User.findOne({where:{id:userId}})
+				.then(function(user){
+					return models.DietProgress.findOne({
+						where:{
+							UserId: user.id,
+							DietId: user.DietId
+						},
+						order: [['reportDay', 'ASC']]
+					})
+					// then add the answers
+					.then(function(dp){
+						// update report
+						var data = req.body.answers;
+						var report;
+						models.DietProgress.update({
+							a1: data.a1,
+							a2: data.a2,
+							a3: data.a3
+						},
+						{
+							where: {
+								id: data.reportId
+							}
+						})		
+						// with that instance selected, pass it into a .then, and update it
+						.then(function(report){
+							res.send({report});
+						})
+						// catch any errors
+						.catch(function(err) {
+				      console.log(err);
+				  	})
+					})
+				})
+			}
+		})
+	})
+
 
 	// 3. Update a person's diet from profile.
 	// =======================================
@@ -364,7 +424,7 @@ module.exports = function(app) {
           return res.status(400).json("{'error':'" + err + "'")
       }
       else {
-				// update report id
+				// update report
 				var data = req.body.answers;
 				var report;
 				models.DietProgress.update({
