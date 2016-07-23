@@ -26767,9 +26767,10 @@
 	var SearchBar = __webpack_require__(272);
 	var DietList = __webpack_require__(273);
 
-	// Auth
+	// Auth code
 
 
+	// create main container app
 	var App = React.createClass({
 		displayName: 'App',
 
@@ -26791,6 +26792,7 @@
 			};
 		},
 
+		// handle search query
 		searchQuery: function searchQuery(term) {
 			var self = this;
 			helpers.getSearchResults(term).then(function (diets) {
@@ -26810,12 +26812,14 @@
 		},
 
 
+		// Whenever a diet is searched, change to the diet page
 		componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
 			if (prevState.selectedDiet != this.state.selectedDiet) {
 				this.context.router.push({ pathname: '/diet/' + this.state.selectedDiet.id });
 			}
 		},
 
+		// For login event listener
 		updateAuth: function updateAuth(loggedIn) {
 			this.setState({
 				loggedIn: loggedIn
@@ -43535,6 +43539,8 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Login form
+	// ==========
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	var auth = __webpack_require__(239);
@@ -47220,20 +47226,6 @@
 	      endDate: moment(nextProps.startDate).add(27, 'days'),
 	      excludeDates: exDates
 	    });
-	  },
-
-	  componentWillMount: function componentWillMount() {
-	    // var exDates = [];
-
-	    // for (var i = 1; i < 365; i++){
-	    //   exDates.push(moment().subtract(parseInt([i]), 'days'))
-	    // }
-	    // for (var j = 29; j < 365; j++){
-	    //   exDates.push(moment().add(parseInt([j]), 'days'))
-	    // }
-	    // return this.setState({
-	    //   excludeDates: exDates
-	    // });
 	  },
 
 	  update: function update(e) {
@@ -110967,7 +110959,7 @@
 
 	'use strict';
 
-	// Query page
+	// Home page
 	// ==========
 
 	// dependencies
