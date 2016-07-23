@@ -1,4 +1,4 @@
-// Query page
+// Home page
 // ==========
 
 // dependencies
