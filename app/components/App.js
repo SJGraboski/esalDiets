@@ -63,21 +63,21 @@ var App = React.createClass({
 		}
 	},
 
-	updateAuth(loggedIn) {
+	updateAuth: function(loggedIn) {
     this.setState({
       loggedIn: loggedIn
     })
   },
 
 	// Call this whenever the user clicks Logout
-	logOut() {
-
-		// authenticate login
+	logOut: function() {
+		// authenticate logout
 		auth.logout( (loggedOut) => {
-			// if we register the user
+			// if we logout the user
 			if (loggedOut) {
 				this.setState({
-					loggedIn: false
+					loggedIn: false,
+					userId: null
 				})
 				// send us to their profile page
 				this.context.router.push({pathname: '/'})
@@ -85,15 +85,15 @@ var App = React.createClass({
 		})
 	},
 
-  componentDidMount () {
+  componentDidMount:function () {
     this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
     var promise = auth.isAuthenticated();
     promise.then(resp => {
-    	return this.setState({
+    	console.log(resp);
+    	this.setState({
     		loggedIn: true,
-	  		userId: resp.data.userId,
-	  		userName: resp.data.username,
-    	})
+	  		userId: resp.data.userId
+	  	})
     })
     .catch(err => {
     	this.setState({
@@ -184,7 +184,6 @@ var App = React.createClass({
 				{React.cloneElement(this.props.children, 
 					{
 				 		loggedIn: this.state.loggedIn,
-				 		username: this.state.username,
 				 		userId: this.state.userId,
 				 		selectedDiet: this.state.selectedDiet
 					}
@@ -221,7 +220,7 @@ var App = React.createClass({
 })
 
 App.contextTypes = {
-  router: React.PropTypes.func.isRequired
+  router: React.PropTypes.object.isRequired
 }
 
 // export, where config/router will require it.

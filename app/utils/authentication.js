@@ -1,3 +1,14 @@
+// This Authentication utility is based on the one found in the guide I listed,
+// with alterations to make it work with the parts of the app I created:
+// the API functions and JWT handling on the back end
+
+
+// Guide: 
+// Authentication Workflow with React by Rocky Jaiswal
+// http://rockyj.in/2016/03/14/auth_workflow_react.html
+
+
+
 // bring in axios
 var axios = require('axios');
 

@@ -114,5 +114,5 @@ export default class Register extends React.Component {
 }
 
 Register.contextTypes = {
-  router: React.PropTypes.func.isRequired
+  router: React.PropTypes.object.isRequired
 }

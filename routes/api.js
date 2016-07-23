@@ -42,11 +42,11 @@ module.exports = function(app) {
 		models.User.findOne({where:{id:userId}})
 		.then(function(user){
 			// we then need to grab the earliest dietReport
-			models.DietProgress.findAll(
+			return models.DietProgress.findAll(
 				{
 					where: {
 						UserId: userId,
-						DietId: user.DietId
+						DietId: user.DietId ? user.DietId : null 
 					},
 					order: [['reportDay', 'ASC']]
 				}
@@ -157,7 +157,7 @@ module.exports = function(app) {
 					'ELSE @container END ' +
 
 				// grab this data from the DietProgresses table
-		    'from DietProgresses ' + 
+		    'from DietProgresses' + 
 
 		  // grab the info for whatever diet we send it.
 		  // Group it by the report number, 
@@ -490,7 +490,6 @@ module.exports = function(app) {
           userData = {
           	userId: db_result.dataValues.id,
           	username: db_result.dataValues.username,
-          	dietId: db_result.dataValues.DietId
           }
           
           // create JSON token with the our user info
@@ -499,7 +498,7 @@ module.exports = function(app) {
           })
 
           // Then send success message with our token
-          res.json({
+          return res.json({
             success: true,
             message: 'Access granted.',
             token: token
@@ -567,7 +566,6 @@ module.exports = function(app) {
           userData = {
           	userId: db_result.dataValues.id,
           	username: db_result.dataValues.username,
-          	dietId: db_results.dataValues.dietId
           }
 
       // create JSON token
@@ -576,7 +574,7 @@ module.exports = function(app) {
       });
 
       // Then send success message with token
-      res.json({
+      return res.json({
           success: true,
           message: "Access granted.",
           token: token
