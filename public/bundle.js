@@ -112609,7 +112609,7 @@
 				console.log(result);
 				var data = result.data;
 				return this.setState({
-					dietId: nextProps.params.dietId,
+					dietId: this.props.params.dietId,
 					dietName: data.name,
 					dietDescription: data.description,
 					dietImage: data.dietImage,
