@@ -5,7 +5,15 @@ $('#nav').affix({
         top: $('header').height()
       }
 }); 
+// diet search show
+$('.dietSearch').focus(function(){
+ $('.list-group').show();
+});
 
+// diet search hide
+$('.dietSearch').focusout(function(){
+ $('.list-group').hide();
+});
 
 //resize navbar
 $(function() {
