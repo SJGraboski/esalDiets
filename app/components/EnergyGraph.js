@@ -10,10 +10,24 @@ class EnergyGraph extends React.Component {
     };
 
     componentWillReceiveProps(nextProps){
-        console.log(nextProps);
-        return this.setState({
-            energy: nextProps.energy
-        })
+        // set state to answers if not null on energy
+        if(nextProps.energy[0]){
+            // if there's only one element
+            if(nextProps.energy.length === 1) {
+                //make the second element the same as the first
+                var newArray = [nextProps.energy[0], 
+                                {x:2, y:nextProps.energy[0].y}];
+                return this.setState({
+                    energy: newArray
+                })
+            }
+            // otherwise, set state to prop
+            else {
+                return this.setState({
+                    energy: nextProps.energy
+                })
+            }
+        }
     };
 
     render () {

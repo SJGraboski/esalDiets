@@ -69,16 +69,30 @@ var App = React.createClass({
     })
   },
 
+	// Call this whenever the user clicks Logout
+	logOut() {
+
+		// authenticate login
+		auth.logout( (loggedOut) => {
+			// if we register the user
+			if (loggedOut) {
+				this.setState({
+					loggedIn: false
+				})
+				// send us to their profile page
+				this.context.router.push({pathname: '/'})
+			}
+		})
+	},
+
   componentDidMount () {
     this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
-    const promise = auth.isAuthenticated();
+    var promise = auth.isAuthenticated();
     promise.then(resp => {
-    	console.log(resp.data);
-    	this.setState({
+    	return this.setState({
     		loggedIn: true,
 	  		userId: resp.data.userId,
 	  		userName: resp.data.username,
-	  		dietId: resp.data.dietId
     	})
     })
     .catch(err => {
@@ -135,9 +149,9 @@ var App = React.createClass({
 				      {!this.state.loggedIn && 
 				      	(
 				      		<ul className="nav navbar-nav navbar-right icon">
-				      			<li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i>Analytics</a></li>
-				      			<li><a href="#userdata"><i className="fa fa-line-chart" aria-hidden="true"></i>User Data</a></li>
-				      			<li><Link to="login"><i className="fa fa-sign-in" aria-hidden="true"></i>Log In</Link></li>
+				      			<li><a className='smooth' href="analytics"><i className="fa fa-line-chart" aria-hidden="true"></i>Analytics</a></li>
+				      			<li><a className='smooth' href="userdata"><i className="fa fa-line-chart" aria-hidden="true"></i>User Data</a></li>
+				      			<li><Link to="/login"><i className="fa fa-sign-in" aria-hidden="true"></i>Log In</Link></li>
 				      			<li><Link to="/register"><i className="fa fa-user-plus" aria-hidden="true"></i>Register</Link></li>
 				      		</ul>
 			      		)
@@ -145,10 +159,10 @@ var App = React.createClass({
 				      {this.state.loggedIn &&
 				      	(
 			      			<ul className="nav navbar-nav navbar-right icon">
-				      			<li><a href="#analytics"><i className="fa fa-line-chart" aria-hidden="true"></i>Analytics</a></li>
-				      			<li><a href="#userdata"><i className="fa fa-line-chart" aria-hidden="true"></i>User Data</a></li>
-				      			<li><Link to="profile"><i className="fa fa-user" aria-hidden="true"></i>Profile</Link></li>
-				      			<li><Link to="logout"><i className="fa fa-sign-out" aria-hidden="true"></i>Sign Out</Link></li>
+				      			<li><a className='smooth' href="analytics"><i className="fa fa-line-chart" aria-hidden="true"></i>Analytics</a></li>
+				      			<li><a className='smooth' href="userdata"><i className="fa fa-line-chart" aria-hidden="true"></i>User Data</a></li>
+				      			<li><Link to="/profile"><i className="fa fa-user" aria-hidden="true"></i>Profile</Link></li>
+				      			<li><a href='#' onClick={this.logOut}><i className="fa fa-sign-out" aria-hidden="true"></i>Sign Out</a></li>
 				      		</ul>
 				      	)
 				      }
@@ -172,7 +186,7 @@ var App = React.createClass({
 				 		loggedIn: this.state.loggedIn,
 				 		username: this.state.username,
 				 		userId: this.state.userId,
-				 		dietId: this.state.dietId
+				 		selectedDiet: this.state.selectedDiet
 					}
 				)}
 			</div>

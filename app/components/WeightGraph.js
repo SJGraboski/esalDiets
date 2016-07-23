@@ -10,10 +10,25 @@ class WeightGraph extends React.Component {
     };
 
     componentWillReceiveProps(nextProps){
-        console.log(nextProps);
-        return this.setState({
-            weight: nextProps.weight
-        })
+        // set state to answers if not null on weight
+        if(nextProps.weight[0]){
+            // if there's only one element
+            if(nextProps.weight.length === 1) {
+                //make the second element the same as the first
+                var newArray = [nextProps.weight[0], 
+                                {x:2, y:nextProps.weight[0].y}];
+                return this.setState({
+                    weight: newArray
+                })
+            }
+            // otherwise, set state to prop
+            else {
+                console.log(nextProps.weight)
+                return this.setState({
+                    weight: nextProps.weight
+                })
+            }
+        }
     };
 
     render () {

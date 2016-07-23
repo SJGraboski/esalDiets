@@ -18,12 +18,15 @@ var sequelize = models.sequelize;
 // export api routes for the express app
 module.exports = function(app) {
 
-	// Grab Profile Data
-	app.get('/api/profile-data/:user/:diet', function(req, res){
+
+// PART 1: GRAB DIET DATA
+// -/-/-/-/-/-/-/-/-/-/-/
+
+	// 1. Grab Profile Data
+	app.get('/api/profile-data/:user', function(req, res){
 
 		// grab the userId
 		var userId = req.params.user;
-		var dietId = req.params.diet;
 
 		// container vars for our profile info
 		var answered;
@@ -35,68 +38,73 @@ module.exports = function(app) {
 		//
 		// for now, we'll use dummy data, except the next part.
 
-		// we first need to grab the earliest dietReport
-		models.DietProgress.findAll(
-			{
-				where: {
-					UserId: userId,
-					DietId: dietId
-				},
-				order: [['reportDay', 'ASC']]
-			}
-		)
-		// now we need to parse every one for answers
-		.then(function(theReports){
-			currentDay = theReports[0].reportDay;
-			for (var i = 1; i <= theReports.length; i++) {
-				if (theReports[i-1].a1){
-					theAnswers[0].push({x:i, y:theReports[i-1].a1})
-				}
-				if (theReports[i-1].a2){
-					theAnswers[1].push({x:i, y:theReports[i-1].a2})
-				}
-				if (theReports[i-1].a3){
-					theAnswers[2].push({x:i, y:theReports[i-1].a3})
-				}
-			}
-			// We're going to check whether the user answered a question today.
-			return models.DietProgress.findOne(
+		// we first grab the user's current diet
+		models.User.findOne({where:{id:userId}})
+		.then(function(user){
+			// we then need to grab the earliest dietReport
+			models.DietProgress.findAll(
 				{
 					where: {
 						UserId: userId,
-						DietId: dietId,
-						// the report date must be less than or equal to the current time,
-						// while being greater than exactly a day from now (i.e., today)
-						reportDay: {
-					    $lte: new Date(), // current timestamp
-	    				$gt: (new Date() - 86400000) // current timestamp, minus a day (in ms)
-						}
-					}
+						DietId: user.DietId
+					},
+					order: [['reportDay', 'ASC']]
 				}
 			)
-			.then(function(dietProg){
-				dietProg.getDiet()
-				.then(function(diet){
-					if(dietProg.a1 || dietProg.a2 || dietProg.a3){
-						answered = true;
+			// now we need to parse every one for answers
+			.then(function(theReports){
+				currentDay = theReports[0].reportDay;
+				for (var i = 1; i <= theReports.length; i++) {
+					if (theReports[i-1].a1){
+						theAnswers[0].push({x:i, y:theReports[i-1].a1})
 					}
-					else {
-						answered = false;
+					if (theReports[i-1].a2){
+						theAnswers[1].push({x:i, y:theReports[i-1].a2})
 					}
-					return res.send({
-						reportId: dietProg.id,
-						reportDay: dietProg.reportDay,
-						startDate: currentDay,
-						answers: theAnswers,
-						answered: answered,
-						diet: diet
+					if (theReports[i-1].a3){
+						theAnswers[2].push({x:i, y:theReports[i-1].a3})
+					}
+				}
+				// We're going to check whether the user answered a question today.
+				return models.DietProgress.findOne(
+					{
+						where: {
+							UserId: userId,
+							DietId: user.DietId,
+							// the report date must be less than or equal to the current time,
+							// while being greater than exactly a day from now (i.e., today)
+							reportDay: {
+						    $lte: new Date(), // current timestamp
+		    				$gt: (new Date() - 86400000) // current timestamp, minus a day (in ms)
+							}
+						}
+					}
+				)
+				.then(function(dietProg){
+					dietProg.getDiet()
+					.then(function(diet){
+						if(dietProg.a1 || dietProg.a2 || dietProg.a3){
+							answered = true;
+						}
+						else {
+							answered = false;
+						}
+						return res.send({
+							reportId: dietProg.id,
+							reportDay: dietProg.reportDay,
+							startDate: currentDay,
+							answers: theAnswers,
+							answered: answered,
+							diet: diet
+						})
 					})
-				})
-			})			
+				})			
+			})
 		})
 	});
 
-	// Grab all data associated with a particluar diet
+
+	// 2. Grab all data associated with a particluar diet
 	app.get('/api/diet-info/:dietId', function(req, res){
 
 		// dietId
@@ -110,54 +118,55 @@ module.exports = function(app) {
 		var setUp = 'SET @container := 0, @orig_a3 := 0; '
 
 		// the average answers from every day
+		// INTENSE QUERY!
 		var avgAnswers =  
-											// Select the reportNum, the average answers of a1 and a2.
-											'SELECT reportNum, AVG(a1) as a1, AVG(a2) as a2, ' + 
+			// Select the reportNum, the average answers of a1 and a2.
+			'SELECT reportNum, AVG(a1) as a1, AVG(a2) as a2, ' + 
 
-												// We set up a conditional for our weight change result.
-												// If it's the first report day, there can't be a change in weight.
-												// So, the answer's 0.
-												'CASE WHEN reportNum = 1 THEN 0 ' +
+				// We set up a conditional for our weight change result.
+				// If it's the first report day, there can't be a change in weight.
+				// So, the answer's 0.
+				'CASE WHEN reportNum = 1 THEN 0 ' +
 
-												// Otherwise, grab the average results 
-												// of the current day's weight minus the weight at the diet's start.
-	 											'ELSE AVG(a3 - orig_a3) END AS a3dif ' +
+				// Otherwise, grab the average results 
+				// of the current day's weight minus the weight at the diet's start.
+					'ELSE AVG(a3 - orig_a3) END AS a3dif ' +
 
-	 										// In order to save the original weight, 
-	 										// we have to use a temporary selection.
-											'from ( ' +
+				// In order to save the original weight, 
+				// we have to use a temporary selection.
+			'from ( ' +
 
-												// To do this, we select the relevant data, 
-												// and send a variable of the original weight as the orig_a3
-												// that we subtract from the current day's weight.
-										    'select reportNum, a1, a2, a3, DietID, UserId, @orig_a3 as orig_a3, ' +
-										  	
-										  	// we keep a container variable for our original weight.
-										  	'@container := @orig_a3, ' +
+				// To do this, we select the relevant data, 
+				// and send a variable of the original weight as the orig_a3
+				// that we subtract from the current day's weight.
+		    'select reportNum, a1, a2, a3, DietID, UserId, @orig_a3 as orig_a3, ' +
+		  	
+		  	// we keep a container variable for our original weight.
+		  	'@container := @orig_a3, ' +
 
-										  	// we declare an original weight variable, equal to the 
-										  	// result of a case statement
-										    '@orig_a3 := CASE ' +
+		  	// we declare an original weight variable, equal to the 
+		  	// result of a case statement
+		    '@orig_a3 := CASE ' +
 
-										    	// If it's the first day of the diet, 
-										    	// then save the weight as the original weight.
-													'WHEN reportNum=1 THEN a3 ' +
+		    	// If it's the first day of the diet, 
+		    	// then save the weight as the original weight.
+					'WHEN reportNum=1 THEN a3 ' +
 
-													// Otherwise, use the container, 
-													// which will carry the original weight throughout the 28 days.
-													'ELSE @container END ' +
+					// Otherwise, use the container, 
+					// which will carry the original weight throughout the 28 days.
+					'ELSE @container END ' +
 
-												// grab this data from the DietProgresses table
-										    'from DietProgresses ' + 
+				// grab this data from the DietProgresses table
+		    'from DietProgresses ' + 
 
-										  // grab the info for whatever diet we send it.
-										  // Group it by the report number, 
-										  // so that we get average results for every day of the diet
-									    ') tempTable WHERE DietID=? GROUP BY reportNum;'
+		  // grab the info for whatever diet we send it.
+		  // Group it by the report number, 
+		  // so that we get average results for every day of the diet
+	    ') tempTable WHERE DietID=? GROUP BY reportNum;'
 
 
-		// START QUERY
-		// ===========
+		// Use our queries!
+		// ================
 
 		// grab a particular diet
 		models.Diet.findOne({
@@ -199,14 +208,17 @@ module.exports = function(app) {
 	})
 
 
+	// PART 3: Search Bar
+	// -/-/-/-/-/-/-/-/-/
 
-
-	// search for diets
+	// 1. Search for diets
 	app.get('/api/search-diet/:query', function(req, res){
 
 		// Grab the search query.
 		var query = req.params.query;
 
+		// Find all diets that match the query 
+		// based on name and description against search term.
 		models.Diet.findAll({
 		  where: {
 		    $or: [
@@ -216,36 +228,167 @@ module.exports = function(app) {
 		  },
 		  limit: 5
 		})
+		// Send results to browser
 		.then(function(results){
 			return res.json(results);
 		});
 	})
 
-	// Update a person's diet.
-	app.post('/api/update-report', function(req, res){
-		// update report id
-		var data = req.body;
-		var report;
-		models.DietProgress.update({
-			a1: data.a1,
-			a2: data.a2,
-			a3: data.a3
-		},
-		{
-			where: {
-				id: data.reportId
+
+
+	// PART 2: UPDATA USER DIETS
+	// -/-/-/-/-/-/-/-/-/-/-/-/-/
+
+	// 1. Subscribe to a diet
+	// ======================
+	app.post('/api/subscribe', function(req, res) {
+
+		// First check that the user is logged in
+
+		// grab the token
+		var token = req.body.token;
+		// verify the token
+    jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+      if (err) {
+      	console.log("badtoken");
+          // return error if there is one
+          return res.status(400).json("{'error':'" + err + "'")
+      }
+      else {
+				// First, make a function to add 28 progress reports
+				// function to add 28 diet progress reports to db
+				function addProgress(user, diet) {
+
+				  // create a transaction
+				  return sequelize.transaction(function () {
+				    // in the transaction, save promises in this empty array
+				    var promises = [];
+				    // for 28 iterations, 
+				    for (var i = 0; i < 28; i++) {
+				      // create one of the 28 progress reports, saving it as a promise
+				      var newPromise = models.DietProgress.create({
+				        q1: "How's your mood?",
+				        a1: null,
+				        q2: "How's your energy?",
+				        a2: null,
+				        q3: "What was your weight today?",
+				        a3: null,
+				        reportDay: (Date.now() + (86400000 * i)),
+				        reportNum: (i+1)
+				        // ^^^ the current day, minus 28 days, plus one day times the value of i
+				      })
+				      // then, with the dietProg passed,
+				      .then(function(dietProg){
+				        // set the user to the user argument of addProgress
+				        return dietProg.setUser(user)
+				        // then, 
+				        .then(function(){
+				          // set the diet to the diet argument of addProgress
+				          return dietProg.setDiet(diet)
+				        })
+				      })
+				      // push each promise to the newPromise array
+				      promises.push(newPromise);
+				    }
+				    // then, fulfill each sequelize promise,
+				    // or, in other words, create all 28 notifications
+				    return Promise.all(promises)
+		    	});
+				}
+
+				// Now, grab the user and diet from req
+				var userId = req.body.userId;
+				var dietId = req.body.dietId;
+
+				// If the user ever subscribed to this diet before
+				// we need to remove that data, so we don't have conflicts with data.
+				// Plus, we don't want to average in old data to total avgs
+				// considering a less scrupulous user might create, track and leave diets
+				// to screw around with the numbers
+
+				models.DietProgress.destroy({
+					where:{
+						DietId: dietId,
+						UserId: userId
+					}
+				})
+				// whether it deletes anything or not, move one
+				.then(function(){
+				
+					// Find the diet
+					return models.Diet.findOne({
+						where: {
+							id: dietId
+						}
+					})
+					// and make the user's diet the one we grabbed from req
+					.then(function(diet){
+						return diet.addUser(userId)
+						// and now update their diets
+						.then(function(){
+							// create 28 notifications for the user with this promise chain
+	            function promiseNotification(id, diet) {
+	              return new Promise(function(resolve, reject){
+	                addProgress(id, diet);
+	              })
+	            }
+              return promiseNotification(userId, dietId)
+              // send a success message when we're done
+              .then(function(){
+              	return res.json({success:true});
+              });
+            })
+					})
+				})
 			}
-		}
-		)		
-		// with that instance selected, pass it into a .then, and update it
-		.then(function(report){
-			res.send({report});
 		})
-		// catch any errors
-		.catch(function(err) {
-      console.log(err);
-  	})
 	})
+
+	// 2. First Report Answer
+	// ======================
+
+	// Find the user's report 
+
+	// 3. Update a person's diet from profile.
+	// =======================================
+	app.post('/api/update-report', function(req, res){
+
+		// First check that the user is logged in
+		var token = req.body.token;
+
+		// verify the token
+    jwt.verify(token, app.get('jwtSecret'), function(err, decoded) {
+      if (err) {
+      	console.log("badtoken");
+          // return error if there is one
+          return res.status(400).json("{'error':'" + err + "'")
+      }
+      else {
+				// update report id
+				var data = req.body.answers;
+				var report;
+				models.DietProgress.update({
+					a1: data.a1,
+					a2: data.a2,
+					a3: data.a3
+				},
+				{
+					where: {
+						id: data.reportId
+					}
+				})		
+				// with that instance selected, pass it into a .then, and update it
+				.then(function(report){
+					res.send({report});
+				})
+				// catch any errors
+				.catch(function(err) {
+		      console.log(err);
+		  	})
+			}
+  	});
+  })
+
 
 
 
@@ -326,11 +469,12 @@ module.exports = function(app) {
       	console.log("good")
       	// give the user access
       	return res.json({
-      		success:true, 
-      		message:'You\'re in!',
+      		success: true, 
+      		message: 'You\'re in!',
       		userId: decoded.userId,
       		username: decoded.username,
-      		dietId: decoded.dietId
+      		dietId: decoded.dietId,
+      		token: token
       	});
       }
     })

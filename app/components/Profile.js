@@ -15,23 +15,11 @@ var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
 var SearchBar = require('react-search-bar');
 
-const matches = {
-	'macbook a': [
-		'macbook air 13 case',
-		'macbook air 11 case',
-		'macbook air charger'
-	],
-	'macbook p': [
-		'macbook pro 13 case',
-		'macbook pro 15 case',
-		'macbook pro charger'
-	]
-};
-
-
-
 // helpers functions
 var helpers = require('../utils/helpers.js');
+
+// authentication
+var auth = require('../utils/authentication.js');
 
 // create Profile component
 var Profile = React.createClass({
@@ -49,13 +37,13 @@ var Profile = React.createClass({
 	},
 	componentWillMount: function(){
 		if(this.props.userId != null) {
-			helpers.getProfileData(this.props.userId, this.props.dietId)
+			helpers.getProfileData(this.props.userId)
 			.then(function(result){
 				var data = result.data;
 				console.log(result);
 				return this.setState({
 					userId: this.props.userId,
-					dietId: this.props.dietId,
+					dietId: data.dietId,
 					reportId: data.reportId,
 					answered: data.answered,
 					startDate: data.startDate,
@@ -68,14 +56,14 @@ var Profile = React.createClass({
 	componentWillReceiveProps: function(nextProps) {
 		if (this.props != nextProps && nextProps.userId != null) {
 			console.log(nextProps)
-			helpers.getProfileData(nextProps.userId, nextProps.dietId)
+			helpers.getProfileData(nextProps.userId)
 			.then(function(result){
 				var data = result.data;
 				console.log(result);
 				console.log(nextProps);
 				return this.setState({
 					userId: nextProps.userId,
-					dietId: nextProps.dietId,
+					dietId: data.dietId,
 					reportId: data.reportId,
 					answered: data.answered,
 					startDate: data.startDate,
@@ -89,27 +77,31 @@ var Profile = React.createClass({
 	componentDidUpdate: function(prevProps, prevState){
 		// check to make sure at least one of the search inputs are different
 		if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null){
-			// helpers reportAnswer
-			helpers.reportUpdate(this.state.reportUpdate)
-			.then(function(data){
-				console.log(data);
-				// check response
-				if (data != false) {
-					return helpers.getProfileData(this.props.userId, this.props.dietId)
-					.then(function(result){
-						var data = result.data;
-						return this.setState({
-							userId: this.props.userId,
-							dietId: this.props.dietId,
-							reportId: data.reportId,
-							answered: data.answered,
-							startDate: data.startDate,
-							answers: data.answers,
-							reportUpdate: null
-						})
-					}.bind(this)); // make "this" function as expected
-				}
-			}.bind(this)); // make "this" function as expected
+			// first check that user is logged in
+	    var promise = auth.isAuthenticated();
+	    // if so, send token, userId and dietId into subscribe
+	    promise.then(resp => {
+				// helpers reportAnswer
+				return helpers.reportUpdate(this.state.reportUpdate, resp.data.token)
+				.then(function(data){
+					// check response
+					if (data != false) {
+						return helpers.getProfileData(this.props.userId, this.props.dietId)
+						.then(function(result){
+							var data = result.data;
+							return this.setState({
+								userId: this.props.userId,
+								dietId: this.props.dietId,
+								reportId: data.reportId,
+								answered: data.answered,
+								startDate: data.startDate,
+								answers: data.answers,
+								reportUpdate: null
+							})
+						}.bind(this)); // make "this" function as expected
+					}
+				}.bind(this)); // make "this" function as expected
+			})
 		}
 	},
 	// set Query to inputs
@@ -140,8 +132,8 @@ var Profile = React.createClass({
 	notLoggedIn() {
 		return (
 			<div>
-			<h2>AHHHHHHHH, YOU'RE NOT LOGGED IN!</h2>
-			<h3>Get out, Get Out, GET OUUUUUUUTTTT</h3>
+			<h2>Not logged in</h2>
+			<h3>You must be logged in to view a profile page</h3>
 			</div>
 		)
 	},

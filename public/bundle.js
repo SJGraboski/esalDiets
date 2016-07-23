@@ -26821,21 +26821,37 @@
 				loggedIn: loggedIn
 			});
 		},
-		componentDidMount: function componentDidMount() {
+
+
+		// Call this whenever the user clicks Logout
+		logOut: function logOut() {
 			var _this = this;
+
+			// authenticate login
+			_authentication2.default.logout(function (loggedOut) {
+				// if we register the user
+				if (loggedOut) {
+					_this.setState({
+						loggedIn: false
+					});
+					// send us to their profile page
+					_this.context.router.push({ pathname: '/' });
+				}
+			});
+		},
+		componentDidMount: function componentDidMount() {
+			var _this2 = this;
 
 			this.subscription = _event_manager2.default.getEmitter().addListener(_event_manager2.default.authChannel, this.updateAuth);
 			var promise = _authentication2.default.isAuthenticated();
 			promise.then(function (resp) {
-				console.log(resp.data);
-				_this.setState({
+				return _this2.setState({
 					loggedIn: true,
 					userId: resp.data.userId,
-					userName: resp.data.username,
-					dietId: resp.data.dietId
+					userName: resp.data.username
 				});
 			}).catch(function (err) {
-				_this.setState({
+				_this2.setState({
 					loggedIn: false
 				});
 			});
@@ -26847,10 +26863,10 @@
 
 		// main component app. Takes in the other routes
 		render: function render() {
-			var _this2 = this;
+			var _this3 = this;
 
 			var searchQuery = _lodash2.default.debounce(function (term) {
-				_this2.searchQuery(term);
+				_this3.searchQuery(term);
 			}, 300);
 
 			return React.createElement(
@@ -26926,7 +26942,7 @@
 												null,
 												React.createElement(
 													'a',
-													{ href: '#analytics' },
+													{ className: 'smooth', href: 'analytics' },
 													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
 													'Analytics'
 												)
@@ -26936,7 +26952,7 @@
 												null,
 												React.createElement(
 													'a',
-													{ href: '#userdata' },
+													{ className: 'smooth', href: 'userdata' },
 													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
 													'User Data'
 												)
@@ -26946,7 +26962,7 @@
 												null,
 												React.createElement(
 													Link,
-													{ to: 'login' },
+													{ to: '/login' },
 													React.createElement('i', { className: 'fa fa-sign-in', 'aria-hidden': 'true' }),
 													'Log In'
 												)
@@ -26970,7 +26986,7 @@
 												null,
 												React.createElement(
 													'a',
-													{ href: '#analytics' },
+													{ className: 'smooth', href: 'analytics' },
 													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
 													'Analytics'
 												)
@@ -26980,7 +26996,7 @@
 												null,
 												React.createElement(
 													'a',
-													{ href: '#userdata' },
+													{ className: 'smooth', href: 'userdata' },
 													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
 													'User Data'
 												)
@@ -26990,7 +27006,7 @@
 												null,
 												React.createElement(
 													Link,
-													{ to: 'profile' },
+													{ to: '/profile' },
 													React.createElement('i', { className: 'fa fa-user', 'aria-hidden': 'true' }),
 													'Profile'
 												)
@@ -26999,8 +27015,8 @@
 												'li',
 												null,
 												React.createElement(
-													Link,
-													{ to: 'logout' },
+													'a',
+													{ href: '#', onClick: this.logOut },
 													React.createElement('i', { className: 'fa fa-sign-out', 'aria-hidden': 'true' }),
 													'Sign Out'
 												)
@@ -27018,14 +27034,14 @@
 					{ className: 'container', id: 'childrenContainer' },
 					React.createElement(DietList, {
 						onDietSelect: function onDietSelect(selectedDiet) {
-							return _this2.setState({ selectedDiet: selectedDiet });
+							return _this3.setState({ selectedDiet: selectedDiet });
 						},
 						diets: this.state.diets }),
 					React.cloneElement(this.props.children, {
 						loggedIn: this.state.loggedIn,
 						username: this.state.username,
 						userId: this.state.userId,
-						dietId: this.state.dietId
+						selectedDiet: this.state.selectedDiet
 					})
 				),
 				React.createElement('div', { id: 'placeholder' }),
@@ -43686,6 +43702,9 @@
 	      });
 	    }
 	  },
+
+
+	  // log in a user
 	  login: function login(email, password, cb) {
 	    var promise = axios.post("/api/session", { email: email,
 	      password: password });
@@ -45506,10 +45525,12 @@
 	// Create a helpers object which we will export
 	var helpers = {
 		// get Profile Data
-		getProfileData: function getProfileData(userId, dietId) {
-			return axios.get("/api/profile-data/" + userId + "/" + dietId).then(function (response) {
+		getProfileData: function getProfileData(userId) {
+			return axios.get("/api/profile-data/" + userId).then(function (response) {
 				console.log(response);
 				return response;
+			}).catch(function (error) {
+				return error;
 			});
 		},
 
@@ -45517,6 +45538,8 @@
 		getDietData: function getDietData(dietId) {
 			return axios.get("/api/diet-info/" + dietId).then(function (response) {
 				return response;
+			}).catch(function (error) {
+				return error;
 			});
 		},
 
@@ -45525,15 +45548,26 @@
 			return axios.get("/api/search-diet/" + query).then(function (response) {
 				console.log(response);
 				return response;
+			}).catch(function (error) {
+				return error;
 			});
 		},
 
 		// report update will update a progress report
-		reportUpdate: function reportUpdate(newAnswers) {
-			return axios.post("/api/update-report", newAnswers).then(function (response) {
+		reportUpdate: function reportUpdate(newAnswers, token) {
+			return axios.post("/api/update-report", { answers: newAnswers, token: token }).then(function (response) {
 				return true;
 			}).catch(function (error) {
 				return false;
+			});
+		},
+
+		// subscribe user to diet
+		subscribe: function subscribe(user, diet, token) {
+			return axios.post("/api/subscribe", { userId: user, dietId: diet, token: token }).then(function (response) {
+				return response;
+			}).catch(function (error) {
+				return error;
 			});
 		}
 	};
@@ -47000,13 +47034,11 @@
 	var WeightGraph = __webpack_require__(967);
 	var SearchBar = __webpack_require__(968);
 
-	var matches = {
-		'macbook a': ['macbook air 13 case', 'macbook air 11 case', 'macbook air charger'],
-		'macbook p': ['macbook pro 13 case', 'macbook pro 15 case', 'macbook pro charger']
-	};
-
 	// helpers functions
 	var helpers = __webpack_require__(267);
+
+	// authentication
+	var auth = __webpack_require__(239);
 
 	// create Profile component
 	var Profile = React.createClass({
@@ -47026,12 +47058,12 @@
 		},
 		componentWillMount: function componentWillMount() {
 			if (this.props.userId != null) {
-				helpers.getProfileData(this.props.userId, this.props.dietId).then(function (result) {
+				helpers.getProfileData(this.props.userId).then(function (result) {
 					var data = result.data;
 					console.log(result);
 					return this.setState({
 						userId: this.props.userId,
-						dietId: this.props.dietId,
+						dietId: data.dietId,
 						reportId: data.reportId,
 						answered: data.answered,
 						startDate: data.startDate,
@@ -47044,13 +47076,13 @@
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 			if (this.props != nextProps && nextProps.userId != null) {
 				console.log(nextProps);
-				helpers.getProfileData(nextProps.userId, nextProps.dietId).then(function (result) {
+				helpers.getProfileData(nextProps.userId).then(function (result) {
 					var data = result.data;
 					console.log(result);
 					console.log(nextProps);
 					return this.setState({
 						userId: nextProps.userId,
-						dietId: nextProps.dietId,
+						dietId: data.dietId,
 						reportId: data.reportId,
 						answered: data.answered,
 						startDate: data.startDate,
@@ -47062,27 +47094,33 @@
 		},
 		// componentDidUpdate: grab user info whenever update comes in
 		componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+			var _this = this;
+
 			// check to make sure at least one of the search inputs are different
 			if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null) {
-				// helpers reportAnswer
-				helpers.reportUpdate(this.state.reportUpdate).then(function (data) {
-					console.log(data);
-					// check response
-					if (data != false) {
-						return helpers.getProfileData(this.props.userId, this.props.dietId).then(function (result) {
-							var data = result.data;
-							return this.setState({
-								userId: this.props.userId,
-								dietId: this.props.dietId,
-								reportId: data.reportId,
-								answered: data.answered,
-								startDate: data.startDate,
-								answers: data.answers,
-								reportUpdate: null
-							});
-						}.bind(this)); // make "this" function as expected
-					}
-				}.bind(this)); // make "this" function as expected
+				// first check that user is logged in
+				var promise = auth.isAuthenticated();
+				// if so, send token, userId and dietId into subscribe
+				promise.then(function (resp) {
+					// helpers reportAnswer
+					return helpers.reportUpdate(_this.state.reportUpdate, resp.data.token).then(function (data) {
+						// check response
+						if (data != false) {
+							return helpers.getProfileData(this.props.userId, this.props.dietId).then(function (result) {
+								var data = result.data;
+								return this.setState({
+									userId: this.props.userId,
+									dietId: this.props.dietId,
+									reportId: data.reportId,
+									answered: data.answered,
+									startDate: data.startDate,
+									answers: data.answers,
+									reportUpdate: null
+								});
+							}.bind(this)); // make "this" function as expected
+						}
+					}.bind(_this)); // make "this" function as expected
+				});
 			}
 		},
 		// set Query to inputs
@@ -47118,12 +47156,12 @@
 				React.createElement(
 					'h2',
 					null,
-					'AHHHHHHHH, YOU\'RE NOT LOGGED IN!'
+					'Not logged in'
 				),
 				React.createElement(
 					'h3',
 					null,
-					'Get out, Get Out, GET OUUUUUUUTTTT'
+					'You must be logged in to view a profile page'
 				)
 			);
 		},
@@ -80789,10 +80827,23 @@
 	    _createClass(MoodGraph, [{
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log(nextProps);
-	            return this.setState({
-	                mood: nextProps.mood
-	            });
+	            // set state to answers if not null on mood
+	            if (nextProps.mood[0]) {
+	                // if there's only one element
+	                if (nextProps.mood.length === 1) {
+	                    //make the second element the same as the first
+	                    var newArray = [nextProps.mood[0], { x: 2, y: nextProps.mood[0].y }];
+	                    return this.setState({
+	                        mood: newArray
+	                    });
+	                }
+	                // otherwise, set state to prop
+	                else {
+	                        return this.setState({
+	                            mood: nextProps.mood
+	                        });
+	                    }
+	            }
 	        }
 	    }, {
 	        key: "render",
@@ -110757,10 +110808,23 @@
 	    _createClass(EnergyGraph, [{
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log(nextProps);
-	            return this.setState({
-	                energy: nextProps.energy
-	            });
+	            // set state to answers if not null on energy
+	            if (nextProps.energy[0]) {
+	                // if there's only one element
+	                if (nextProps.energy.length === 1) {
+	                    //make the second element the same as the first
+	                    var newArray = [nextProps.energy[0], { x: 2, y: nextProps.energy[0].y }];
+	                    return this.setState({
+	                        energy: newArray
+	                    });
+	                }
+	                // otherwise, set state to prop
+	                else {
+	                        return this.setState({
+	                            energy: nextProps.energy
+	                        });
+	                    }
+	            }
 	        }
 	    }, {
 	        key: "render",
@@ -110859,10 +110923,24 @@
 	    _createClass(WeightGraph, [{
 	        key: "componentWillReceiveProps",
 	        value: function componentWillReceiveProps(nextProps) {
-	            console.log(nextProps);
-	            return this.setState({
-	                weight: nextProps.weight
-	            });
+	            // set state to answers if not null on weight
+	            if (nextProps.weight[0]) {
+	                // if there's only one element
+	                if (nextProps.weight.length === 1) {
+	                    //make the second element the same as the first
+	                    var newArray = [nextProps.weight[0], { x: 2, y: nextProps.weight[0].y }];
+	                    return this.setState({
+	                        weight: newArray
+	                    });
+	                }
+	                // otherwise, set state to prop
+	                else {
+	                        console.log(nextProps.weight);
+	                        return this.setState({
+	                            weight: nextProps.weight
+	                        });
+	                    }
+	            }
 	        }
 	    }, {
 	        key: "render",
@@ -112227,11 +112305,6 @@
 	var EnergyGraph = __webpack_require__(966);
 	var WeightGraph = __webpack_require__(967);
 
-	var matches = {
-		'macbook a': ['macbook air 13 case', 'macbook air 11 case', 'macbook air charger'],
-		'macbook p': ['macbook pro 13 case', 'macbook pro 15 case', 'macbook pro charger']
-	};
-
 	// helpers functions
 	var helpers = __webpack_require__(267);
 
@@ -112268,7 +112341,7 @@
 			// check to make sure at least one of the search inputs are different
 			if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null) {
 				// helpers reportAnswer
-				helpers.reportUpdate(this.state.reportUpdate).then(function (data) {
+				helpers.reportUpdate(this.state.reportUpdate, token).then(function (data) {
 					// check response
 					if (data != false) {
 						return helpers.getProfileData().then(function (result) {
@@ -112333,7 +112406,7 @@
 							React.createElement(
 								'span',
 								{ id: 'arrow' },
-								React.createElement('a', { href: '#about', className: 'fa fa-angle-double-down' })
+								React.createElement('a', { href: '#about', className: 'fa fa-angle-double-down smooth' })
 							)
 						)
 					)
@@ -112565,13 +112638,10 @@
 	var WeightGraph = __webpack_require__(967);
 	var SearchBar = __webpack_require__(968);
 
-	var matches = {
-		'macbook a': ['macbook air 13 case', 'macbook air 11 case', 'macbook air charger'],
-		'macbook p': ['macbook pro 13 case', 'macbook pro 15 case', 'macbook pro charger']
-	};
-
 	// helpers functions
 	var helpers = __webpack_require__(267);
+	// authentication
+	var auth = __webpack_require__(239);
 
 	// create Diet component
 	var Diet = React.createClass({
@@ -112589,6 +112659,7 @@
 			};
 		},
 
+		// check for when we pass in an update to answers.
 		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 			helpers.getDietData(nextProps.params.dietId).then(function (result) {
 				console.log(result);
@@ -112617,6 +112688,23 @@
 				});
 			}.bind(this));
 		},
+
+		// Subscribe to a diet
+		subscribe: function subscribe() {
+			var _this = this;
+
+			// first check that user is logged in
+			var promise = auth.isAuthenticated();
+			// if so, send token, userId and dietId into subscribe
+			promise.then(function (resp) {
+				return helpers.subscribe(_this.props.userId, _this.state.dietId, resp.data.token);
+			}).catch(function (err) {
+				_this.setState({
+					loggedIn: false
+				});
+			});
+		},
+
 		// set Query to inputs
 		updateQuery: function updateQuery(newAnswers) {
 			// set the state to the for inputs
@@ -112699,7 +112787,7 @@
 								{ className: 'text-center' },
 								React.createElement(
 									'button',
-									{ type: 'submit', className: 'formSubmit' },
+									{ onClick: this.subscribe, type: 'submit', className: 'formSubmit' },
 									'Subscribe'
 								)
 							)

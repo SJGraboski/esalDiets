@@ -4,12 +4,15 @@ var path = require('path');
 // Create a helpers object which we will export
 var helpers = {
 	// get Profile Data
-	getProfileData: function(userId, dietId) {
-		return axios.get("/api/profile-data/" + userId + "/" + dietId)
+	getProfileData: function(userId) {
+		return axios.get("/api/profile-data/" + userId)
 		.then(function(response){
 			console.log(response);
 			return response;
 		})
+		.catch(function (error) {
+    	return error;
+  	});
 	},
 
 	// get Diet Data
@@ -18,6 +21,9 @@ var helpers = {
 		.then(function(response){
 			return response;
 		})
+		.catch(function (error) {
+    	return error;
+  	});
 	},
 
 	// get Search Results
@@ -27,16 +33,30 @@ var helpers = {
 			console.log(response);
 			return response;
 		})
+		.catch(function (error) {
+    	return error;
+  	});
 	},
 
 	// report update will update a progress report
-	reportUpdate: function(newAnswers) {
-		return axios.post("/api/update-report", newAnswers)
+	reportUpdate: function(newAnswers, token) {
+		return axios.post("/api/update-report", {answers:newAnswers, token: token})
 		.then(function(response){
 			return true;
 		})
 	  .catch(function (error) {
     	return false;
+  	});
+	},
+
+	// subscribe user to diet
+	subscribe: function(user, diet, token) {
+		return axios.post("/api/subscribe", {userId: user, dietId: diet, token: token})
+		.then(function(response){
+			return response;
+		})
+		.catch(function (error) {
+    	return error;
   	});
 	}
 }
