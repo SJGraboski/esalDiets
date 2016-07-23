@@ -26943,26 +26943,6 @@
 												'li',
 												null,
 												React.createElement(
-													'a',
-													{ className: 'smooth', href: 'analytics' },
-													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
-													'Analytics'
-												)
-											),
-											React.createElement(
-												'li',
-												null,
-												React.createElement(
-													'a',
-													{ className: 'smooth', href: 'userdata' },
-													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
-													'User Data'
-												)
-											),
-											React.createElement(
-												'li',
-												null,
-												React.createElement(
 													Link,
 													{ to: '/login' },
 													React.createElement('i', { className: 'fa fa-sign-in', 'aria-hidden': 'true' }),
@@ -26983,26 +26963,6 @@
 										this.state.loggedIn && React.createElement(
 											'ul',
 											{ className: 'nav navbar-nav navbar-right icon' },
-											React.createElement(
-												'li',
-												null,
-												React.createElement(
-													'a',
-													{ className: 'smooth', href: 'analytics' },
-													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
-													'Analytics'
-												)
-											),
-											React.createElement(
-												'li',
-												null,
-												React.createElement(
-													'a',
-													{ className: 'smooth', href: 'userdata' },
-													React.createElement('i', { className: 'fa fa-line-chart', 'aria-hidden': 'true' }),
-													'User Data'
-												)
-											),
 											React.createElement(
 												'li',
 												null,
