@@ -3,6 +3,7 @@
 
 // dependencies
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 
@@ -11,7 +12,6 @@ var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
-var SearchBar = require('react-search-bar');
 
 // bring in bootstrap for modal
 var ReactBootstrap = require("react-bootstrap");
@@ -19,6 +19,9 @@ var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 var Button = ReactBootstrap.Button;
 var Modal = ReactBootstrap.Modal;
 var ButtonToolbar = ReactBootstrap.ButtonToolbar;
+var FormGroup = ReactBootstrap.FormGroup;
+var FormControl = ReactBootstrap.FormControl;
+var ControlLabel = ReactBootstrap.ControlLabel;
 
 
 // helpers functions
@@ -32,7 +35,6 @@ var Diet = React.createClass({
 	getInitialState: function() {
 		return {
 			dietId: null,
-			answers: [[],[],[]],
 			dietName: null,
 			dietDescription: null,
 			dietCreated: null,
@@ -78,27 +80,38 @@ var Diet = React.createClass({
 	subscribe: function() {
 		// first check that user is logged in
     var promise = auth.isAuthenticated();
+		// grab the answers from the modal
+
+  		var newAnswers = [
+  			ReactDOM.findDOMNode(this.refs.Qone).value,
+				ReactDOM.findDOMNode(this.refs.Qtwo).value,
+				ReactDOM.findDOMNode(this.refs.Qthree).value
+  		]
     // if so, send token, userId and dietId into subscribe
     promise.then(resp => {
-    	return helpers.subscribe(this.props.userId, this.state.dietId, resp.data.token)
-    	// after subscribe, submit the first answers
-
+    	helpers.subscribe(newAnswers, this.props.userId, this.state.dietId, resp.data.token);
+    	// send us to the profile page after 2 secs
+	    setTimeout(
+      	() => {this.context.router.push({pathname: '/profile'})},
+      2000
+    	)
     })
     .catch(err => {
-    	this.setState({
+    	return this.setState({
     		loggedIn: false
     	})
     });
+
 	},
 
 	// open the modal
   showModal() {
-    this.setState({show: true});
+    this.setState({modal: true});
   },
 
   // hide th modal
   hideModal() {
-    this.setState({show: false});
+    this.setState({modal: false});
   },
 
 	// render function
@@ -124,12 +137,11 @@ var Diet = React.createClass({
 				<p className="dietCopy">{this.state.dietDescription}</p>
 			</div>
 				<div className="text-center">
-				<button onClick={this.subscribe} type='submit' className="formSubmit">Subscribe</button>
+				<button onClick={this.showModal} type='submit' className="formSubmit">Subscribe</button>
 				</div>
 			</div>
 			
 
-			</div>
 			</div>
 			</div>
 
@@ -171,8 +183,14 @@ var Diet = React.createClass({
           </Modal.Footer>
         </Modal>
       </ButtonToolbar>
+    	</div>
+
 		)
 	}
 })
+
+Diet.contextTypes = {
+  router: React.PropTypes.func.isRequired
+}
 
 module.exports = Diet;

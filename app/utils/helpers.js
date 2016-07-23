@@ -50,8 +50,8 @@ var helpers = {
 	},
 
 	// subscribe user to diet
-	subscribe: function(user, diet, token) {
-		return axios.post("/api/subscribe", {userId: user, dietId: diet, token: token})
+	subscribe: function(newAnswers, user, diet, token) {
+		return axios.post("/api/subscribe", {userId: user, dietId: diet, answers:newAnswers, token: token})
 		.then(function(response){
 			return response;
 		})
