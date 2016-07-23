@@ -1,3 +1,5 @@
+// Login form
+// ==========
 var React = require('react');
 var PropTypes = React.PropTypes;
 var auth = require('../utils/authentication');

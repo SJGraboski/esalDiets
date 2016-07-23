@@ -11,11 +11,12 @@ var DietList = require('./Diets/DietList');
 
 
 
-// Auth
+// Auth code
 import Login from '../components/Login';
 import auth from '../utils/authentication.js';
 import eventManager from '../utils/event_manager';
 
+// create main container app
 var App = React.createClass({
 
 	getInitialState: function(){
@@ -35,8 +36,7 @@ var App = React.createClass({
 		}
 	},
 
-
-
+	// handle search query
 	searchQuery(term) {
 		var self = this;
 		helpers.getSearchResults(term)
@@ -57,12 +57,14 @@ var App = React.createClass({
 		})
 	},
 
+	// Whenever a diet is searched, change to the diet page
 	componentDidUpdate: function(prevProps, prevState) {
 		if (prevState.selectedDiet != this.state.selectedDiet) {
 			this.context.router.push({pathname: '/diet/' + this.state.selectedDiet.id});
 		}
 	},
 
+	// For login event listener
 	updateAuth: function(loggedIn) {
     this.setState({
       loggedIn: loggedIn

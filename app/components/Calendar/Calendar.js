@@ -66,21 +66,6 @@ var Calendar = React.createClass({
     })
   },
 
-  componentWillMount: function(){
-    // var exDates = [];
-
-    // for (var i = 1; i < 365; i++){
-    //   exDates.push(moment().subtract(parseInt([i]), 'days'))
-    // }
-    // for (var j = 29; j < 365; j++){
-    //   exDates.push(moment().add(parseInt([j]), 'days'))
-    // }
-    // return this.setState({
-    //   excludeDates: exDates
-    // });
-  },
-
-
   update: function(e){
     // prevent default behavior (reload)
     e.preventDefault();
