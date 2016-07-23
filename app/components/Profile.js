@@ -27,6 +27,7 @@ var Profile = React.createClass({
 		return {
 			userId: null,
 			dietId: null,
+			dietName: "Start One Today!",
 			reportId: null,
 			answered: null,
 			startDay: null,
@@ -44,6 +45,7 @@ var Profile = React.createClass({
 				return this.setState({
 					userId: this.props.userId,
 					dietId: data.dietId,
+					dietName: data.diet.name,
 					reportId: data.reportId,
 					answered: data.answered,
 					startDate: data.startDate,
@@ -64,6 +66,7 @@ var Profile = React.createClass({
 				return this.setState({
 					userId: nextProps.userId,
 					dietId: data.dietId,
+					dietName: data.diet.name,
 					reportId: data.reportId,
 					answered: data.answered,
 					startDate: data.startDate,
@@ -92,6 +95,7 @@ var Profile = React.createClass({
 							return this.setState({
 								userId: this.props.userId,
 								dietId: this.state.dietId,
+								dietName: data.diet.name,
 								reportId: data.reportId,
 								answered: data.answered,
 								startDate: data.startDate,
@@ -126,6 +130,7 @@ var Profile = React.createClass({
 			<div className="row graphContainer">
 			<div className="placeholderspace" id="placeholderspace"></div>
 			<div className="col-md-12" id="analytics">
+				<h1 className="profileTitle">Your Current Diet: {this.state.dietName}</h1>
 				<MoodGraph mood={this.state.answers[0]} />
 				<EnergyGraph energy={this.state.answers[1]} />
 				<WeightGraph weight={this.state.answers[2]} />

@@ -585,7 +585,7 @@ svg {
 
 
 
-.dietPageName {
+.dietPageName, .profileTitle {
 	font-size: 3em;
 	text-align: center;
 	font-weight: 700;

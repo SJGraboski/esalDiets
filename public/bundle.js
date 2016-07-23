@@ -26728,7 +26728,7 @@
 	  React.createElement(Route, { component: _Login2.default, name: 'Login', path: 'login' }),
 	  React.createElement(Route, { component: _Logout2.default, name: 'Logout', path: 'logout' }),
 	  React.createElement(Route, { component: _Register2.default, name: 'Register', path: 'register' }),
-	  React.createElement(Route, { component: _Diet2.default, name: 'Diet', path: 'diet/:dietId', onEnter: checkAuth }),
+	  React.createElement(Route, { component: _Diet2.default, name: 'Diet', path: 'diet/:dietId' }),
 	  React.createElement(Route, { component: _Profile2.default, name: 'Profile', path: 'profile', onEnter: checkAuth })
 	);
 
@@ -47057,6 +47057,7 @@
 			return {
 				userId: null,
 				dietId: null,
+				dietName: "Start One Today!",
 				reportId: null,
 				answered: null,
 				startDay: null,
@@ -47073,6 +47074,7 @@
 					return this.setState({
 						userId: this.props.userId,
 						dietId: data.dietId,
+						dietName: data.diet.name,
 						reportId: data.reportId,
 						answered: data.answered,
 						startDate: data.startDate,
@@ -47092,6 +47094,7 @@
 					return this.setState({
 						userId: nextProps.userId,
 						dietId: data.dietId,
+						dietName: data.diet.name,
 						reportId: data.reportId,
 						answered: data.answered,
 						startDate: data.startDate,
@@ -47120,6 +47123,7 @@
 								return this.setState({
 									userId: this.props.userId,
 									dietId: this.state.dietId,
+									dietName: data.diet.name,
 									reportId: data.reportId,
 									answered: data.answered,
 									startDate: data.startDate,
@@ -47164,6 +47168,12 @@
 				React.createElement(
 					'div',
 					{ className: 'col-md-12', id: 'analytics' },
+					React.createElement(
+						'h1',
+						{ className: 'profileTitle' },
+						'Your Current Diet: ',
+						this.state.dietName
+					),
 					React.createElement(MoodGraph, { mood: this.state.answers[0] }),
 					React.createElement(EnergyGraph, { energy: this.state.answers[1] }),
 					React.createElement(WeightGraph, { weight: this.state.answers[2] })
