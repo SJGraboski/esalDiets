@@ -14,6 +14,7 @@ var auth = {
     }
   },
 
+  // log in a user
   login (email, password, cb) {
     const promise = axios.post("/api/session", {email: email,
                                                 password: password});

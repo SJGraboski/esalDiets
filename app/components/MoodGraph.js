@@ -10,10 +10,24 @@ class MoodGraph extends React.Component {
     };
 
     componentWillReceiveProps(nextProps){
-        console.log(nextProps);
-        return this.setState({
-            mood: nextProps.mood
-        })
+        // set state to answers if not null on mood
+        if(nextProps.mood[0]){
+            // if there's only one element
+            if(nextProps.mood.length === 1) {
+                //make the second element the same as the first
+                var newArray = [nextProps.mood[0], 
+                                {x:2, y:nextProps.mood[0].y}];
+                return this.setState({
+                    mood: newArray
+                })
+            }
+            // otherwise, set state to prop
+            else {
+                return this.setState({
+                    mood: nextProps.mood
+                })
+            }
+        }
     };
 
     render () {

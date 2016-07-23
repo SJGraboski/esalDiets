@@ -6,7 +6,6 @@ var React = require('react');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 
-
 // get components
 var Calendar = require('./Calendar/Calendar.js');
 var MoodGraph = require('./MoodGraph.js');
@@ -14,23 +13,18 @@ var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
 var SearchBar = require('react-search-bar');
 
-const matches = {
-	'macbook a': [
-		'macbook air 13 case',
-		'macbook air 11 case',
-		'macbook air charger'
-	],
-	'macbook p': [
-		'macbook pro 13 case',
-		'macbook pro 15 case',
-		'macbook pro charger'
-	]
-};
-
+// bring in bootstrap for modal
+var ReactBootstrap = require("react-bootstrap");
+var ButtonToolbar = ReactBootstrap.ButtonToolbar;
+var Button = ReactBootstrap.Button;
+var Modal = ReactBootstrap.Modal;
+var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 
 
 // helpers functions
 var helpers = require('../utils/helpers.js');
+// authentication
+var auth = require('../utils/authentication.js');
 
 // create Diet component
 var Diet = React.createClass({
@@ -42,10 +36,13 @@ var Diet = React.createClass({
 			dietName: null,
 			dietDescription: null,
 			dietCreated: null,
-			dietImage: null
+			dietImage: null,
+			modal: false,
+			answers: [[],[],[]]
 		}
 	},
 
+	// check for when we pass in an update to answers.
   componentWillReceiveProps: function(nextProps){
   	helpers.getDietData(nextProps.params.dietId)
 		.then(function(result){
@@ -76,34 +73,34 @@ var Diet = React.createClass({
 			})
 		}.bind(this));
 	},
-	// set Query to inputs
-	updateQuery: function(newAnswers){
-		// set the state to the for inputs
-		this.setState({
-			reportUpdate: newAnswers,
-		});
-	},
-	onChange(input, resolve) {
-		// Simulate AJAX request
-		setTimeout(() => {
-			const suggestions = matches[Object.keys(matches).find((partial) => {
-					return input.match(new RegExp(partial), 'i');
-				})] || ['macbook', 'macbook air', 'macbook pro'];
 
-			resolve(suggestions.filter((suggestion) =>
-				suggestion.match(new RegExp('^' + input.replace(/\W\s/g, ''), 'i'))
-			));
-		}, 25);
+	// Subscribe to a diet
+	subscribe: function() {
+		// first check that user is logged in
+    var promise = auth.isAuthenticated();
+    // if so, send token, userId and dietId into subscribe
+    promise.then(resp => {
+    	return helpers.subscribe(this.props.userId, this.state.dietId, resp.data.token)
+    	// after subscribe, submit the first answers
+
+    })
+    .catch(err => {
+    	this.setState({
+    		loggedIn: false
+    	})
+    });
 	},
-	onSearch(input) {
-		if (!input) return;
-		console.info(`Searching "${input}"`);
-		// run the search query
-		helpers.getSearchResults(input)
-		.then(function(results){
-			console.log(results);
-		})
-	},
+
+	// open the modal
+  showModal() {
+    this.setState({show: true});
+  },
+
+  // hide th modal
+  hideModal() {
+    this.setState({show: false});
+  },
+
 	// render function
 	render: function() {
 		return (
@@ -127,7 +124,7 @@ var Diet = React.createClass({
 				<p className="dietCopy">{this.state.dietDescription}</p>
 			</div>
 				<div className="text-center">
-				<button type='submit' className="formSubmit">Subscribe</button>
+				<button onClick={this.subscribe} type='submit' className="formSubmit">Subscribe</button>
 				</div>
 			</div>
 			
@@ -135,6 +132,45 @@ var Diet = React.createClass({
 			</div>
 			</div>
 			</div>
+
+			<ButtonToolbar>
+			<Modal
+          show={this.state.modal}
+          onHide={this.hideModal}
+          dialogClassName="custom-modal"
+        >
+          <Modal.Header closeButton>
+          </Modal.Header>
+          <Modal.Body>
+            <h4 className="modalTitle">Entry Report (required)</h4>
+             <form>
+              <FormGroup controlId="formControlsSelect">
+                  <ControlLabel className="modalQuestion">How's your mood?</ControlLabel>
+                  <FormControl className="modalEnter" componentClass="select" placeholder="select" ref="Qone">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </FormControl>
+                  <ControlLabel className="modalQuestion">How's your energy level?</ControlLabel>
+                  <FormControl className="modalEnter" componentClass="select" placeholder="select" ref="Qtwo">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </FormControl>
+                  <ControlLabel className="modalQuestion">What is your current weight?</ControlLabel>
+                  <FormControl className="modalEnter" type="text" placeholder="Enter weight" ref="Qthree"/>
+              </FormGroup>
+              </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="formSubmit" onClick={this.subscribe}>Submit</Button>
+          </Modal.Footer>
+        </Modal>
+      </ButtonToolbar>
 		)
 	}
 })

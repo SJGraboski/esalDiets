@@ -11,20 +11,6 @@ var MoodGraph = require('./MoodGraph.js');
 var EnergyGraph = require('./EnergyGraph.js');
 var WeightGraph = require('./WeightGraph.js');
 
-const matches = {
-	'macbook a': [
-		'macbook air 13 case',
-		'macbook air 11 case',
-		'macbook air charger'
-	],
-	'macbook p': [
-		'macbook pro 13 case',
-		'macbook pro 15 case',
-		'macbook pro charger'
-	]
-};
-
-
 
 // helpers functions
 var helpers = require('../utils/helpers.js');
@@ -61,7 +47,7 @@ var Home = React.createClass({
 		// check to make sure at least one of the search inputs are different
 		if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null){
 			// helpers reportAnswer
-			helpers.reportUpdate(this.state.reportUpdate)
+			helpers.reportUpdate(this.state.reportUpdate, token)
 			.then(function(data){
 				// check response
 				if (data != false) {
@@ -120,7 +106,7 @@ var Home = React.createClass({
 	                
 	            
 	                <img className="logobig" src="./assets/images/esallogobig.svg" id="logobigsvg" />
-	                <div><span id="arrow"><a href="#about" className="fa fa-angle-double-down"></a></span></div>
+	                <div><span id="arrow"><a href="#about" className="fa fa-angle-double-down smooth"></a></span></div>
 	            </div>
 	    	</div>
 	    	<div id="about">
