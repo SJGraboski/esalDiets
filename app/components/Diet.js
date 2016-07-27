@@ -40,10 +40,14 @@ var Diet = React.createClass({
 			dietCreated: null,
 			dietImage: null,
 			modal: false,
-			answers: [[],[],[]]
+			answers: [[],[],[]],
+			wError: null
 		}
 	},
 
+	contextTypes: {
+	  router: React.PropTypes.object.isRequired
+	},
 	// check for when we pass in an update to answers.
   componentWillReceiveProps: function(nextProps){
   	helpers.getDietData(nextProps.params.dietId)
@@ -78,30 +82,46 @@ var Diet = React.createClass({
 
 	// Subscribe to a diet
 	subscribe: function() {
-		// first check that user is logged in
-    var promise = auth.isAuthenticated();
+		// reset wError state
+		this.setState({wError: null});
+		console.log(this.props.userId);
+		var _this = this;
+		var userId = _this.props.userId;
+		var dietId = _this.state.dietId;
+
+		console.log(_this.props);
 		// grab the answers from the modal
+		var mood = ReactDOM.findDOMNode(this.refs.Qone).value;
+		var energy = ReactDOM.findDOMNode(this.refs.Qtwo).value;
+		var weight = ReactDOM.findDOMNode(this.refs.Qthree).value;
 
-  		var newAnswers = [
-  			ReactDOM.findDOMNode(this.refs.Qone).value,
-				ReactDOM.findDOMNode(this.refs.Qtwo).value,
-				ReactDOM.findDOMNode(this.refs.Qthree).value
-  		]
-    // if so, send token, userId and dietId into subscribe
-    promise.then(resp => {
-    	helpers.subscribe(newAnswers, this.props.userId, this.state.dietId, resp.data.token);
-    	// send us to the profile page after 2 secs
-	    setTimeout(
-      	() => {this.context.router.push({pathname: '/profile'})},
-      3000
-    	)
-    })
-    .catch(err => {
-    	return this.setState({
-    		loggedIn: false
-    	})
-    });
+		// if not the answers weren't filled out, give the right err message
+		if (!weight) {
+			this.setState({
+				wError: true
+			})
+			return;
+		}			
 
+		// place the answers in an array
+		var newAnswers = [mood, energy, weight]
+
+
+  	// authenticate user, 
+  	// then send answers, token, userId and dietId into subscribe
+  	auth.isAuthenticated()
+  	.then(function(resp){
+	  	return helpers.subscribe(newAnswers, userId, _this.state.dietId, resp.data.token)
+	  	// send us to the profile page after we recieve success message
+	    .then(function(){
+	    	return _this.context.router.push({pathname: '/profile'})
+	    })
+	    .catch(err => {
+	    	_this.setState({
+	    		loggedIn: false
+	    	})
+	    })
+  	})
 	},
 
 	// open the modal
@@ -136,9 +156,13 @@ var Diet = React.createClass({
 				<div className="dietDes">
 				<p className="dietCopy">{this.state.dietDescription}</p>
 			</div>
+			{ this.props.loggedIn && 
+				(
 				<div className="text-center">
 				<button onClick={this.showModal} type='submit' className="formSubmit">Subscribe</button>
 				</div>
+				)
+			}
 			</div>
 			
 
@@ -175,6 +199,9 @@ var Diet = React.createClass({
                   </FormControl>
                   <ControlLabel className="modalQuestion">What is your current weight?</ControlLabel>
                   <FormControl className="modalEnter" type="text" placeholder="Enter weight" ref="Qthree"/>
+            			{this.state.wError && (
+										<p className='error'>Please Enter a Weight</p>
+									)}
               </FormGroup>
               </form>
           </Modal.Body>
@@ -188,9 +215,5 @@ var Diet = React.createClass({
 		)
 	}
 })
-
-Diet.contextTypes = {
-  router: React.PropTypes.object.isRequired
-}
 
 module.exports = Diet;

@@ -1,4 +1,4 @@
-// Query page
+// Profile page
 // ==========
 
 // dependencies
@@ -35,9 +35,9 @@ var Profile = React.createClass({
 			answers: [[],[],[]]
 		}
 	},
-	componentWillMount: function(){
+	componentDidMount: function(){
+		console.log(this.props);
 		if(this.props.userId != null) {
-			console.log(this.props);
 			return helpers.getProfileData(this.props.userId)
 			.then(function(result){
 				var data = result.data;
@@ -55,41 +55,20 @@ var Profile = React.createClass({
 			}.bind(this));
 		}
 	},
-	componentWillReceiveProps: function(nextProps) {
-		if (this.props.userId != nextProps.userId && nextProps.userId != null) {
-			console.log(nextProps)
-			return helpers.getProfileData(nextProps.userId)
-			.then(function(result){
-				var data = result.data;
-				console.log(result);
-				console.log(nextProps);
-				return this.setState({
-					userId: nextProps.userId,
-					dietId: data.dietId,
-					dietName: data.diet.name,
-					reportId: data.reportId,
-					answered: data.answered,
-					startDate: data.startDate,
-					answers: data.answers,
-					reportUpdate: null
-				})
-			}.bind(this));
-		}
-	},
 	// componentDidUpdate: grab user info whenever update comes in
 	componentDidUpdate: function(prevProps, prevState){
 		// check to make sure at least one of the search inputs are different
 		if (this.state.reportUpdate != prevState.reportUpdate && this.state.reportUpdate != null){
 			// first check that user is logged in
 	    var promise = auth.isAuthenticated();
-	    // if so, send token, userId and dietId into subscribe
+	    // if so, send token, userId and dietId into reportUpdate
 	    promise.then(resp => {
 				// helpers reportAnswer
 				helpers.reportUpdate(this.state.reportUpdate, resp.data.token)
 				.then(function(data){
 					// check response
 					if (data != false) {
-						return helpers.getProfileData(this.props.userId, this.state.dietId)
+						return helpers.getProfileData(this.props.userId)
 						.then(function(result){
 							var data = result.data;
 							return this.setState({
@@ -106,6 +85,26 @@ var Profile = React.createClass({
 					}
 				}.bind(this)); // make "this" function as expected
 			})
+		}
+
+		// Handling our userId props
+		if (this.props.userId != prevProps.userId && this.props.userId != null) {
+			console.log(this.props);
+			helpers.getProfileData(this.props.userId)
+			.then(function(result){
+				var data = result.data;
+				console.log(result);
+				return this.setState({
+					userId: this.props.userId,
+					dietId: data.dietId,
+					dietName: data.diet.name,
+					reportId: data.reportId,
+					answered: data.answered,
+					startDate: data.startDate,
+					answers: data.answers,
+					reportUpdate: null
+				})
+			}.bind(this));
 		}
 	},
 	// set Query to inputs

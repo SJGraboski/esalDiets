@@ -4,18 +4,20 @@ var React = require('react');
 var PropTypes = React.PropTypes;
 var auth = require('../utils/authentication');
 
-export default class Login extends React.Component {
+var Login = React.createClass({
 
-	constructor(props, context) {
-		super(props);
-		context.router;
-		this.state = {
+	contextTypes: {
+  	router: React.PropTypes.object.isRequired
+	},
+
+	getInitialState: function() {
+		return {
 			error: false
 		};
-	}
+	},
 
 	// Call this whenever the user clicks Login
-	login(e) {
+	login: function(e) {
 		// prevent default behavior
 		e.preventDefault();
 
@@ -32,7 +34,7 @@ export default class Login extends React.Component {
 				this.setState({error:true})
 			}
 		})
-	}
+	},
 
 	render() {
 		return (
@@ -48,7 +50,7 @@ export default class Login extends React.Component {
 						<input type='text' className="formEnter" ref='email' placeholder='Email' />
 						<input type='text' className="formEnter" ref='pass' placeholder='Password' />
 					</div>
-					<button type='submit' className="formSubmit" onClick={this.login.bind(this)}>Submit</button>
+					<button type='submit' className="formSubmit" onClick={this.login}>Submit</button>
 				</form>
 			{this.state.error && (
 				<p className='error'>invalid email and/or password</p>
@@ -60,8 +62,6 @@ export default class Login extends React.Component {
 
 		)
 	}
-}
+})
 
-Login.contextTypes = {
-  router: React.PropTypes.object.isRequired
-}
+module.exports = Login;

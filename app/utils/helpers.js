@@ -53,7 +53,7 @@ var helpers = {
 	subscribe: function(newAnswers, user, diet, token) {
 		return axios.post("/api/subscribe", {userId: user, dietId: diet, answers:newAnswers, token: token})
 		.then(function(response){
-			return response;
+			return true;
 		})
 		.catch(function (error) {
     	return error;
