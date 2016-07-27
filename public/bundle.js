@@ -46296,7 +46296,7 @@
 									'div',
 									{ className: 'form-group' },
 									React.createElement('input', { type: 'text', className: 'formEnter', ref: 'email', placeholder: 'Email' }),
-									React.createElement('input', { type: 'text', className: 'formEnter', ref: 'pass', placeholder: 'Password' })
+									React.createElement('input', { type: 'password', className: 'formEnter', ref: 'pass', placeholder: 'Password' })
 								),
 								React.createElement(
 									'button',
