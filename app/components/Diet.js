@@ -163,6 +163,13 @@ var Diet = React.createClass({
 				</div>
 				)
 			}
+			{ !this.props.loggedIn && 
+				(
+				<div className="text-center">
+				<p className='error'>Log In to Subscribe to this Diet!</p>
+				</div>
+				)
+			}
 			</div>
 			
 
