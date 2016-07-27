@@ -48,7 +48,7 @@ var Login = React.createClass({
 				<form role='form'>
 					<div className='form-group'>
 						<input type='text' className="formEnter" ref='email' placeholder='Email' />
-						<input type='text' className="formEnter" ref='pass' placeholder='Password' />
+						<input type='password' className="formEnter" ref='pass' placeholder='Password' />
 					</div>
 					<button type='submit' className="formSubmit" onClick={this.login}>Submit</button>
 				</form>
