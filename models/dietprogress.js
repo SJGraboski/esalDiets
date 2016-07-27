@@ -1,4 +1,5 @@
 // diet progress model
+// ===================
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var DietProgress = sequelize.define('DietProgress', {

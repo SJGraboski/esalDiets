@@ -162,13 +162,29 @@ module.exports = function(app) {
 		  // grab the info for whatever diet we send it.
 		  // Group it by the report number, 
 		  // so that we get average results for every day of the diet
-	    ') tempTable WHERE DietID=? GROUP BY reportNum;'
+	    ') tempTable WHERE DietID=? GROUP BY reportNum;';
 
+    // push answer results into an array of array
+    function answerPush(arr) {
+			for (var i = 1; i <= arr.length; i++) {
+				if (arr[i-1].a1) {
+					theAnswers[0].push({x:i, y:arr[i-1].a1})
+				}
+				if (arr[i-1].a2) {
+					theAnswers[1].push({x:i, y:arr[i-1].a2})
+				}
+				if (arr[i-1].a3dif) {
+					theAnswers[2].push({x:i, y:arr[i-1].a3dif})
+				}
+			}
+			theAnswers[2].unshift({x:1, y:0});
+    };
 
 		// Use our queries!
 		// ================
 
 		// grab a particular diet
+		function test(ok){};
 		models.Diet.findOne({
 			where:{
 				id: dietId
@@ -178,28 +194,34 @@ module.exports = function(app) {
 		.then(function(diet) {
 			return sequelize.query(setUp)
 			.then(function() {
+				// we pass this raw query.
+				return sequelize.query(avgAnswers, {replacements: [dietId], type: sequelize.QueryTypes.SELECT})
+				// run the function again if weight returns null
+				.then(function(results){
+					// if the weight only has 1 response (ie, it's null)
+					if (results[2].a3dif === null) {
+						console.log("rerunning query\nrerunning query\nrerunning query\nrerunning query\nrerunning query");
+						// run the query again
+						return sequelize.query(avgAnswers, {replacements: [dietId], type: sequelize.QueryTypes.SELECT})
+						.then(function(newResults) {
+							// and push the new answers
+							answerPush(newResults);
+							// put the answers in our diet instance
+							diet.dataValues.answers = theAnswers;
+							// send the diet instance
+							return res.json(diet);
+						})
+					}
 
-
-			// we pass this raw query.
-			return sequelize.query(avgAnswers, {replacements: [dietId], type: sequelize.QueryTypes.SELECT})
-			// then pass the results
-			.then(function(results){
-				for (var i = 1; i <= results.length; i++) {
-					if (results[i-1].a1) {
-						theAnswers[0].push({x:i, y:results[i-1].a1})
+					// otherwise, use our current answers
+					else {
+						answerPush(results);
+						console.log(results);
+						diet.dataValues.answers = theAnswers;
+						return res.json(diet);
 					}
-					if (results[i-1].a2) {
-						theAnswers[1].push({x:i, y:results[i-1].a2})
-					}
-					if (results[i-1].a3dif) {
-						theAnswers[2].push({x:i, y:results[i-1].a3dif})
-					}
-				}
-				theAnswers[2].unshift({x:1, y:0});
-				diet.dataValues.answers = theAnswers;
-				return res.json(diet);
+				})
 			})
-		})
 		})
 		// error check the Diet query
 		.catch(function(error){
@@ -236,7 +258,7 @@ module.exports = function(app) {
 
 
 
-	// PART 2: UPDATA USER DIETS
+	// PART 2: UPDATE USER DIETS
 	// -/-/-/-/-/-/-/-/-/-/-/-/-/
 
 	// 1. Subscribe to a diet
@@ -294,22 +316,13 @@ module.exports = function(app) {
 				      // push each promise to the newPromise array
 				      promises.push(newPromise);
 				    }
-				    // then, fulfill each sequelize promise,
 				    // or, in other words, create all 28 notifications
 				    return Promise.all(promises)
-				    // when the promise runs
-		        .then(function(){
-		        	// increase insertCheck by on
-				      insertCheck++;
-				      // if we did an insert
-				      if (insertCheck){
-				      	//send our json success message
-				        return res.json({success:true});
-				        	// the transaction method doesn't send promises correctly, 
-				        	// so this is the only way to send success.
-				      }
-				    });
-		    	});
+		    	})
+		    	.then(function(){
+		    		// return true on success
+		    		return res.json({success: 'true'});
+		    	})
 				}
 
 				// Now, grab the user and diet from req

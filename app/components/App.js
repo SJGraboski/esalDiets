@@ -4,7 +4,7 @@ var React = require('react');
 var helpers = require('../utils/helpers.js');
 var Navigation = require('react-router').Navigation;
 var Link = require('react-router').Link;
-import _ from 'lodash';
+var _ = require('lodash');
 var PropTypes = React.PropTypes;
 var SearchBar = require('./Diets/SearchBar');
 var DietList = require('./Diets/DietList');
@@ -12,9 +12,9 @@ var DietList = require('./Diets/DietList');
 
 
 // Auth code
-import Login from '../components/Login';
-import auth from '../utils/authentication.js';
-import eventManager from '../utils/event_manager';
+var Login = require('../components/Login');
+var auth = require('../utils/authentication.js');
+var eventManager = require('../utils/event_manager');
 
 // create main container app
 var App = React.createClass({
@@ -37,7 +37,7 @@ var App = React.createClass({
 	},
 
 	// handle search query
-	searchQuery(term) {
+	searchQuery: function(term) {
 		var self = this;
 		helpers.getSearchResults(term)
 		.then(function(diets){
@@ -65,9 +65,12 @@ var App = React.createClass({
 	},
 
 	// For login event listener
-	updateAuth: function(loggedIn) {
+	updateAuth: function(loggedIn, resp) {
+		console.log(loggedIn);
+		console.log('userId ' + resp.data.userId);
     this.setState({
-      loggedIn: loggedIn
+      loggedIn: loggedIn,
+      userId: resp.data.userId
     })
   },
 
@@ -77,6 +80,7 @@ var App = React.createClass({
 		auth.logout( (loggedOut) => {
 			// if we logout the user
 			if (loggedOut) {
+				console.log("Logged Out!");
 				this.setState({
 					loggedIn: false,
 					userId: null
@@ -87,24 +91,26 @@ var App = React.createClass({
 		})
 	},
 
-  componentDidMount:function () {
+  componentDidMount: function () {
     this.subscription = eventManager.getEmitter().addListener(eventManager.authChannel, this.updateAuth);
     var promise = auth.isAuthenticated();
     promise.then(resp => {
+    	// check if log in gets us in
+    	console.log("Logged In! UserID is " + resp.data.userId);
     	console.log(resp);
-    	this.setState({
+    	return this.setState({
     		loggedIn: true,
-	  		userId: resp.data.userId
+    		userId: resp.data.userId
 	  	})
     })
     .catch(err => {
-    	this.setState({
+    	return this.setState({
     		loggedIn: false
     	})
     });
   },
 
-  componentWillUnmount () {
+  componentWillUnmount: function () {
     this.subscription.remove();
   },
 
