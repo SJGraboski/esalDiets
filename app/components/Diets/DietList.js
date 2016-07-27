@@ -6,7 +6,7 @@ const DietList = (props) => {
         return (
             <ListItem
                 key={diet.id}
-                onDietSelect= {props.onDietSelect}
+                onDietSelect={props.onDietSelect}
                 diet={diet} />
         )
     });
