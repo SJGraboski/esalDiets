@@ -111383,6 +111383,15 @@
 									{ onClick: this.showModal, type: 'submit', className: 'formSubmit' },
 									'Subscribe'
 								)
+							),
+							!this.props.loggedIn && React.createElement(
+								'div',
+								{ className: 'text-center' },
+								React.createElement(
+									'p',
+									{ className: 'error' },
+									'Log In to Subscribe to this Diet!'
+								)
 							)
 						)
 					)
