@@ -26884,7 +26884,7 @@
 									React.createElement(
 										'div',
 										{ className: 'pagebanner' },
-										React.createElement('img', { src: './assets/images/esalBanner.png', id: 'profilepagebanner' })
+										React.createElement('img', { className: 'img-responsive', src: './assets/images/esalBanner.png', id: 'profilepagebanner' })
 									)
 								)
 							)
@@ -110926,6 +110926,7 @@
 	// dependencies
 	var React = __webpack_require__(1);
 	var Router = __webpack_require__(172);
+	var Link = __webpack_require__(172).Link;
 
 	// get components
 	var Calendar = __webpack_require__(276);
@@ -110968,7 +110969,7 @@
 					React.createElement(
 						'div',
 						{ className: 'col-md-12 content top' },
-						React.createElement('img', { className: 'logobig', src: './assets/images/esallogobig.svg', id: 'logobigsvg' }),
+						React.createElement('img', { className: 'logobig img-responsive', src: './assets/images/esallogobig.svg', id: 'logobigsvg' }),
 						React.createElement(
 							'div',
 							null,
@@ -110982,10 +110983,10 @@
 				),
 				React.createElement(
 					'div',
-					{ id: 'about' },
+					{ id: 'about', className: 'row' },
 					React.createElement(
 						'div',
-						{ className: 'col-md-4 aboutContainer' },
+						{ className: 'col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-0 aboutContainer' },
 						React.createElement(
 							'div',
 							{ className: 'fbox' },
@@ -111003,12 +111004,12 @@
 						React.createElement(
 							'p',
 							{ className: 'aboutCopy' },
-							'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida. Sed eget ornare magna. Sed ut imperdiet augue. Maecenas sed congue purus. Curabitur efficitur aliquet mi, eget maximus quam lacinia ac. Aliquam erat volutpat. Fusce sed convallis nulla.'
+							'Sign up for Esal and subscribe to any of the diets in our catalog. Fill out a quick survey each day and use our data visualizations to track your progress. Not satisfied with your current regimen? Subscribe to a new one, no questions asked!'
 						)
 					),
 					React.createElement(
 						'div',
-						{ className: 'col-md-4 aboutContainer' },
+						{ className: 'col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-0 aboutContainer' },
 						React.createElement(
 							'div',
 							{ className: 'fbox' },
@@ -111026,12 +111027,12 @@
 						React.createElement(
 							'p',
 							{ className: 'aboutCopy' },
-							'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida. Sed eget ornare magna. Sed ut imperdiet augue. Maecenas sed congue purus. Curabitur efficitur aliquet mi, eget maximus quam lacinia ac. Aliquam erat volutpat. Fusce sed convallis nulla.'
+							'Worried the latest trendy diet is all bluster? Each plan in our catalog features line graphs depicting the results for the average user over 28 days. Esal will aggregate data from the diet’s subscribers. No fluff here—just real statistics.'
 						)
 					),
 					React.createElement(
 						'div',
-						{ className: 'col-md-4 aboutContainer' },
+						{ className: 'col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-0 aboutContainer' },
 						React.createElement(
 							'div',
 							{ className: 'fbox' },
@@ -111049,7 +111050,7 @@
 						React.createElement(
 							'p',
 							{ className: 'aboutCopy' },
-							'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida. Sed eget ornare magna. Sed ut imperdiet augue. Maecenas sed congue purus. Curabitur efficitur aliquet mi, eget maximus quam lacinia ac. Aliquam erat volutpat. Fusce sed convallis nulla.'
+							'The Esal Team plans to let users opt into daily emails and text messages—these will remind our subscribers to fill out their daily reports. We want to ensure that our supporters get everything they can out of our service.'
 						)
 					)
 				),
@@ -111066,27 +111067,27 @@
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'col-md-6 dietPadding' },
+						Link,
+						{ to: '/diet/31', className: 'col-md-6 dietPadding' },
 						React.createElement(
 							'div',
-							{ className: 'dietbox' },
+							{ to: '/diet/31', className: 'dietbox' },
 							React.createElement(
 								'h2',
 								{ className: 'dietTitle' },
-								'2 Bannana Diet'
+								'Salmon and Potato Diet'
 							),
-							React.createElement('img', { src: './assets/images/dietOne.png', className: 'smDietImg', alt: '2 Bannana Diet' }),
+							React.createElement('img', { src: './assets/images/dietFour.png', className: 'smDietImg', alt: 'Salmon and Potato Diet' }),
 							React.createElement(
 								'p',
 								{ className: 'dietCopy' },
-								'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.'
+								'Salmon is packed with lean protein. Potatoes contain lots of fiber. Sounds like a well-rounded plate to us!'
 							)
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'col-md-6 dietPadding' },
+						Link,
+						{ to: '/diet/33', className: 'col-md-6 dietPadding' },
 						React.createElement(
 							'div',
 							{ className: 'dietbox' },
@@ -111099,13 +111100,13 @@
 							React.createElement(
 								'p',
 								{ className: 'dietCopy' },
-								'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.'
+								'Kale\'s all the rage lately, and for good reason. Packed with fiber and protein, this vegetable deserves a spot in your diet.'
 							)
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'col-md-6 dietPadding' },
+						Link,
+						{ to: '/diet/30', className: 'col-md-6 dietPadding' },
 						React.createElement(
 							'div',
 							{ className: 'dietbox' },
@@ -111118,32 +111119,32 @@
 							React.createElement(
 								'p',
 								{ className: 'dietCopy' },
-								'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.'
+								'Juicing\'s great and all, but why not let your body break down the fiber instead of your blender? Just straight-up whole fruits here!'
 							)
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'col-md-6 dietPadding' },
+						Link,
+						{ to: '/diet/1', className: 'col-md-6 dietPadding' },
 						React.createElement(
 							'div',
 							{ className: 'dietbox' },
 							React.createElement(
 								'h2',
 								{ className: 'dietTitle' },
-								'Salmon and Potato Diet'
+								'2 Bannana Diet'
 							),
-							React.createElement('img', { src: './assets/images/dietFour.png', className: 'smDietImg', alt: 'Salmon and Potato Diet' }),
+							React.createElement('img', { src: './assets/images/dietOne.png', className: 'smDietImg', alt: '2 Bannana Diet' }),
 							React.createElement(
 								'p',
 								{ className: 'dietCopy' },
-								'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.'
+								'The trending diet of the moment! Fantastic for weight loss, if you\'re willing to risk regularly passing out (i.e., don\'t actually take this diet).'
 							)
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'col-md-6 dietPadding' },
+						Link,
+						{ to: '/diet/34', className: 'col-md-6 dietPadding' },
 						React.createElement(
 							'div',
 							{ className: 'dietbox' },
@@ -111156,13 +111157,13 @@
 							React.createElement(
 								'p',
 								{ className: 'dietCopy' },
-								'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.'
+								'Rich in fiber with a modest calorie count, lotus roots will surely fill out your vegetable quota.'
 							)
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'col-md-6 dietPadding' },
+						Link,
+						{ to: '/diet/35', className: 'col-md-6 dietPadding' },
 						React.createElement(
 							'div',
 							{ className: 'dietbox' },
@@ -111175,7 +111176,7 @@
 							React.createElement(
 								'p',
 								{ className: 'dietCopy' },
-								'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum viverra luctus risus nec gravida.'
+								'Can lemon water truly boost your energy and mood? Will it help you lose weight? Check our stats and find out!'
 							)
 						)
 					)
