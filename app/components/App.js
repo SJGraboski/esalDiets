@@ -126,7 +126,7 @@ var App = React.createClass({
 				  <div className="container">
 				  <div className="row">
 				    <div className="pagebanner">
-				      <img src="./assets/images/esalBanner.png" id="profilepagebanner" />
+				      <img className="img-responsive" src="./assets/images/esalBanner.png" id="profilepagebanner" />
 				    </div>
 				  </div>
 				  </div>

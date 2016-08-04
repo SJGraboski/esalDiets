@@ -16,8 +16,8 @@ body {
 }
 
 header {
-	height:280px;
-	/*background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");*/
+	min-height:100%;
+	/* background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4c/Bananas.jpg");*/
 	background-size: cover;
 	background-color: #318dbe;
 	display: flex;
@@ -231,25 +231,24 @@ svg {
 /* home page */
 
 #homepage {
-	margin-top: -50px;
-	background-image: url("./assets/images/esalhomeimg.png");
-	height: calc(100vh - 82px);
-	background-size: cover;
-	margin-bottom: 0px;
-	background-repeat: no-repeat;
-	color: #fff;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-direction: column;
-	flex-direction: column;
-	-webkit-justify-content: center;
-	justify-content: center;
-	align-items: center;
-	background-attachment: fixed;
+    margin-top: -50px;
+    background: url("./assets/images/esalhomeimg.png") no-repeat center center fixed;
+    height: calc(100vh - 82px);
+    margin-bottom: 0px;
+    color: #fff;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    background-attachment: fixed;
 }
 
-#logobigsvg{
-	height: 65vh;
+#logobigsvg {
+    height: 65vh;
+    margin: 0 auto;
 }
 
 .fa-angle-double-down {
@@ -278,20 +277,18 @@ svg {
 	min-width: 100%;
 	padding-top: 20px;
 	min-height: 400px;
-	margin: auto 0px;
 	background-color: #fff;
-	display: -webkit-flex;
+/*	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-direction: row;
 	flex-direction: row;
 	-webkit-justify-content: center;
 	justify-content: center;
-	align-items: center;
+	align-items: center;*/
 }
 
 .aboutContainer{
 	min-height: 350px;
-	margin: 10px;
 	background-color: #fff;
 
 }
@@ -746,3 +743,19 @@ div.hideIt {
 	display:none;
 }
 /* Media Queries */
+@media screen and (max-width: 544px) {
+	.footer {
+	    min-height: 255px;
+	    background-color: #125072;
+	    padding: 10px;
+	}
+
+	.footerTextRight {
+	    text-align: left;
+	}
+
+	#footerRight {
+		clear: both;
+    float: left;
+	}
+}
