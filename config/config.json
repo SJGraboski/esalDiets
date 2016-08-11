@@ -2,7 +2,7 @@
   "development": {
     "jwtSecret": "PK0Ds5ezBPbVTn7CZS7u0VK3bnVKaO5STEscA9",
     "username": "root",
-    "password": "",
+    "password": null,
     "database": "esal",
     "host": "127.0.0.1",
     "dialect": "mysql"
@@ -17,10 +17,7 @@
   },
   "production": {
     "jwtSecret": "PK0Ds5ezBPbVTn7CZS7u0VK3bnVKaO5STEscA9",
-    "username": "fr6a3pmvslm280g1",
-    "password": "rxsvvcqy6z7j9t1f",
-    "database": "ub6m6mxi1roms7yp",
-    "host": "nj5rh9gto1v5n05t.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+    "use_env_variable": "JAWSDB_URL",
     "dialect": "mysql"
   }
 }
