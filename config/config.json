@@ -1,6 +1,5 @@
 {
   "development": {
-    "jwtSecret": "PK0Ds5ezBPbVTn7CZS7u0VK3bnVKaO5STEscA9",
     "username": "root",
     "password": null,
     "database": "esal",
@@ -8,7 +7,6 @@
     "dialect": "mysql"
   },
   "test": {
-    "jwtSecret": "PK0Ds5ezBPbVTn7CZS7u0VK3bnVKaO5STEscA9",
     "username": "root",
     "password": null,
     "database": "database_test",
@@ -16,7 +14,6 @@
     "dialect": "mysql"
   },
   "production": {
-    "jwtSecret": "PK0Ds5ezBPbVTn7CZS7u0VK3bnVKaO5STEscA9",
     "use_env_variable": "JAWSDB_URL",
     "dialect": "mysql"
   }
