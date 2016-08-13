@@ -33,7 +33,8 @@ var staticContentFolder = './public';
 app.use(express.static(staticContentFolder));
 
 // set json webtokensecret
-app.set('jwtSecret', 'CODINGSCOOL');
+var jwt_secret = process.env.JWT_SECRET || "CodingsCool"
+app.set('jwtSecret', jwt_secret);
 
 
 // Sequelize
