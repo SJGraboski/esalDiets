@@ -540,7 +540,8 @@ module.exports = function(app) {
           return res.status(400).json("{'error':'" + err + "'")
       }
       else {
-      	console.log("good")
+      	console.log("good");
+      	console.log(decoded);
       	// give the user access
       	return res.json({
       		success: true, 

@@ -1,4 +1,4 @@
-/*Axios is a convenient NPM package for performing HTTP requests*/
+/* Axios is a convenient NPM package for performing HTTP requests */
 var axios = require('axios');
 var path = require('path');
 // Create a helpers object which we will export
