@@ -400,8 +400,16 @@ svg {
 	overflow: none;
 }
 
+.dietbox:hover {
+	text-decoration: none;
+}
+
 .dietPadding {
 	padding: 15px;
+}
+
+.dietPadding:hover {
+	text-decoration: none;
 }
 
 .smDietImg {

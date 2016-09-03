@@ -1,10 +1,14 @@
 //set affix height
 
-$('#nav').affix({
-      offset: {
-        top: $('header').height()
-      }
-}); 
+$(function() {
+      var offsetFn = function() {
+            var affixTop = $('.pagebanner').height();
+            return affixTop;
+        }
+        $('#nav').affix({offset: {top: offsetFn}});
+    });
+
+
 // diet search show
 $('.dietSearch').focus(function(){
  $('.list-group').show();
@@ -28,6 +32,7 @@ $( window ).resize(function() {
 
 //add class to menu on scroll
 $(window).bind('scroll', function() {
+  
         var navHeight = $(window).height() - 500;
         if ($(window).scrollTop() > navHeight) {
             $('.navbar-default').addClass('on');
